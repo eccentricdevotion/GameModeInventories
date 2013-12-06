@@ -1,0 +1,24 @@
+author: eccentric_nz
+description: Allow players to have separate inventories for each game mode (Creative and Survival).
+main: me.eccentric_nz.gamemodeinventories.GameModeInventories
+name: GameModeInventories
+startup: postworld
+version: '2.0'
+permissions:
+  gamemodeinventories.use:
+    default: true
+    description: Allow players to have separate inventories for each gamemode.
+  gamemodeinventories.death:
+    default: op
+    description: Allow players to save their inventories on death, and restore them on respawn.
+  gamemodeinventories.bypass:
+    default: op
+    description: Allow players to access inventories in CREATIVE mode even if 'restrict_creative' is true. Also allow CREATIVE players to drop and pickup items.
+  gamemodeinventories.admin:
+    default: op
+    description: Allow players to change config options.
+commands:
+  gmi:
+    permissions: gamemodeinventories.admin
+    description: Allow players to change config options.
+    usage: /<command> [config option]

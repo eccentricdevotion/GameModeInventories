@@ -1,0 +1,11 @@
+armor: true
+debug: false
+dont_spam_chat: false
+enderchest: true
+no_drops: false
+no_pickups: false
+remove_potions: true
+restrict_creative: false
+save_on_death: true
+survival_on_world_change: false
+xp: true
