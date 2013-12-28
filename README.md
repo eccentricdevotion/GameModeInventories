@@ -16,7 +16,6 @@ This version of GameModeInventories uses a different storage format when saving 
 
 1. Install GMIDatabaseConverter.jar to the server's plugins folder
 2. Start the server
-
    * The plugin will attempt to find and backup your old GameModeInventories database file
    * It will then read the existing inventory data
    * The existing data will be converted to the new format
