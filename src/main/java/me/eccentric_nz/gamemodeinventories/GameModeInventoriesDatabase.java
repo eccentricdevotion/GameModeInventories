@@ -28,7 +28,7 @@ public class GameModeInventoriesDatabase {
     public void createTables() {
         try {
             statement = connection.createStatement();
-            String queryInventories = "CREATE TABLE IF NOT EXISTS inventories (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, player TEXT, gamemode TEXT, inventory TEXT, xp REAL, armour TEXT, enderchest TEXT)";
+            String queryInventories = "CREATE TABLE IF NOT EXISTS inventories (id INTEGER PRIMARY KEY NOT NULL, player TEXT, gamemode TEXT, inventory TEXT, xp REAL, armour TEXT, enderchest TEXT)";
             statement.executeUpdate(queryInventories);
             // update inventories if there is no xp column
             String queryXP = "SELECT sql FROM sqlite_master WHERE tbl_name = 'inventories' AND sql LIKE '%xp REAL%'";
@@ -54,6 +54,10 @@ public class GameModeInventoriesDatabase {
                 statement.executeUpdate(queryAlter3);
                 System.out.println("[GameModeInventories] Adding enderchest to database!");
             }
+            // add blocks table
+            String queryBlocks = "CREATE TABLE IF NOT EXISTS blocks (id INTEGER PRIMARY KEY NOT NULL, location TEXT)";
+            statement.executeUpdate(queryBlocks);
+
             statement.close();
         } catch (SQLException e) {
             System.err.println("[GameModeInventories] Create table error: " + e);

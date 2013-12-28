@@ -63,7 +63,7 @@ public class GameModeInventoriesListener implements Listener {
             boolean saveenderchest = plugin.getConfig().getBoolean("enderchest");
             boolean potions = plugin.getConfig().getBoolean("remove_potions");
             if (p.isOnline()) {
-                plugin.inventoryHandler.switchInventories(p, p.getInventory(), savexp, savearmour, saveenderchest, potions, newGM);
+                plugin.getInventoryHandler().switchInventories(p, p.getInventory(), savexp, savearmour, saveenderchest, potions, newGM);
             }
         }
     }
@@ -92,7 +92,7 @@ public class GameModeInventoriesListener implements Listener {
             Entity entity = event.getRightClicked();
             Player p = event.getPlayer();
             GameMode gm = p.getGameMode();
-            if (gm.equals(GameMode.CREATIVE) && plugin.inventoryHandler.isInstanceOf(entity) && !p.hasPermission("gamemodeinventories.bypass")) {
+            if (gm.equals(GameMode.CREATIVE) && plugin.getInventoryHandler().isInstanceOf(entity) && !p.hasPermission("gamemodeinventories.bypass")) {
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
                     p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to access inventories in CREATIVE!");
                 }
@@ -131,7 +131,7 @@ public class GameModeInventoriesListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void noHorseInventory(InventoryOpenEvent event) {
-        if (plugin.getConfig().getBoolean("restrict_creative") && plugin.inventoryHandler.isInstanceOf(event.getInventory().getHolder())) {
+        if (plugin.getConfig().getBoolean("restrict_creative") && plugin.getInventoryHandler().isInstanceOf(event.getInventory().getHolder())) {
             Player p = (Player) event.getPlayer();
             GameMode gm = p.getGameMode();
             if (gm.equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {

@@ -9,3 +9,4 @@ restrict_creative: false
 save_on_death: true
 survival_on_world_change: false
 xp: true
+track_creative_place: true

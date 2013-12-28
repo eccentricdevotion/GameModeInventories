@@ -22,7 +22,7 @@ public class GameModeInventoriesDeath implements Listener {
 
         if (p.hasPermission("gamemodeinventories.death") && plugin.getConfig().getBoolean("save_on_death")) {
             // save their inventory
-            plugin.inventoryHandler.saveOnDeath(p);
+            plugin.getInventoryHandler().saveOnDeath(p);
             event.getDrops().clear();
         }
     }
@@ -34,7 +34,7 @@ public class GameModeInventoriesDeath implements Listener {
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
                 @Override
                 public void run() {
-                    plugin.inventoryHandler.restoreOnSpawn(p);
+                    plugin.getInventoryHandler().restoreOnSpawn(p);
                 }
             });
         }

@@ -36,6 +36,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("restrict_creative", false);
         boolOptions.put("save_on_death", true);
         boolOptions.put("xp", true);
+        boolOptions.put("track_creative_place", true);
     }
 
     public void checkConfig() {
