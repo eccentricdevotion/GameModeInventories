@@ -36,7 +36,8 @@ public class GameModeInventoriesConfig {
         boolOptions.put("restrict_creative", false);
         boolOptions.put("save_on_death", true);
         boolOptions.put("xp", true);
-        boolOptions.put("track_creative_place", true);
+        boolOptions.put("track_creative_place.enabled", true);
+        boolOptions.put("track_creative_place.break_no_drop", false);
     }
 
     public void checkConfig() {
@@ -44,6 +45,14 @@ public class GameModeInventoriesConfig {
         // boolean values
         for (Map.Entry<String, Boolean> entry : boolOptions.entrySet()) {
             if (!config.contains(entry.getKey())) {
+                if (entry.getKey().equals("track_creative_place.enabled")) {
+                    // check for previous enrty
+                    if (plugin.getConfig().contains("track_creative_place")) {
+                        plugin.getConfig().set(entry.getKey(), plugin.getConfig().getBoolean("track_creative_place"));
+                    } else {
+                        plugin.getConfig().set(entry.getKey(), entry.getValue());
+                    }
+                }
                 plugin.getConfig().set(entry.getKey(), entry.getValue());
                 i++;
             }
