@@ -23,18 +23,20 @@ public class GameModeInventoriesBlock {
     }
 
     public void loadBlocks() {
-        try {
-            Connection connection = service.getConnection();
-            String blocksQuery = "SELECT location FROM blocks";
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(blocksQuery);
-            if (rs.isBeforeFirst()) {
-                while (rs.next()) {
-                    plugin.getCreativeBlocks().add(rs.getString("location"));
+        if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
+            try {
+                Connection connection = service.getConnection();
+                String blocksQuery = "SELECT location FROM blocks";
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(blocksQuery);
+                if (rs.isBeforeFirst()) {
+                    while (rs.next()) {
+                        plugin.getCreativeBlocks().add(rs.getString("location"));
+                    }
                 }
+            } catch (SQLException e) {
+                System.err.println("Could not save block, " + e);
             }
-        } catch (SQLException e) {
-            System.err.println("Could not save block, " + e);
         }
     }
 
