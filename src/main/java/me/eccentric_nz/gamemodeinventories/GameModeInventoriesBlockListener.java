@@ -27,6 +27,7 @@ public class GameModeInventoriesBlockListener implements Listener {
         if (!plugin.getConfig().getBoolean("track_creative_place.enabled")) {
             return;
         }
+        plugin.debug("If 'track_creative_place: enabled: false' is in the config we shoudn't get this message when BREAKING blocks!");
         if (plugin.getCreativeBlocks().contains(event.getBlock().getLocation().toString())) {
             if (event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
                 plugin.getBlock().removeBlock(event.getBlock().getLocation().toString());
@@ -49,6 +50,7 @@ public class GameModeInventoriesBlockListener implements Listener {
         if (!plugin.getConfig().getBoolean("track_creative_place.enabled")) {
             return;
         }
+        plugin.debug("If 'track_creative_place: enabled: false' is in the config we shoudn't get this message when PLACING blocks!");
         if (event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
             if (!plugin.getCreativeBlocks().contains(event.getBlock().getLocation().toString())) {
                 plugin.getBlock().addBlock(event.getBlock().getLocation().toString());

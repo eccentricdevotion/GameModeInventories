@@ -14,7 +14,7 @@ public class GameModeInventories extends JavaPlugin {
     protected static GameModeInventories plugin;
     GameModeInventoriesDatabase service;
     private GameModeInventoriesBlock block;
-    private List<String> creativeBlocks = new ArrayList<String>();
+    private final List<String> creativeBlocks = new ArrayList<String>();
 
     @Override
     public void onEnable() {
