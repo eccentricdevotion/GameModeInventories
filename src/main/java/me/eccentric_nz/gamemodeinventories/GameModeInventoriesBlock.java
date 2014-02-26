@@ -24,7 +24,6 @@ public class GameModeInventoriesBlock {
 
     public void loadBlocks() {
         if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
-            plugin.debug("If 'track_creative_place: enabled: true' is in the config we will load the protected blocks!");
             try {
                 Connection connection = service.getConnection();
                 String blocksQuery = "SELECT location FROM blocks";
