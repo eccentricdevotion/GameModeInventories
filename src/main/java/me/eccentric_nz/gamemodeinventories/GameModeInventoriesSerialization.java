@@ -23,12 +23,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.inventory.ItemStack;
 import me.eccentric_nz.gamemodeinventories.JSON.JSONArray;
 import me.eccentric_nz.gamemodeinventories.JSON.JSONException;
 import me.eccentric_nz.gamemodeinventories.JSON.JSONObject;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Fancy JSON serialization mostly by evilmidget38.
