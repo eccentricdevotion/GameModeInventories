@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,6 +16,7 @@ public class GameModeInventories extends JavaPlugin {
     GameModeInventoriesDatabase service;
     private GameModeInventoriesBlock block;
     private final List<String> creativeBlocks = new ArrayList<String>();
+    private final List<Material> blackList = new ArrayList<Material>();
 
     @Override
     public void onEnable() {
@@ -44,6 +46,7 @@ public class GameModeInventories extends JavaPlugin {
         getCommand("gmi").setTabCompleter(command);
         block = new GameModeInventoriesBlock(this);
         block.loadBlocks();
+        loadBlackList();
     }
 
     @Override
@@ -72,5 +75,20 @@ public class GameModeInventories extends JavaPlugin {
 
     public List<String> getCreativeBlocks() {
         return creativeBlocks;
+    }
+
+    public List<Material> getBlackList() {
+        return blackList;
+    }
+
+    private void loadBlackList() {
+        List<String> bl = getConfig().getStringList("blacklist");
+        for (String s : bl) {
+            try {
+                blackList.add(Material.valueOf(s));
+            } catch (IllegalArgumentException iae) {
+                getServer().getConsoleSender().sendMessage("[GameModeInventories] Invalid material in blacklist - " + s);
+            }
+        }
     }
 }
