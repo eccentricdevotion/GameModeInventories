@@ -3,7 +3,7 @@ description: Allow players to have separate inventories for each game mode (Crea
 main: me.eccentric_nz.gamemodeinventories.GameModeInventories
 name: GameModeInventories
 startup: postworld
-version: '2.1.2'
+version: '2.1.3'
 permissions:
   gamemodeinventories.use:
     default: true
