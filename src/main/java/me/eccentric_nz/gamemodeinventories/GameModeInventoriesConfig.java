@@ -40,7 +40,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("remove_potions", true);
         boolOptions.put("restrict_creative", false);
         boolOptions.put("save_on_death", true);
-        boolOptions.put("switch_on_reload", false);
+        boolOptions.put("switch_on_reload", true);
         boolOptions.put("xp", true);
         boolOptions.put("track_creative_place.enabled", true);
         boolOptions.put("track_creative_place.break_no_drop", false);
