@@ -18,3 +18,4 @@ blacklist:
 - TNT
 - BEDROCK
 - LAVA_BUCKET
+switch_on_reload: false
