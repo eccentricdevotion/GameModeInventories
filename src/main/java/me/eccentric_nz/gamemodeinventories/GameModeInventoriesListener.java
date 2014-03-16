@@ -11,12 +11,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class GameModeInventoriesListener implements Listener {
 
@@ -87,12 +91,35 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
+    public void onInventoryClose(InventoryCloseEvent event) {
+        if (plugin.getConfig().getBoolean("no_drops")) {
+            Inventory inv = event.getInventory();
+            if (inv.getType().equals(InventoryType.WORKBENCH)) {
+                Player p = (Player) event.getPlayer();
+                if (p.getGameMode().equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {
+                    boolean empty = true;
+                    for (ItemStack is : inv.getContents()) {
+                        if (!is.getType().equals(Material.AIR)) {
+                            empty = false;
+                        }
+                    }
+                    if (!empty) {
+                        inv.clear();
+                        if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
+                            p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "Workbenches do not drop items in CREATIVE!");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
     public void onEntityClick(PlayerInteractEntityEvent event) {
         if (plugin.getConfig().getBoolean("restrict_creative")) {
             Entity entity = event.getRightClicked();
             Player p = event.getPlayer();
-            GameMode gm = p.getGameMode();
-            if (gm.equals(GameMode.CREATIVE) && plugin.getInventoryHandler().isInstanceOf(entity) && !p.hasPermission("gamemodeinventories.bypass")) {
+            if (p.getGameMode().equals(GameMode.CREATIVE) && plugin.getInventoryHandler().isInstanceOf(entity) && !p.hasPermission("gamemodeinventories.bypass")) {
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
                     p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to access inventories in CREATIVE!");
                 }
