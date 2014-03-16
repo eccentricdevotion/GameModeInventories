@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -27,7 +28,7 @@ public class GameModeInventoriesBlockListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onItemSpawn(ItemSpawnEvent event) {
         if (!plugin.getConfig().getBoolean("no_falling_drops")) {
             return;
@@ -39,7 +40,7 @@ public class GameModeInventoriesBlockListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
             return;
@@ -55,7 +56,7 @@ public class GameModeInventoriesBlockListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         if (!plugin.getConfig().getBoolean("track_creative_place.enabled")) {
             return;
@@ -80,7 +81,7 @@ public class GameModeInventoriesBlockListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onBlockplace(BlockPlaceEvent event) {
+    public void onBlockPlace(BlockPlaceEvent event) {
         if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
             return;
         }

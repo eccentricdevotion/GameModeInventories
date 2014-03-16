@@ -86,7 +86,7 @@ public class GameModeInventoriesListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEntityClick(PlayerInteractEntityEvent event) {
         if (plugin.getConfig().getBoolean("restrict_creative")) {
             Entity entity = event.getRightClicked();
