@@ -53,14 +53,10 @@ public class GameModeInventoriesInventory {
                 ps.setInt(2, id);
                 ps.executeUpdate();
                 ps.close();
-                //String updateQuery = "UPDATE inventories SET inventory = '" + inv + "' WHERE id = " + id;
-                //statement.executeUpdate(updateQuery);
             } else {
                 // they haven't got an inventory saved yet so make one with their current inventory
-                //String invQuery = "INSERT INTO inventories (player, gamemode, inventory) VALUES ('" + name + "','" + currentGM + "','" + inv + "')";
                 String insertQuery = "INSERT INTO inventories (player, gamemode, inventory) VALUES (?, ?, ?)";
                 ps = connection.prepareStatement(insertQuery);
-                //statement.executeUpdate(invQuery);
                 ps.setString(1, name);
                 ps.setString(2, currentGM);
                 ps.setString(3, inv);
@@ -75,14 +71,12 @@ public class GameModeInventoriesInventory {
             if (savexp) {
                 // get players XP
                 int a = xpc.getCurrentExp();
-                //String xpQuery = "UPDATE inventories SET xp = '" + a + "' WHERE id = " + id;
                 String xpQuery = "UPDATE inventories SET xp = ? WHERE id = ?";
                 PreparedStatement psx = connection.prepareStatement(xpQuery);
                 psx.setInt(1, a);
                 psx.setInt(2, id);
                 psx.executeUpdate();
                 psx.close();
-                //statement.executeUpdate(xpQuery);
             }
             if (savearmour) {
                 // get players armour
@@ -93,16 +87,12 @@ public class GameModeInventoriesInventory {
                 psa.setInt(2, id);
                 psa.executeUpdate();
                 psa.close();
-//                String armourQuery = "UPDATE inventories SET armour = '" + arm + "' WHERE id = " + id;
-//                statement.executeUpdate(armourQuery);
             }
             if (saveender) {
                 // get players enderchest
                 Inventory ec = p.getEnderChest();
                 if (ec != null) {
                     String ender = GameModeInventoriesSerialization.toString(ec.getContents());
-//                    String enderQuery = "UPDATE inventories SET enderchest = '" + ender + "' WHERE id = " + id;
-//                    statement.executeUpdate(enderQuery);
                     String enderQuery = "UPDATE inventories SET enderchest = ? WHERE id = ?";
                     PreparedStatement pse = connection.prepareStatement(enderQuery);
                     pse.setString(1, ender);
@@ -190,12 +180,10 @@ public class GameModeInventoriesInventory {
                 ps.setInt(3, id);
                 ps.executeUpdate();
                 ps.close();
-                //statement.executeUpdate(updateQuery);
                 rsInv.close();
             } else {
                 // they haven't got an inventory saved yet so make one with their current inventory
                 String invQuery = "INSERT INTO inventories (player, gamemode, inventory, armour) VALUES (?, ?, ?, ?)";
-                //statement.executeUpdate(invQuery);
                 ps = connection.prepareStatement(invQuery);
                 ps.setString(1, name);
                 ps.setString(2, gm);

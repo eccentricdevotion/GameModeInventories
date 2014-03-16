@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -53,16 +52,14 @@ public class GameModeInventories extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (getConfig().getBoolean("switch_on_reload")) {
-            boolean savexp = plugin.getConfig().getBoolean("xp");
-            boolean savearmour = plugin.getConfig().getBoolean("armor");
-            boolean saveenderchest = plugin.getConfig().getBoolean("enderchest");
-            boolean potions = plugin.getConfig().getBoolean("remove_potions");
-            for (Player p : getServer().getOnlinePlayers()) {
-                if (p.hasPermission("gamemodeinventories.use")) {
-                    if (p.isOnline()) {
-                        plugin.getInventoryHandler().switchInventories(p, p.getInventory(), savexp, savearmour, saveenderchest, potions, GameMode.SURVIVAL);
-                    }
+        boolean savexp = getConfig().getBoolean("xp");
+        boolean savearmour = getConfig().getBoolean("armor");
+        boolean saveenderchest = getConfig().getBoolean("enderchest");
+        boolean potions = getConfig().getBoolean("remove_potions");
+        for (Player p : getServer().getOnlinePlayers()) {
+            if (p.hasPermission("gamemodeinventories.use")) {
+                if (p.isOnline()) {
+                    inventoryHandler.switchInventories(p, p.getInventory(), savexp, savearmour, saveenderchest, potions, p.getGameMode());
                 }
             }
         }
