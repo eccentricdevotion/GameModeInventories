@@ -50,7 +50,7 @@ public class GameModeInventoriesPistonListener implements Listener {
         }
         if (plugin.getCreativeBlocks().contains(event.getBlock().getRelative(event.getDirection(), 2).getLocation().toString())) {
             event.setCancelled(true);
-            plugin.debug("Cancelled piston retraction because the moved blocks was a CREATIVE placed block");
+            plugin.debug("Cancelled piston retraction because the moved block was a CREATIVE placed block");
         }
     }
 }

@@ -13,9 +13,9 @@ xp: true
 track_creative_place:
     enabled: true
     break_no_drop: false
+    no_piston_move: false
 creative_blacklist: false
 blacklist:
 - TNT
 - BEDROCK
 - LAVA_BUCKET
-switch_on_reload: true

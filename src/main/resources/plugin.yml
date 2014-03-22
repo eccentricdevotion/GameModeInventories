@@ -2,7 +2,7 @@ author: eccentric_nz
 description: Allow players to have separate inventories for each game mode (Creative and Survival).
 main: me.eccentric_nz.gamemodeinventories.GameModeInventories
 name: GameModeInventories
-startup: postworld
+load: POSTWORLD
 version: '2.2.2'
 permissions:
   gamemodeinventories.use:
