@@ -23,6 +23,7 @@ public class GameModeInventoriesConfig {
     private File configFile = null;
     HashMap<String, Boolean> boolOptions = new HashMap<String, Boolean>();
     List<String> bl = new ArrayList<String>();
+    List<String> com = new ArrayList<String>();
 
     public GameModeInventoriesConfig(GameModeInventories plugin) {
         this.plugin = plugin;
@@ -30,6 +31,7 @@ public class GameModeInventoriesConfig {
         this.config = YamlConfiguration.loadConfiguration(configFile);
         // boolean
         boolOptions.put("armor", true);
+        boolOptions.put("command_blacklist", false);
         boolOptions.put("creative_blacklist", false);
         boolOptions.put("debug", false);
         boolOptions.put("dont_spam_chat", false);
@@ -47,6 +49,10 @@ public class GameModeInventoriesConfig {
         bl.add("TNT");
         bl.add("BEDROCK");
         bl.add("LAVA_BUCKET");
+        com.add("give");
+        com.add("i");
+        com.add("buy");
+        com.add("sell");
     }
 
     public void checkConfig() {
@@ -68,6 +74,11 @@ public class GameModeInventoriesConfig {
         }
         if (!config.contains("blacklist")) {
             plugin.getConfig().set("blacklist", bl);
+            i++;
+        }
+        if (!config.contains("commands")) {
+            plugin.getConfig().set("commands", com);
+            i++;
         }
         if (i > 0) {
             plugin.getServer().getConsoleSender().sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + i + ChatColor.RESET + " new items to config");

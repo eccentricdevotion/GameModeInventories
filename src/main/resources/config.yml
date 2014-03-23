@@ -19,3 +19,9 @@ blacklist:
 - TNT
 - BEDROCK
 - LAVA_BUCKET
+command_blacklist: false
+commands:
+- give
+- i
+- buy
+- sell
