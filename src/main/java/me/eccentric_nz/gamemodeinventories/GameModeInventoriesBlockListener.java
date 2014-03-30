@@ -65,13 +65,16 @@ public class GameModeInventoriesBlockListener implements Listener {
             if (event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
                 plugin.getBlock().removeBlock(event.getBlock().getLocation().toString());
             } else {
-                event.setCancelled(true);
-                String message = "You cannot break blocks that were placed in creative gamemode!";
+                String message;
                 if (plugin.getConfig().getBoolean("track_creative_place.break_no_drop")) {
                     // remove the location from the creative blocks list because we're removing the block!
                     plugin.getBlock().removeBlock(event.getBlock().getLocation().toString());
                     event.getBlock().setType(Material.AIR);
+                    event.getBlock().getDrops().clear();
                     message = "Blocks that were placed in creative gamemode, do not give drops!";
+                } else {
+                    event.setCancelled(true);
+                    message = "You cannot break blocks that were placed in creative gamemode!";
                 }
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
                     event.getPlayer().sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + message);
