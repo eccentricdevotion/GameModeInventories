@@ -35,6 +35,9 @@ public class GameModeInventoriesDeath implements Listener {
             plugin.getInventoryHandler().saveOnDeath(p);
             event.getDrops().clear();
         }
+        if (p.getGameMode().equals(GameMode.CREATIVE) && plugin.getConfig().getBoolean("no_drops")) {
+            event.getDrops().clear();
+        }
     }
 
     @EventHandler
