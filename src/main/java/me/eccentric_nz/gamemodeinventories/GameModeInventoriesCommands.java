@@ -44,7 +44,10 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
 
         if (cmd.getName().equalsIgnoreCase("gmi")) {
             if (args.length == 0) {
-                sender.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + GameModeInventoriesConstants.HELP.split("\n"));
+                sender.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "=== HELP ===");
+                for (String h : GameModeInventoriesConstants.HELP.split("\n")) {
+                    sender.sendMessage(h);
+                }
                 return true;
             }
             if (sender.hasPermission("gamemodeinventories.admin")) {

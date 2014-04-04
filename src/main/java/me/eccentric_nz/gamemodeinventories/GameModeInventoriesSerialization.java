@@ -43,7 +43,7 @@ public class GameModeInventoriesSerialization {
         Map<String, Object> map = new HashMap<String, Object>();
         Iterator<String> keys = object.keys();
         while (keys.hasNext()) {
-            String key = (String) keys.next();
+            String key = keys.next();
             map.put(key, fromJson(object.get(key)));
         }
         return map;
