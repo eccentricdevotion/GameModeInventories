@@ -30,6 +30,7 @@ public class GameModeInventoriesInventory {
     GameModeInventoriesXPCalculator xpc;
 
     public void switchInventories(Player p, Inventory inventory, boolean savexp, boolean savearmour, boolean saveender, boolean potions, GameMode newGM) {
+        String uuid = p.getUniqueId().toString();
         String name = p.getName();
         String currentGM = p.getGameMode().name();
         if (savexp) {
@@ -41,7 +42,7 @@ public class GameModeInventoriesInventory {
             Statement statement = connection.createStatement();
             PreparedStatement ps;
             // get their current gamemode inventory from database
-            String getQuery = "SELECT id FROM inventories WHERE player = '" + name + "' AND gamemode = '" + currentGM + "'";
+            String getQuery = "SELECT id FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + currentGM + "'";
             ResultSet rsInv = statement.executeQuery(getQuery);
             int id = 0;
             if (rsInv.next()) {
@@ -55,11 +56,12 @@ public class GameModeInventoriesInventory {
                 ps.close();
             } else {
                 // they haven't got an inventory saved yet so make one with their current inventory
-                String insertQuery = "INSERT INTO inventories (player, gamemode, inventory) VALUES (?, ?, ?)";
+                String insertQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory) VALUES (?, ?, ?, ?)";
                 ps = connection.prepareStatement(insertQuery);
-                ps.setString(1, name);
-                ps.setString(2, currentGM);
-                ps.setString(3, inv);
+                ps.setString(1, uuid);
+                ps.setString(2, name);
+                ps.setString(3, currentGM);
+                ps.setString(4, inv);
                 ps.executeUpdate();
                 ResultSet idRS = ps.getGeneratedKeys();
                 if (idRS.next()) {
@@ -108,7 +110,7 @@ public class GameModeInventoriesInventory {
                 }
             }
             // check if they have an inventory for the new gamemode
-            String getNewQuery = "SELECT inventory, xp, armour, enderchest FROM inventories WHERE player = '" + name + "' AND gamemode = '" + newGM + "'";
+            String getNewQuery = "SELECT inventory, xp, armour, enderchest FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + newGM + "'";
             ResultSet rsNewInv = statement.executeQuery(getNewQuery);
             int amount;
             String savedarmour;
@@ -159,6 +161,7 @@ public class GameModeInventoriesInventory {
     }
 
     public void saveOnDeath(Player p) {
+        String uuid = p.getUniqueId().toString();
         String name = p.getName();
         String gm = p.getGameMode().name();
         String inv = GameModeInventoriesSerialization.toString(p.getInventory().getContents());
@@ -167,7 +170,7 @@ public class GameModeInventoriesInventory {
             Connection connection = service.getConnection();
             Statement statement = connection.createStatement();
             // get their current gamemode inventory from database
-            String getQuery = "SELECT id FROM inventories WHERE player = '" + name + "' AND gamemode = '" + gm + "'";
+            String getQuery = "SELECT id FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + gm + "'";
             ResultSet rsInv = statement.executeQuery(getQuery);
             PreparedStatement ps;
             if (rsInv.next()) {
@@ -183,12 +186,13 @@ public class GameModeInventoriesInventory {
                 rsInv.close();
             } else {
                 // they haven't got an inventory saved yet so make one with their current inventory
-                String invQuery = "INSERT INTO inventories (player, gamemode, inventory, armour) VALUES (?, ?, ?, ?)";
+                String invQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory, armour) VALUES (?, ?, ?, ?, ?)";
                 ps = connection.prepareStatement(invQuery);
-                ps.setString(1, name);
-                ps.setString(2, gm);
-                ps.setString(3, inv);
-                ps.setString(4, arm);
+                ps.setString(1, uuid);
+                ps.setString(2, name);
+                ps.setString(3, gm);
+                ps.setString(4, inv);
+                ps.setString(5, arm);
                 ps.executeUpdate();
                 ps.close();
             }
@@ -199,14 +203,14 @@ public class GameModeInventoriesInventory {
     }
 
     public void restoreOnSpawn(Player p) {
-        String name = p.getName();
+        String uuid = p.getUniqueId().toString();
         String gm = p.getGameMode().name();
         // restore their inventory
         try {
             Connection connection = service.getConnection();
             Statement statement = connection.createStatement();
             // get their current gamemode inventory from database
-            String getQuery = "SELECT inventory, armour FROM inventories WHERE player = '" + name + "' AND gamemode = '" + gm + "'";
+            String getQuery = "SELECT inventory, armour FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + gm + "'";
             ResultSet rsInv = statement.executeQuery(getQuery);
             if (rsInv.next()) {
                 // set their inventory to the saved one
