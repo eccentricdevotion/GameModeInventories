@@ -44,6 +44,7 @@ public class GameModeInventories extends JavaPlugin {
                 // conversion failed
                 System.out.println("[GameModeInventories]" + ChatColor.RED + "UUID conversion failed, disabling...");
                 pm.disablePlugin(this);
+                return;
             } else {
                 getConfig().set("uuid_conversion_done", true);
                 System.out.println("[GameModeInventories] UUID conversion successful :)");
