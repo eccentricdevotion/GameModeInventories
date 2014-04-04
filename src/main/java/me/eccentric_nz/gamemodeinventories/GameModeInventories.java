@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -35,9 +36,20 @@ public class GameModeInventories extends JavaPlugin {
         } catch (Exception e) {
             debug("Connection and Tables Error: " + e);
         }
-
-        inventoryHandler = new GameModeInventoriesInventory();
         PluginManager pm = Bukkit.getServer().getPluginManager();
+        // update database add and populate uuid fields
+        if (!getConfig().getBoolean("uuid_conversion_done")) {
+            GameModeInventoriesUUIDConverter uc = new GameModeInventoriesUUIDConverter(this);
+            if (!uc.convert()) {
+                // conversion failed
+                System.out.println("[GameModeInventories]" + ChatColor.RED + "UUID conversion failed, disabling...");
+                pm.disablePlugin(this);
+            } else {
+                getConfig().set("uuid_conversion_done", true);
+                System.out.println("[GameModeInventories] UUID conversion successful :)");
+            }
+        }
+        inventoryHandler = new GameModeInventoriesInventory();
         pm.registerEvents(new GameModeInventoriesListener(this), this);
         pm.registerEvents(new GameModeInventoriesDeath(this), this);
         pm.registerEvents(new GameModeInventoriesBlockListener(this), this);

@@ -28,8 +28,16 @@ public class GameModeInventoriesDatabase {
     public void createTables() {
         try {
             statement = connection.createStatement();
-            String queryInventories = "CREATE TABLE IF NOT EXISTS inventories (id INTEGER PRIMARY KEY NOT NULL, player TEXT, gamemode TEXT, inventory TEXT, xp REAL, armour TEXT, enderchest TEXT)";
+            String queryInventories = "CREATE TABLE IF NOT EXISTS inventories (id INTEGER PRIMARY KEY NOT NULL, uuid TEXT, player TEXT, gamemode TEXT, inventory TEXT, xp REAL, armour TEXT, enderchest TEXT)";
             statement.executeUpdate(queryInventories);
+            // update inventories if there is no uuid column
+            String queryUUID = "SELECT sql FROM sqlite_master WHERE tbl_name = 'inventories' AND sql LIKE '%uuid TEXT%'";
+            ResultSet rsUUID = statement.executeQuery(queryUUID);
+            if (!rsUUID.next()) {
+                String queryAlterU = "ALTER TABLE inventories ADD uuid TEXT";
+                statement.executeUpdate(queryAlterU);
+                System.out.println("[GameModeInventories] Adding UUID to database!");
+            }
             // update inventories if there is no xp column
             String queryXP = "SELECT sql FROM sqlite_master WHERE tbl_name = 'inventories' AND sql LIKE '%xp REAL%'";
             ResultSet rsXP = statement.executeQuery(queryXP);

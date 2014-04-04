@@ -46,6 +46,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("track_creative_place.enabled", true);
         boolOptions.put("track_creative_place.no_piston_move", false);
         boolOptions.put("xp", true);
+        boolOptions.put("uuid_conversion_done", false);
         bl.add("TNT");
         bl.add("BEDROCK");
         bl.add("LAVA_BUCKET");
