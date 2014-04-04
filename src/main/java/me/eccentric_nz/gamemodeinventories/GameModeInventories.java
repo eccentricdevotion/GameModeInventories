@@ -47,6 +47,7 @@ public class GameModeInventories extends JavaPlugin {
                 return;
             } else {
                 getConfig().set("uuid_conversion_done", true);
+                saveConfig();
                 System.out.println("[GameModeInventories] UUID conversion successful :)");
             }
         }
