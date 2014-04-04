@@ -107,10 +107,10 @@ public class GameModeInventoriesUUIDConverter {
                     ps.close();
                 }
             } catch (SQLException e) {
-                plugin.debug("Error closing tardis table! " + e.getMessage());
+                plugin.debug("Error closing inventories table! " + e.getMessage());
             }
         }
-        System.out.println("[GameModeInventories] Converted " + count + " Time Lord names to UUIDs.");
+        System.out.println("[GameModeInventories] Converted " + count + " player names to UUIDs.");
         return true;
     }
 
