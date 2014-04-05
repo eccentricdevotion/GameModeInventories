@@ -72,13 +72,16 @@ public class GameModeInventoriesPistonListener implements Listener {
                 }
             }
         }
-        if (plugin.getCreativeBlocks().contains(event.getBlock().getLocation().toString())) {
-            return;
-        }
         for (Block b : event.getBlocks()) {
             if (plugin.getCreativeBlocks().contains(b.getLocation().toString())) {
-                event.setCancelled(true);
-                plugin.debug("Cancelled piston extension because one of the moved blocks was a CREATIVE placed block");
+                if (plugin.getCreativeBlocks().contains(event.getBlock().getLocation().toString())) {
+                    // update the location of the moved block
+                    plugin.getCreativeBlocks().remove(b.getLocation().toString());
+                    plugin.getCreativeBlocks().add(b.getRelative(event.getDirection()).getLocation().toString());
+                } else {
+                    event.setCancelled(true);
+                    plugin.debug("Cancelled piston extension because one of the moved blocks was a CREATIVE placed block");
+                }
             }
         }
     }
@@ -91,12 +94,15 @@ public class GameModeInventoriesPistonListener implements Listener {
         if (!plugin.getConfig().getBoolean("track_creative_place.enabled")) {
             return;
         }
-        if (plugin.getCreativeBlocks().contains(event.getBlock().getLocation().toString())) {
-            return;
-        }
         if (plugin.getCreativeBlocks().contains(event.getBlock().getRelative(event.getDirection(), 2).getLocation().toString())) {
-            event.setCancelled(true);
-            plugin.debug("Cancelled piston retraction because the moved block was a CREATIVE placed block");
+            if (plugin.getCreativeBlocks().contains(event.getBlock().getLocation().toString())) {
+                // update the location of the moved block
+                plugin.getCreativeBlocks().remove(event.getBlock().getRelative(event.getDirection(), 2).getLocation().toString());
+                plugin.getCreativeBlocks().add(event.getBlock().getRelative(event.getDirection()).getLocation().toString());
+            } else {
+                event.setCancelled(true);
+                plugin.debug("Cancelled piston retraction because the moved block was a CREATIVE placed block");
+            }
         }
     }
 }
