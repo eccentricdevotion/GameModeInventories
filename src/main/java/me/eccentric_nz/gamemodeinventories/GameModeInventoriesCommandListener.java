@@ -37,7 +37,7 @@ public class GameModeInventoriesCommandListener implements Listener {
             if (blacklist.contains(command)) {
                 event.setCancelled(true);
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                    event.getPlayer().sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to use " + ChatColor.GREEN + "/" + command + ChatColor.RESET + " in CREATIVE!");
+                    event.getPlayer().sendMessage(plugin.MY_PLUGIN_NAME + String.format(plugin.getM().getMessage().get("NO_CREATIVE_COMMAND"), ChatColor.GREEN + "/" + command + ChatColor.RESET));
                 }
             }
         }

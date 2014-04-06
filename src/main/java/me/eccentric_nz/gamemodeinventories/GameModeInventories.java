@@ -19,6 +19,8 @@ public class GameModeInventories extends JavaPlugin {
     private GameModeInventoriesBlock block;
     private final List<String> creativeBlocks = new ArrayList<String>();
     private final List<Material> blackList = new ArrayList<Material>();
+    public final String MY_PLUGIN_NAME = ChatColor.GOLD + "[GameModeInventories] " + ChatColor.RESET;
+    private GameModeInventoriesMessage m;
 
     @Override
     public void onEnable() {
@@ -51,6 +53,8 @@ public class GameModeInventories extends JavaPlugin {
                 System.out.println("[GameModeInventories] UUID conversion successful :)");
             }
         }
+        m = new GameModeInventoriesMessage(this);
+        m.getMessages();
         inventoryHandler = new GameModeInventoriesInventory();
         pm.registerEvents(new GameModeInventoriesListener(this), this);
         pm.registerEvents(new GameModeInventoriesDeath(this), this);
@@ -114,8 +118,12 @@ public class GameModeInventories extends JavaPlugin {
             try {
                 blackList.add(Material.valueOf(s));
             } catch (IllegalArgumentException iae) {
-                getServer().getConsoleSender().sendMessage("[GameModeInventories] Invalid material in blacklist - " + s);
+                getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + String.format(m.getMessage().get("INVALID_MATERIAL"), s));
             }
         }
+    }
+
+    public GameModeInventoriesMessage getM() {
+        return m;
     }
 }

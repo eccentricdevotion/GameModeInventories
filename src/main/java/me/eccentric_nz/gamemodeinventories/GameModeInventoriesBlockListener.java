@@ -50,7 +50,7 @@ public class GameModeInventoriesBlockListener implements Listener {
             if (plugin.getBlackList().contains(mat)) {
                 event.setCancelled(true);
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                    event.getPlayer().sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + mat.toString() + " placement is disabled in creative gamemode!");
+                    event.getPlayer().sendMessage(plugin.MY_PLUGIN_NAME + String.format(plugin.getM().getMessage().get("NO_CREATIVE_PLACE"), mat.toString()));
                 }
             }
         }
@@ -71,13 +71,13 @@ public class GameModeInventoriesBlockListener implements Listener {
                     plugin.getBlock().removeBlock(event.getBlock().getLocation().toString());
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getDrops().clear();
-                    message = "Blocks that were placed in creative gamemode, do not give drops!";
+                    message = plugin.getM().getMessage().get("NO_CREATIVE_DROPS");
                 } else {
                     event.setCancelled(true);
-                    message = "You cannot break blocks that were placed in creative gamemode!";
+                    message = plugin.getM().getMessage().get("NO_CREATIVE_BREAK");
                 }
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                    event.getPlayer().sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + message);
+                    event.getPlayer().sendMessage(plugin.MY_PLUGIN_NAME + message);
                 }
             }
         }
@@ -92,7 +92,7 @@ public class GameModeInventoriesBlockListener implements Listener {
         if (plugin.getConfig().getBoolean("creative_blacklist") && plugin.getBlackList().contains(mat)) {
             event.setCancelled(true);
             if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                event.getPlayer().sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + mat.toString() + " placement is disabled in creative gamemode!");
+                event.getPlayer().sendMessage(plugin.MY_PLUGIN_NAME + String.format(plugin.getM().getMessage().get("NO_CREATIVE_PLACE"), mat.toString()));
             }
             return;
         }

@@ -44,10 +44,7 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
 
         if (cmd.getName().equalsIgnoreCase("gmi")) {
             if (args.length == 0) {
-                sender.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "=== HELP ===");
-                for (String h : GameModeInventoriesConstants.HELP.split("\n")) {
-                    sender.sendMessage(h);
-                }
+                sender.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("HELP"));
                 return true;
             }
             if (sender.hasPermission("gamemodeinventories.admin")) {
@@ -55,12 +52,12 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                 if (args.length == 1 && firstArgs.containsKey(option)) {
                     boolean bool = !plugin.getConfig().getBoolean(firstArgs.get(option));
                     plugin.getConfig().set(firstArgs.get(option), bool);
-                    sender.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + option + " was set to: " + bool);
+                    sender.sendMessage(plugin.MY_PLUGIN_NAME + String.format(plugin.getM().getMessage().get("CONFIG_SET"), option, bool));
                     plugin.saveConfig();
                     return true;
                 }
             } else {
-                sender.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You do not have permission to run that command!");
+                sender.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_PERMISSION"));
                 return true;
             }
         }

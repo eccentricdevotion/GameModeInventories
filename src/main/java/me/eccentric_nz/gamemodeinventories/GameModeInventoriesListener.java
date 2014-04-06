@@ -83,7 +83,7 @@ public class GameModeInventoriesListener implements Listener {
                 if (gm.equals(GameMode.CREATIVE) && containers.contains(m) && !p.hasPermission("gamemodeinventories.bypass") && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                     event.setCancelled(true);
                     if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                        p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to access inventories in CREATIVE!");
+                        p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_INVENTORY"));
                     }
                 }
             }
@@ -106,7 +106,7 @@ public class GameModeInventoriesListener implements Listener {
                     if (!empty) {
                         inv.clear();
                         if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                            p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "Workbenches do not drop items in CREATIVE!");
+                            p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_WORKBENCH_DROPS"));
                         }
                     }
                 }
@@ -121,7 +121,7 @@ public class GameModeInventoriesListener implements Listener {
             Player p = event.getPlayer();
             if (p.getGameMode().equals(GameMode.CREATIVE) && plugin.getInventoryHandler().isInstanceOf(entity) && !p.hasPermission("gamemodeinventories.bypass")) {
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                    p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to access inventories in CREATIVE!");
+                    p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_INVENTORY"));
                 }
                 event.setCancelled(true);
             }
@@ -136,7 +136,7 @@ public class GameModeInventoriesListener implements Listener {
             if (gm.equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {
                 event.setCancelled(true);
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                    p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to drop items in CREATIVE!");
+                    p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_PLAYER_DROPS"));
                 }
             }
         }
@@ -150,7 +150,7 @@ public class GameModeInventoriesListener implements Listener {
             if (gm.equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {
                 event.setCancelled(true);
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                    p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to pick up items in CREATIVE!");
+                    p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_PICKUP"));
                 }
             }
         }
@@ -164,7 +164,7 @@ public class GameModeInventoriesListener implements Listener {
             if (gm.equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {
                 event.setCancelled(true);
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                    p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to access horse inventories in CREATIVE!");
+                    p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_HORSE"));
                 }
             }
         }
