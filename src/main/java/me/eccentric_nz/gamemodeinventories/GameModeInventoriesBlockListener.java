@@ -42,6 +42,9 @@ public class GameModeInventoriesBlockListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
+        if (!plugin.getConfig().getBoolean("creative_blacklist")) {
+            return;
+        }
         if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
             return;
         }
