@@ -7,6 +7,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -40,7 +41,7 @@ public class GameModeInventoriesBlockListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (!plugin.getConfig().getBoolean("creative_blacklist")) {
             return;
@@ -48,10 +49,11 @@ public class GameModeInventoriesBlockListener implements Listener {
         if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
             return;
         }
-        if (event.hasItem() && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+        if (event.hasItem() && (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR))) {
             Material mat = event.getItem().getType();
             if (plugin.getBlackList().contains(mat)) {
                 event.setCancelled(true);
+                event.setUseItemInHand(Result.DENY);
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
                     event.getPlayer().sendMessage(plugin.MY_PLUGIN_NAME + String.format(plugin.getM().getMessage().get("NO_CREATIVE_PLACE"), mat.toString()));
                 }
