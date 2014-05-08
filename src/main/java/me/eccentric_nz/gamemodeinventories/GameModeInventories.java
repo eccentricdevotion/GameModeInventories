@@ -61,6 +61,7 @@ public class GameModeInventories extends JavaPlugin {
         pm.registerEvents(new GameModeInventoriesBlockListener(this), this);
         pm.registerEvents(new GameModeInventoriesPistonListener(this), this);
         pm.registerEvents(new GameModeInventoriesCommandListener(this), this);
+        pm.registerEvents(new GameModeInventoriesWorldListener(this), this);
         GameModeInventoriesCommands command = new GameModeInventoriesCommands(this);
         getCommand("gmi").setExecutor(command);
         getCommand("gmi").setTabCompleter(command);
