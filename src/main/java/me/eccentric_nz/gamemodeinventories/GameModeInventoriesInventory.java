@@ -29,6 +29,7 @@ public class GameModeInventoriesInventory {
     GameModeInventoriesDatabase service = GameModeInventoriesDatabase.getInstance();
     GameModeInventoriesXPCalculator xpc;
 
+    @SuppressWarnings("deprecation")
     public void switchInventories(Player p, Inventory inventory, boolean savexp, boolean savearmour, boolean saveender, boolean potions, GameMode newGM) {
         String uuid = p.getUniqueId().toString();
         String name = p.getName();
@@ -155,6 +156,7 @@ public class GameModeInventoriesInventory {
             if (savexp) {
                 xpc.setExp(amount);
             }
+            p.updateInventory();
         } catch (SQLException e) {
             System.err.println("Could not save inventory on gamemode change, " + e);
         }
