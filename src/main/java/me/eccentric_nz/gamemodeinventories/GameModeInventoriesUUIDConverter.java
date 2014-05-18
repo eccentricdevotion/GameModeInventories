@@ -71,7 +71,9 @@ public class GameModeInventoriesUUIDConverter {
             rs = statement.executeQuery(query);
             if (rs.isBeforeFirst()) {
                 while (rs.next()) {
-                    players.add(rs.getString("player"));
+                    if (!rs.getString("player").isEmpty()) {
+                        players.add(rs.getString("player"));
+                    }
                 }
                 GameModeInventoriesUUIDFetcher fetcher = new GameModeInventoriesUUIDFetcher(players);
                 // get UUIDs
