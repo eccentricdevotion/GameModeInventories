@@ -16,7 +16,7 @@ import java.sql.Statement;
 public class GameModeInventoriesBlock {
 
     private final GameModeInventories plugin;
-    GameModeInventoriesDatabase service = GameModeInventoriesDatabase.getInstance();
+    GameModeInventoriesDBConnection service = GameModeInventoriesDBConnection.getInstance();
 
     public GameModeInventoriesBlock(GameModeInventories plugin) {
         this.plugin = plugin;
@@ -26,6 +26,7 @@ public class GameModeInventoriesBlock {
         if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
             try {
                 Connection connection = service.getConnection();
+                service.testConnection(connection);
                 String blocksQuery = "SELECT location FROM blocks";
                 Statement statement = connection.createStatement();
                 ResultSet rs = statement.executeQuery(blocksQuery);
@@ -43,6 +44,7 @@ public class GameModeInventoriesBlock {
     public void addBlock(String l) {
         try {
             Connection connection = service.getConnection();
+            service.testConnection(connection);
             String insertQuery = "INSERT INTO blocks (location) VALUES (?)";
             PreparedStatement ps = connection.prepareStatement(insertQuery);
             ps.setString(1, l);
@@ -56,6 +58,7 @@ public class GameModeInventoriesBlock {
     public void removeBlock(String l) {
         try {
             Connection connection = service.getConnection();
+            service.testConnection(connection);
             String deleteQuery = "DELETE FROM blocks WHERE location = ?";
             PreparedStatement ps = connection.prepareStatement(deleteQuery);
             ps.setString(1, l);

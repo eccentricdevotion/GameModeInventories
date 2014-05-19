@@ -40,7 +40,7 @@ import org.bukkit.util.FileUtil;
 public class GameModeInventoriesUUIDConverter {
 
     private final GameModeInventories plugin;
-    private final GameModeInventoriesDatabase service = GameModeInventoriesDatabase.getInstance();
+    private final GameModeInventoriesDBConnection service = GameModeInventoriesDBConnection.getInstance();
     private final Connection connection = service.getConnection();
     private final List<String> players = new ArrayList<String>();
 
@@ -67,6 +67,7 @@ public class GameModeInventoriesUUIDConverter {
         String inventories_update = "UPDATE inventories SET uuid = ? WHERE player = ?";
         int count = 0;
         try {
+            service.testConnection(connection);
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
             if (rs.isBeforeFirst()) {

@@ -15,7 +15,7 @@ public class GameModeInventories extends JavaPlugin {
 
     private GameModeInventoriesInventory inventoryHandler;
     protected static GameModeInventories plugin;
-    GameModeInventoriesDatabase service;
+    GameModeInventoriesDBConnection service;
     private GameModeInventoriesBlock block;
     private final List<String> creativeBlocks = new ArrayList<String>();
     private final List<Material> blackList = new ArrayList<Material>();
@@ -30,17 +30,11 @@ public class GameModeInventories extends JavaPlugin {
         GameModeInventoriesConfig tc = new GameModeInventoriesConfig(this);
         tc.checkConfig();
 
-        service = GameModeInventoriesDatabase.getInstance();
-        try {
-            String path = getDataFolder() + File.separator + "GMI.db";
-            service.setConnection(path);
-            service.createTables();
-        } catch (Exception e) {
-            debug("Connection and Tables Error: " + e);
-        }
+        service = GameModeInventoriesDBConnection.getInstance();
+        loadDatabase();
         PluginManager pm = Bukkit.getServer().getPluginManager();
         // update database add and populate uuid fields
-        if (!getConfig().getBoolean("uuid_conversion_done")) {
+        if (!getConfig().getBoolean("uuid_conversion_done") && getConfig().getString("storage.database").equals("sqlite")) {
             GameModeInventoriesUUIDConverter uc = new GameModeInventoriesUUIDConverter(this);
             if (!uc.convert()) {
                 // conversion failed
@@ -88,6 +82,27 @@ public class GameModeInventories extends JavaPlugin {
             service.connection.close();
         } catch (SQLException e) {
             System.err.println("[GameModeInventories] Could not close database connection: " + e);
+        }
+    }
+
+    /**
+     * Sets up the database.
+     */
+    private void loadDatabase() {
+        String dbtype = getConfig().getString("storage.database");
+        try {
+            if (dbtype.equals("sqlite")) {
+                String path = getDataFolder() + File.separator + "GMI.db";
+                service.setConnection(path);
+                GameModeInventoriesSQLite sqlite = new GameModeInventoriesSQLite(this);
+                sqlite.createTables();
+            } else {
+                service.setConnection();
+                GameModeInventoriesMySQL mysql = new GameModeInventoriesMySQL(this);
+                mysql.createTables();
+            }
+        } catch (Exception e) {
+            getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + "Connection and Tables Error: " + e);
         }
     }
 

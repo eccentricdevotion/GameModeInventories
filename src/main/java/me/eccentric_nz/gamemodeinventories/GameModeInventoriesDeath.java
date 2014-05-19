@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 public class GameModeInventoriesDeath implements Listener {
 
     private final GameModeInventories plugin;
-    GameModeInventoriesDatabase service = GameModeInventoriesDatabase.getInstance();
     private final boolean force;
     private final GameMode mode;
 

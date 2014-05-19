@@ -26,7 +26,7 @@ import org.bukkit.potion.PotionEffect;
 
 public class GameModeInventoriesInventory {
 
-    GameModeInventoriesDatabase service = GameModeInventoriesDatabase.getInstance();
+    GameModeInventoriesDBConnection service = GameModeInventoriesDBConnection.getInstance();
     GameModeInventoriesXPCalculator xpc;
 
     @SuppressWarnings("deprecation")
@@ -40,6 +40,7 @@ public class GameModeInventoriesInventory {
         String inv = GameModeInventoriesSerialization.toString(p.getInventory().getContents());
         try {
             Connection connection = service.getConnection();
+            service.testConnection(connection);
             Statement statement = connection.createStatement();
             PreparedStatement ps;
             // get their current gamemode inventory from database
@@ -58,7 +59,7 @@ public class GameModeInventoriesInventory {
             } else {
                 // they haven't got an inventory saved yet so make one with their current inventory
                 String insertQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory) VALUES (?, ?, ?, ?)";
-                ps = connection.prepareStatement(insertQuery);
+                ps = connection.prepareStatement(insertQuery, PreparedStatement.RETURN_GENERATED_KEYS);
                 ps.setString(1, uuid);
                 ps.setString(2, name);
                 ps.setString(3, currentGM);
@@ -170,6 +171,7 @@ public class GameModeInventoriesInventory {
         String arm = GameModeInventoriesSerialization.toString(p.getInventory().getArmorContents());
         try {
             Connection connection = service.getConnection();
+            service.testConnection(connection);
             Statement statement = connection.createStatement();
             // get their current gamemode inventory from database
             String getQuery = "SELECT id FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + gm + "'";
@@ -210,6 +212,7 @@ public class GameModeInventoriesInventory {
         // restore their inventory
         try {
             Connection connection = service.getConnection();
+            service.testConnection(connection);
             Statement statement = connection.createStatement();
             // get their current gamemode inventory from database
             String getQuery = "SELECT inventory, armour FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + gm + "'";

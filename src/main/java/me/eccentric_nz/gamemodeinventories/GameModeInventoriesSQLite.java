@@ -1,31 +1,30 @@
+/*
+ *  Copyright 2014 eccentric_nz.
+ */
 package me.eccentric_nz.gamemodeinventories;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class GameModeInventoriesDatabase {
+/**
+ *
+ * @author eccentric_nz
+ */
+public class GameModeInventoriesSQLite {
 
-    private static final GameModeInventoriesDatabase instance = new GameModeInventoriesDatabase();
-    public Connection connection = null;
-    public Statement statement;
+    private final GameModeInventoriesDBConnection service = GameModeInventoriesDBConnection.getInstance();
+    private final Connection connection = service.getConnection();
+    private Statement statement = null;
+    private final GameModeInventories plugin;
 
-    public static synchronized GameModeInventoriesDatabase getInstance() {
-        return instance;
-    }
-
-    public void setConnection(String path) throws Exception {
-        Class.forName("org.sqlite.JDBC");
-        connection = DriverManager.getConnection("jdbc:sqlite:" + path);
-    }
-
-    public Connection getConnection() {
-        return connection;
+    public GameModeInventoriesSQLite(GameModeInventories plugin) {
+        this.plugin = plugin;
     }
 
     public void createTables() {
+        service.setIsMySQL(false);
         try {
             statement = connection.createStatement();
             String queryInventories = "CREATE TABLE IF NOT EXISTS inventories (id INTEGER PRIMARY KEY NOT NULL, uuid TEXT, player TEXT, gamemode TEXT, inventory TEXT, xp REAL, armour TEXT, enderchest TEXT)";
@@ -68,12 +67,15 @@ public class GameModeInventoriesDatabase {
 
             statement.close();
         } catch (SQLException e) {
-            System.err.println("[GameModeInventories] Create table error: " + e);
+            plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "SQLite create table error: " + e);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "SQLite close statement error: " + e);
+            }
         }
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException("Clone is not allowed.");
     }
 }

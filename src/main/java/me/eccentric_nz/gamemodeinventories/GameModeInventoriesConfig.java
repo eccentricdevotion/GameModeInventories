@@ -21,6 +21,7 @@ public class GameModeInventoriesConfig {
     private final GameModeInventories plugin;
     private FileConfiguration config = null;
     private File configFile = null;
+    HashMap<String, String> strOptions = new HashMap<String, String>();
     HashMap<String, Boolean> boolOptions = new HashMap<String, Boolean>();
     List<String> bl = new ArrayList<String>();
     List<String> com = new ArrayList<String>();
@@ -29,6 +30,11 @@ public class GameModeInventoriesConfig {
         this.plugin = plugin;
         this.configFile = new File(plugin.getDataFolder(), "config.yml");
         this.config = YamlConfiguration.loadConfiguration(configFile);
+        // database
+        strOptions.put("storage.database", "sqlite");
+        strOptions.put("storage.mysql.url", "mysql://localhost:3306/GMI");
+        strOptions.put("storage.mysql.user", "bukkit");
+        strOptions.put("storage.mysql.password", "mysecurepassword");
         // boolean
         boolOptions.put("armor", true);
         boolOptions.put("command_blacklist", false);
@@ -58,6 +64,13 @@ public class GameModeInventoriesConfig {
 
     public void checkConfig() {
         int i = 0;
+        // string values
+        for (Map.Entry<String, String> entry : strOptions.entrySet()) {
+            if (!config.contains(entry.getKey())) {
+                plugin.getConfig().set(entry.getKey(), entry.getValue());
+                i++;
+            }
+        }
         // boolean values
         for (Map.Entry<String, Boolean> entry : boolOptions.entrySet()) {
             if (!config.contains(entry.getKey())) {
