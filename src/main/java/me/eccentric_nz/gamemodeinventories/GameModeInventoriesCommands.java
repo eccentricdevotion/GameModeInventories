@@ -1,6 +1,11 @@
 package me.eccentric_nz.gamemodeinventories;
 
 import com.google.common.collect.ImmutableList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,6 +15,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.StringUtil;
 
 public class GameModeInventoriesCommands implements CommandExecutor, TabCompleter {
@@ -55,6 +62,58 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                     plugin.getConfig().set(firstArgs.get(option), bool);
                     sender.sendMessage(plugin.MY_PLUGIN_NAME + String.format(plugin.getM().getMessage().get("CONFIG_SET"), option, bool));
                     plugin.saveConfig();
+                    return true;
+                } else if (args.length == 2 && option.equals("kit")) {
+                    String uuid = "00000000-0000-0000-0000-000000000000";
+                    Player p = (Player) sender;
+                    GameModeInventoriesDBConnection service = GameModeInventoriesDBConnection.getInstance();
+                    try {
+                        Connection connection = service.getConnection();
+                        service.testConnection(connection);
+                        Statement statement = connection.createStatement();
+                        if (args[1].toLowerCase().equals("save")) {
+                            String inv = GameModeInventoriesSerialization.toString(p.getInventory().getContents());
+                            PreparedStatement ps;
+                            // get their current gamemode inventory from database
+                            String getQuery = "SELECT id FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = 'SURVIVAL'";
+                            ResultSet rsInv = statement.executeQuery(getQuery);
+                            int id;
+                            if (rsInv.next()) {
+                                // update it with their current inventory
+                                id = rsInv.getInt("id");
+                                String updateQuery = "UPDATE inventories SET inventory = ? WHERE id = ?";
+                                ps = connection.prepareStatement(updateQuery);
+                                ps.setString(1, inv);
+                                ps.setInt(2, id);
+                                ps.executeUpdate();
+                                ps.close();
+                            } else {
+                                // there is no 'kit' inventory saved yet so make one with the player's current inventory
+                                String insertQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory) VALUES (?, 'kit', 'SURVIVAL', ?)";
+                                ps = connection.prepareStatement(insertQuery);
+                                ps.setString(1, uuid);
+                                ps.setString(2, inv);
+                                ps.executeUpdate();
+                                ps.close();
+                            }
+                            rsInv.close();
+                            p.sendMessage(plugin.MY_PLUGIN_NAME + "Kit inventory saved.");
+                        } else {
+                            // load
+                            String getNewQuery = "SELECT inventory FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = 'SURVIVAL'";
+                            ResultSet rsNewInv = statement.executeQuery(getNewQuery);
+                            if (rsNewInv.next()) {
+                                // set the inventory to the kit
+                                ItemStack[] i = GameModeInventoriesSerialization.toItemStacks(rsNewInv.getString("inventory"));
+                                p.getInventory().setContents(i);
+                            }
+                            rsNewInv.close();
+                            p.sendMessage(plugin.MY_PLUGIN_NAME + "Kit inventory loaded.");
+                        }
+                        statement.close();
+                    } catch (SQLException e) {
+                        System.err.println("Could not save inventory for kit, " + e);
+                    }
                     return true;
                 }
             } else {
