@@ -38,6 +38,7 @@ public class GameModeInventoriesListener implements Listener {
         containers.add(Material.CHEST);
         containers.add(Material.DISPENSER);
         containers.add(Material.FURNACE);
+        containers.add(Material.JUKEBOX);
         String[] v = Bukkit.getServer().getBukkitVersion().split("-");
         bukkitversion = (!v[0].equalsIgnoreCase("unknown")) ? new Version(v[0]) : new Version("1.4.7");
         if (bukkitversion.compareTo(preenderchestversion) >= 0) {
