@@ -37,6 +37,7 @@ public class GameModeInventoriesConfig {
         strOptions.put("storage.mysql.password", "mysecurepassword");
         // boolean
         boolOptions.put("armor", true);
+        boolOptions.put("break_bedrock", false);
         boolOptions.put("command_blacklist", false);
         boolOptions.put("creative_blacklist", false);
         boolOptions.put("debug", false);

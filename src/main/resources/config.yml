@@ -19,6 +19,7 @@ blacklist:
 - TNT
 - BEDROCK
 - LAVA_BUCKET
+break_bedrock: false
 command_blacklist: false
 commands:
 - give

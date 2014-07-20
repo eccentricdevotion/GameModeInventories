@@ -28,6 +28,7 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
     public GameModeInventoriesCommands(GameModeInventories plugin) {
         this.plugin = plugin;
         firstArgs.put("armor", "armor");
+        firstArgs.put("break_bedrock", "break_bedrock");
         firstArgs.put("command_blacklist", "command_blacklist");
         firstArgs.put("creative_blacklist", "creative_blacklist");
         firstArgs.put("debug", "debug");

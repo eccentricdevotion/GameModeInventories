@@ -5,6 +5,8 @@ package me.eccentric_nz.gamemodeinventories;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.World.Environment;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.Event.Result;
@@ -85,6 +87,25 @@ public class GameModeInventoriesBlockListener implements Listener {
                     event.getPlayer().sendMessage(plugin.MY_PLUGIN_NAME + message);
                 }
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onBedrockBreak(BlockBreakEvent event) {
+        if (plugin.getConfig().getBoolean("break_bedrock")) {
+            return;
+        }
+        if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+            return;
+        }
+        Block br = event.getBlock();
+        if (!br.getType().equals(Material.BEDROCK)) {
+            return;
+        }
+        if (br.getLocation().getY() < 5) {
+            event.setCancelled(true);
+        } else if (br.getWorld().getEnvironment().equals(Environment.NETHER) && br.getLocation().getY() > 122) {
+            event.setCancelled(true);
         }
     }
 
