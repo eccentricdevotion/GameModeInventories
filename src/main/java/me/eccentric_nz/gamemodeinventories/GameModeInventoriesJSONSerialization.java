@@ -36,7 +36,7 @@ import org.bukkit.inventory.ItemStack;
  * @author eccentric_nz
  *
  */
-public class GameModeInventoriesSerialization {
+public class GameModeInventoriesJSONSerialization {
 
     @SuppressWarnings("unchecked")
     public static Map<String, Object> toMap(JSONObject object) throws JSONException {

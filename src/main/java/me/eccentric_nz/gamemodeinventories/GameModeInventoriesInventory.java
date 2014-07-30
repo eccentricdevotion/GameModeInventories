@@ -6,6 +6,7 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -37,7 +38,7 @@ public class GameModeInventoriesInventory {
         if (savexp) {
             xpc = new GameModeInventoriesXPCalculator(p);
         }
-        String inv = GameModeInventoriesSerialization.toString(p.getInventory().getContents());
+        String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
         try {
             Connection connection = service.getConnection();
             service.testConnection(connection);
@@ -84,7 +85,7 @@ public class GameModeInventoriesInventory {
             }
             if (savearmour) {
                 // get players armour
-                String arm = GameModeInventoriesSerialization.toString(p.getInventory().getArmorContents());
+                String arm = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getArmorContents());
                 String armourQuery = "UPDATE inventories SET armour = ? WHERE id = ?";
                 PreparedStatement psa = connection.prepareStatement(armourQuery);
                 psa.setString(1, arm);
@@ -96,7 +97,7 @@ public class GameModeInventoriesInventory {
                 // get players enderchest
                 Inventory ec = p.getEnderChest();
                 if (ec != null) {
-                    String ender = GameModeInventoriesSerialization.toString(ec.getContents());
+                    String ender = GameModeInventoriesBukkitSerialization.toDatabase(ec.getContents());
                     String enderQuery = "UPDATE inventories SET enderchest = ? WHERE id = ?";
                     PreparedStatement pse = connection.prepareStatement(enderQuery);
                     pse.setString(1, ender);
@@ -112,52 +113,70 @@ public class GameModeInventoriesInventory {
                 }
             }
             // check if they have an inventory for the new gamemode
-            String getNewQuery = "SELECT inventory, xp, armour, enderchest FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + newGM + "'";
-            ResultSet rsNewInv = statement.executeQuery(getNewQuery);
-            int amount;
-            String savedarmour;
-            String savedender;
-            if (rsNewInv.next()) {
-                // set their inventory to the saved one
-                ItemStack[] i = GameModeInventoriesSerialization.toItemStacks(rsNewInv.getString("inventory"));
-                p.getInventory().setContents(i);
-                amount = rsNewInv.getInt("xp");
-                if (savearmour) {
-                    savedarmour = rsNewInv.getString("armour");
-                    ItemStack[] a = GameModeInventoriesSerialization.toItemStacks(savedarmour);
-                    setArmour(p, a);
-                }
-                if (saveender) {
-                    savedender = rsNewInv.getString("enderchest");
-                    if (savedender == null || savedender.equals("[Null]") || savedender.equals("") || savedender.isEmpty()) {
-                        // empty inventory
-                        savedender = "[\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\"]";
+            try {
+                String getNewQuery = "SELECT inventory, xp, armour, enderchest FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + newGM + "'";
+                ResultSet rsNewInv = statement.executeQuery(getNewQuery);
+                int amount;
+                if (rsNewInv.next()) {
+                    // set their inventory to the saved one
+                    String savedinventory = rsNewInv.getString("inventory");
+                    ItemStack[] i;
+                    if (savedinventory.startsWith("[")) {
+                        i = GameModeInventoriesJSONSerialization.toItemStacks(savedinventory);
+                    } else {
+                        i = GameModeInventoriesBukkitSerialization.fromDatabase(savedinventory);
                     }
-                    ItemStack[] a = GameModeInventoriesSerialization.toItemStacks(savedender);
-                    Inventory echest = p.getEnderChest();
-                    echest.setContents(a);
+                    p.getInventory().setContents(i);
+                    amount = rsNewInv.getInt("xp");
+                    if (savearmour) {
+                        String savedarmour = rsNewInv.getString("armour");
+                        ItemStack[] a;
+                        if (savedarmour.startsWith("[")) {
+                            a = GameModeInventoriesJSONSerialization.toItemStacks(savedarmour);
+                        } else {
+                            a = GameModeInventoriesBukkitSerialization.fromDatabase(savedarmour);
+                        }
+                        p.getInventory().setArmorContents(a);
+                    }
+                    if (saveender) {
+                        String savedender = rsNewInv.getString("enderchest");
+                        if (savedender == null || savedender.equals("[Null]") || savedender.equals("") || savedender.isEmpty()) {
+                            // empty inventory
+                            savedender = "[\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\"]";
+                        }
+                        ItemStack[] e;
+                        if (savedender.startsWith("[")) {
+                            e = GameModeInventoriesJSONSerialization.toItemStacks(savedender);
+                        } else {
+                            e = GameModeInventoriesBukkitSerialization.fromDatabase(savedender);
+                        }
+                        Inventory echest = p.getEnderChest();
+                        echest.setContents(e);
+                    }
+                } else {
+                    // start with an empty inventory
+                    p.getInventory().clear();
+                    if (savearmour) {
+                        p.getInventory().setBoots(null);
+                        p.getInventory().setChestplate(null);
+                        p.getInventory().setLeggings(null);
+                        p.getInventory().setHelmet(null);
+                    }
+                    if (saveender) {
+                        Inventory echest = p.getEnderChest();
+                        echest.clear();
+                    }
+                    amount = 0;
                 }
-            } else {
-                // start with an empty inventory
-                p.getInventory().clear();
-                if (savearmour) {
-                    p.getInventory().setBoots(null);
-                    p.getInventory().setChestplate(null);
-                    p.getInventory().setLeggings(null);
-                    p.getInventory().setHelmet(null);
+                rsNewInv.close();
+                statement.close();
+                if (savexp) {
+                    xpc.setExp(amount);
                 }
-                if (saveender) {
-                    Inventory echest = p.getEnderChest();
-                    echest.clear();
-                }
-                amount = 0;
+                p.updateInventory();
+            } catch (IOException ex) {
+                System.err.println("Could not restore inventory on gamemode change, " + ex);
             }
-            rsNewInv.close();
-            statement.close();
-            if (savexp) {
-                xpc.setExp(amount);
-            }
-            p.updateInventory();
         } catch (SQLException e) {
             System.err.println("Could not save inventory on gamemode change, " + e);
         }
@@ -167,8 +186,8 @@ public class GameModeInventoriesInventory {
         String uuid = p.getUniqueId().toString();
         String name = p.getName();
         String gm = p.getGameMode().name();
-        String inv = GameModeInventoriesSerialization.toString(p.getInventory().getContents());
-        String arm = GameModeInventoriesSerialization.toString(p.getInventory().getArmorContents());
+        String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
+        String arm = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getArmorContents());
         try {
             Connection connection = service.getConnection();
             service.testConnection(connection);
@@ -218,23 +237,33 @@ public class GameModeInventoriesInventory {
             String getQuery = "SELECT inventory, armour FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + gm + "'";
             ResultSet rsInv = statement.executeQuery(getQuery);
             if (rsInv.next()) {
-                // set their inventory to the saved one
-                String base64 = rsInv.getString("inventory");
-                ItemStack[] i = GameModeInventoriesSerialization.toItemStacks(base64);
-                p.getInventory().setContents(i);
-                String savedarmour = rsInv.getString("armour");
-                ItemStack[] a = GameModeInventoriesSerialization.toItemStacks(savedarmour);
-                setArmour(p, a);
+                try {
+                    // set their inventory to the saved one
+                    String savedinventory = rsInv.getString("inventory");
+                    ItemStack[] i;
+                    if (savedinventory.startsWith("[")) {
+                        i = GameModeInventoriesJSONSerialization.toItemStacks(savedinventory);
+                    } else {
+                        i = GameModeInventoriesBukkitSerialization.fromDatabase(savedinventory);
+                    }
+                    p.getInventory().setContents(i);
+                    String savedarmour = rsInv.getString("armour");
+                    ItemStack[] a;
+                    if (savedarmour.startsWith("[")) {
+                        a = GameModeInventoriesJSONSerialization.toItemStacks(savedarmour);
+                    } else {
+                        a = GameModeInventoriesBukkitSerialization.fromDatabase(savedarmour);
+                    }
+                    p.getInventory().setArmorContents(a);
+                } catch (IOException e) {
+                    System.err.println("Could not restore inventories on respawn, " + e);
+                }
             }
             rsInv.close();
             statement.close();
         } catch (SQLException e) {
             System.err.println("Could not restore inventories on respawn, " + e);
         }
-    }
-
-    public void setArmour(Player p, ItemStack[] is) {
-        p.getInventory().setArmorContents(is);
     }
 
     public boolean isInstanceOf(Entity e) {

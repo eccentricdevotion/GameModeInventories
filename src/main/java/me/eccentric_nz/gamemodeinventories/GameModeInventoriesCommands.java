@@ -1,6 +1,7 @@
 package me.eccentric_nz.gamemodeinventories;
 
 import com.google.common.collect.ImmutableList;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -73,7 +74,7 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                         service.testConnection(connection);
                         Statement statement = connection.createStatement();
                         if (args[1].toLowerCase().equals("save")) {
-                            String inv = GameModeInventoriesSerialization.toString(p.getInventory().getContents());
+                            String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
                             PreparedStatement ps;
                             // get their current gamemode inventory from database
                             String getQuery = "SELECT id FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = 'SURVIVAL'";
@@ -104,16 +105,26 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                             String getNewQuery = "SELECT inventory FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = 'SURVIVAL'";
                             ResultSet rsNewInv = statement.executeQuery(getNewQuery);
                             if (rsNewInv.next()) {
-                                // set the inventory to the kit
-                                ItemStack[] i = GameModeInventoriesSerialization.toItemStacks(rsNewInv.getString("inventory"));
-                                p.getInventory().setContents(i);
+                                try {
+                                    // set the inventory to the kit
+                                    String savedinventory = rsNewInv.getString("inventory");
+                                    ItemStack[] i;
+                                    if (savedinventory.startsWith("[")) {
+                                        i = GameModeInventoriesJSONSerialization.toItemStacks(savedinventory);
+                                    } else {
+                                        i = GameModeInventoriesBukkitSerialization.fromDatabase(savedinventory);
+                                    }
+                                    p.getInventory().setContents(i);
+                                } catch (IOException e) {
+                                    plugin.debug("Could not set inventory for kit, " + e);
+                                }
                             }
                             rsNewInv.close();
                             p.sendMessage(plugin.MY_PLUGIN_NAME + "Kit inventory loaded.");
                         }
                         statement.close();
                     } catch (SQLException e) {
-                        System.err.println("Could not save inventory for kit, " + e);
+                        plugin.debug("Could not save inventory for kit, " + e);
                     }
                     return true;
                 }
