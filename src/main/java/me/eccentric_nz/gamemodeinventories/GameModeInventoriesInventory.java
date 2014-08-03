@@ -217,6 +217,8 @@ public class GameModeInventoriesInventory {
         String gm = p.getGameMode().name();
         String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
         String arm = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getArmorContents());
+        String attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getContents()));
+        String arm_attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getArmorContents()));
         try {
             Connection connection = service.getConnection();
             service.testConnection(connection);
@@ -228,23 +230,27 @@ public class GameModeInventoriesInventory {
             if (rsInv.next()) {
                 // update it with their current inventory
                 int id = rsInv.getInt("id");
-                String updateQuery = "UPDATE inventories SET inventory = ?, armour = ? WHERE id = ?";
+                String updateQuery = "UPDATE inventories SET inventory = ?, armour = ?, attributes = ?, armour_attributes = ?  WHERE id = ?";
                 ps = connection.prepareStatement(updateQuery);
                 ps.setString(1, inv);
                 ps.setString(2, arm);
-                ps.setInt(3, id);
+                ps.setString(3, attr);
+                ps.setString(4, arm_attr);
+                ps.setInt(5, id);
                 ps.executeUpdate();
                 ps.close();
                 rsInv.close();
             } else {
                 // they haven't got an inventory saved yet so make one with their current inventory
-                String invQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory, armour) VALUES (?, ?, ?, ?, ?)";
+                String invQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory, armour, attributes, armour_attributes) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 ps = connection.prepareStatement(invQuery);
                 ps.setString(1, uuid);
                 ps.setString(2, name);
                 ps.setString(3, gm);
                 ps.setString(4, inv);
                 ps.setString(5, arm);
+                ps.setString(6, attr);
+                ps.setString(7, arm_attr);
                 ps.executeUpdate();
                 ps.close();
             }
@@ -263,7 +269,7 @@ public class GameModeInventoriesInventory {
             service.testConnection(connection);
             Statement statement = connection.createStatement();
             // get their current gamemode inventory from database
-            String getQuery = "SELECT inventory, armour FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + gm + "'";
+            String getQuery = "SELECT * FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + gm + "'";
             ResultSet rsInv = statement.executeQuery(getQuery);
             if (rsInv.next()) {
                 try {
@@ -276,6 +282,7 @@ public class GameModeInventoriesInventory {
                         i = GameModeInventoriesBukkitSerialization.fromDatabase(savedinventory);
                     }
                     p.getInventory().setContents(i);
+                    reapplyCustomAttributes(p, rsInv.getString("attributes"));
                     String savedarmour = rsInv.getString("armour");
                     ItemStack[] a;
                     if (savedarmour.startsWith("[")) {
@@ -284,6 +291,7 @@ public class GameModeInventoriesInventory {
                         a = GameModeInventoriesBukkitSerialization.fromDatabase(savedarmour);
                     }
                     p.getInventory().setArmorContents(a);
+                    reapplyCustomAttributes(p, rsInv.getString("armour_attributes"));
                 } catch (IOException e) {
                     System.err.println("Could not restore inventories on respawn, " + e);
                 }
