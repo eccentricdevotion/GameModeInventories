@@ -61,6 +61,16 @@ public class GameModeInventoriesSQLite {
                 statement.executeUpdate(queryAlter3);
                 System.out.println("[GameModeInventories] Adding enderchest to database!");
             }
+            // update inventories if there is no attributes column
+            String queryAttr = "SELECT sql FROM sqlite_master WHERE tbl_name = 'inventories' AND sql LIKE '%attributes TEXT%'";
+            ResultSet rsAttr = statement.executeQuery(queryAttr);
+            if (!rsAttr.next()) {
+                String queryAlter4 = "ALTER TABLE inventories ADD attributes TEXT";
+                statement.executeUpdate(queryAlter4);
+                String queryAlter5 = "ALTER TABLE inventories ADD armour_attributes TEXT";
+                statement.executeUpdate(queryAlter5);
+                System.out.println("[GameModeInventories] Adding attributes to database!");
+            }
             // add blocks table
             String queryBlocks = "CREATE TABLE IF NOT EXISTS blocks (id INTEGER PRIMARY KEY NOT NULL, location TEXT)";
             statement.executeUpdate(queryBlocks);

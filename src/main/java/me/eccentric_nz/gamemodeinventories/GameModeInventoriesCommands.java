@@ -32,6 +32,7 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
         firstArgs.put("break_bedrock", "break_bedrock");
         firstArgs.put("command_blacklist", "command_blacklist");
         firstArgs.put("creative_blacklist", "creative_blacklist");
+        firstArgs.put("custom_attributes", "custom_attributes");
         firstArgs.put("debug", "debug");
         firstArgs.put("dont_spam_chat", "dont_spam_chat");
         firstArgs.put("enderchest", "enderchest");

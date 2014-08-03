@@ -70,10 +70,11 @@ public class GameModeInventories extends JavaPlugin {
         boolean savearmour = getConfig().getBoolean("armor");
         boolean saveenderchest = getConfig().getBoolean("enderchest");
         boolean potions = getConfig().getBoolean("remove_potions");
+        boolean attributes = plugin.getConfig().getBoolean("custom_attributes");
         for (Player p : getServer().getOnlinePlayers()) {
             if (p.hasPermission("gamemodeinventories.use")) {
                 if (p.isOnline()) {
-                    inventoryHandler.switchInventories(p, p.getInventory(), savexp, savearmour, saveenderchest, potions, p.getGameMode());
+                    inventoryHandler.switchInventories(p, p.getInventory(), savexp, savearmour, saveenderchest, potions, attributes, p.getGameMode());
                 }
             }
         }

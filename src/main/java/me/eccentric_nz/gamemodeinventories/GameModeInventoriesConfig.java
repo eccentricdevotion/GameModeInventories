@@ -40,6 +40,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("break_bedrock", false);
         boolOptions.put("command_blacklist", false);
         boolOptions.put("creative_blacklist", false);
+        boolOptions.put("custom_attributes", false);
         boolOptions.put("debug", false);
         boolOptions.put("dont_spam_chat", false);
         boolOptions.put("enderchest", true);

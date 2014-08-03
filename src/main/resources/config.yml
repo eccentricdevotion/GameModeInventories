@@ -26,4 +26,5 @@ commands:
 - i
 - buy
 - sell
+custom_attributes: false
 uuid_conversion_done: true

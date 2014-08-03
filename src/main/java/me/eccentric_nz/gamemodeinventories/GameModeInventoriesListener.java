@@ -68,8 +68,9 @@ public class GameModeInventoriesListener implements Listener {
             boolean savearmour = plugin.getConfig().getBoolean("armor");
             boolean saveenderchest = plugin.getConfig().getBoolean("enderchest");
             boolean potions = plugin.getConfig().getBoolean("remove_potions");
+            boolean attributes = plugin.getConfig().getBoolean("custom_attributes");
             if (p.isOnline()) {
-                plugin.getInventoryHandler().switchInventories(p, p.getInventory(), savexp, savearmour, saveenderchest, potions, newGM);
+                plugin.getInventoryHandler().switchInventories(p, p.getInventory(), savexp, savearmour, saveenderchest, potions, attributes, newGM);
             }
         }
     }
