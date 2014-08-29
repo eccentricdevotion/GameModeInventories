@@ -4,6 +4,7 @@
 package me.eccentric_nz.gamemodeinventories;
 
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
@@ -79,6 +80,13 @@ public class GameModeInventoriesBlockListener implements Listener {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getDrops().clear();
                     message = plugin.getM().getMessage().get("NO_CREATIVE_DROPS");
+                    if (plugin.getCPAPI() != null) {
+                        // log the block removal
+                        Location loc = event.getBlock().getLocation();
+                        int type = event.getBlock().getTypeId();
+                        byte data = event.getBlock().getData();
+                        plugin.getCPAPI().logRemoval(event.getPlayer().getName(), loc, type, data);
+                    }
                 } else {
                     event.setCancelled(true);
                     message = plugin.getM().getMessage().get("NO_CREATIVE_BREAK");

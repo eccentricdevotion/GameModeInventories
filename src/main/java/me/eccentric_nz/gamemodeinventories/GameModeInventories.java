@@ -4,6 +4,8 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import net.coreprotect.CoreProtect;
+import net.coreprotect.CoreProtectAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -21,6 +23,7 @@ public class GameModeInventories extends JavaPlugin {
     private final List<Material> blackList = new ArrayList<Material>();
     public final String MY_PLUGIN_NAME = ChatColor.GOLD + "[GameModeInventories] " + ChatColor.RESET;
     private GameModeInventoriesMessage m;
+    private CoreProtectAPI cpAPI;
 
     @Override
     public void onEnable() {
@@ -62,6 +65,7 @@ public class GameModeInventories extends JavaPlugin {
         block = new GameModeInventoriesBlock(this);
         block.loadBlocks();
         loadBlackList();
+        getCP();
     }
 
     @Override
@@ -105,6 +109,33 @@ public class GameModeInventories extends JavaPlugin {
         } catch (Exception e) {
             getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + "Connection and Tables Error: " + e);
         }
+    }
+
+    /**
+     * Loads CoreProtect support if available
+     *
+     * @return the CoreProtectAPI
+     */
+    public CoreProtectAPI getCP() {
+        CoreProtect cp = (CoreProtect) getServer().getPluginManager().getPlugin("CoreProtect");
+        // Check that CoreProtect is loaded
+        if (cp == null || !(cp instanceof CoreProtect)) {
+            return null;
+        }
+        // Check that the API is enabled
+        CoreProtectAPI CoreProtect = cp.getAPI();
+        if (CoreProtect.isEnabled() == false) {
+            return null;
+        }
+        // Check that a compatible version of the API is loaded
+        if (CoreProtect.APIVersion() < 2) {
+            return null;
+        }
+        return CoreProtect;
+    }
+
+    public CoreProtectAPI getCPAPI() {
+        return cpAPI;
     }
 
     public void debug(Object o) {
