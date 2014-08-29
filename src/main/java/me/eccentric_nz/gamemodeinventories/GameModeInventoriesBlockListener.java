@@ -77,9 +77,6 @@ public class GameModeInventoriesBlockListener implements Listener {
                 if (plugin.getConfig().getBoolean("track_creative_place.break_no_drop")) {
                     // remove the location from the creative blocks list because we're removing the block!
                     plugin.getBlock().removeBlock(event.getBlock().getLocation().toString());
-                    event.getBlock().setType(Material.AIR);
-                    event.getBlock().getDrops().clear();
-                    message = plugin.getM().getMessage().get("NO_CREATIVE_DROPS");
                     if (plugin.getCPAPI() != null) {
                         // log the block removal
                         Location loc = event.getBlock().getLocation();
@@ -87,6 +84,9 @@ public class GameModeInventoriesBlockListener implements Listener {
                         byte data = event.getBlock().getData();
                         plugin.getCPAPI().logRemoval(event.getPlayer().getName(), loc, type, data);
                     }
+                    event.getBlock().setType(Material.AIR);
+                    event.getBlock().getDrops().clear();
+                    message = plugin.getM().getMessage().get("NO_CREATIVE_DROPS");
                 } else {
                     event.setCancelled(true);
                     message = plugin.getM().getMessage().get("NO_CREATIVE_BREAK");
