@@ -4,6 +4,17 @@
     <artifactId>GameModeInventories</artifactId>
     <version>2.5.3</version>
     <name>GameModeInventories</name>
+    <profiles>
+        <profile>
+            <id>jenkins</id>
+            <repositories>
+                <repository>
+                    <id>macgeek</id>
+                    <url>http://localhost:8888</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
     <repositories>
         <repository>
             <id>bukkit-repo</id>
