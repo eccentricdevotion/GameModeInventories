@@ -15,14 +15,16 @@
             </repositories>
         </profile>
     </profiles>
-    <repositories>
+    <!--<repositories>
         <repository>
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </releases>
+        </repository>
+    </repositories>-->
+    <repositories>
+        <repository>
+            <id>macgeek</id>
+            <url>http://localhost:8888</url>
         </repository>
     </repositories>
     <build>
