@@ -6,21 +6,14 @@
     <name>GameModeInventories</name>
     <repositories>
         <repository>
+            <id>macgeek</id>
+            <url>http://localhost:8888</url>
+        </repository>
+        <repository>
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
     </repositories>
-    <profiles>
-        <profile>
-            <id>jenkins</id>
-            <repositories>
-                <repository>
-                    <id>macgeek</id>
-                    <url>http://localhost:8888</url>
-                </repository>
-            </repositories>
-        </profile>
-    </profiles>
     <build>
         <finalName>GameModeInventories</finalName>
         <plugins>
