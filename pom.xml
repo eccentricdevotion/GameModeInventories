@@ -4,11 +4,23 @@
     <artifactId>GameModeInventories</artifactId>
     <version>2.5.3</version>
     <name>GameModeInventories</name>
+    <profiles>
+        <profile>
+            <id>jenkins</id>
+            <activation>
+                <property>
+                    <name>env.BUILD_NUMBER</name>
+                </property>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>macgeek</id>
+                    <url>http://localhost:8888</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
     <repositories>
-        <!--<repository>
-            <id>macgeek</id>
-            <url>http://localhost:8888</url>
-        </repository>-->
         <repository>
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public</url>
