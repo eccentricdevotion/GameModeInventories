@@ -78,12 +78,26 @@ public class GameModeInventoriesBlockListener implements Listener {
                 if (plugin.getConfig().getBoolean("track_creative_place.break_no_drop")) {
                     // remove the location from the creative blocks list because we're removing the block!
                     plugin.getBlock().removeBlock(event.getBlock().getLocation().toString());
-                    if (plugin.getCPAPI() != null) {
-                        // log the block removal
+                    if (plugin.getBlockLogger().isLogging()) {
                         Location loc = event.getBlock().getLocation();
-                        int type = event.getBlock().getTypeId();
-                        byte data = event.getBlock().getData();
-                        plugin.getCPAPI().logRemoval(event.getPlayer().getName(), loc, type, data);
+                        String pname = event.getPlayer().getName();
+                        switch (plugin.getBlockLogger().getWhichLogger()) {
+                            case CORE_PROTECT: // log the block removal
+                                int type = event.getBlock().getTypeId();
+                                byte data = event.getBlock().getData();
+                                plugin.getBlockLogger().getCoreProtectAPI().logRemoval(pname, loc, type, data);
+                                break;
+                            case LOG_BLOCK:
+                                plugin.getBlockLogger().getLogBlockConsumer().queueBlockBreak(pname, event.getBlock().getState());
+                                break;
+                            case PRISM:
+                                if (plugin.getBlockLogger().getPrism() != null) {
+                                    GameModeInventoriesPrismHandler.log(loc, event.getBlock(), pname);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                     }
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getDrops().clear();
