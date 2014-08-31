@@ -64,6 +64,7 @@ public class GameModeInventoriesBlockListener implements Listener {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         if (!plugin.getConfig().getBoolean("track_creative_place.enabled")) {

@@ -65,7 +65,7 @@ public class GameModeInventories extends JavaPlugin {
         block = new GameModeInventoriesBlock(this);
         block.loadBlocks();
         loadBlackList();
-        getCP();
+        cpAPI = getCP();
     }
 
     @Override
@@ -131,6 +131,7 @@ public class GameModeInventories extends JavaPlugin {
         if (CoreProtect.APIVersion() < 2) {
             return null;
         }
+        getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + "Connecting to CoreProtect");
         return CoreProtect;
     }
 
