@@ -81,13 +81,13 @@ public class GameModeInventoriesListener implements Listener {
         if (plugin.getConfig().getBoolean("restrict_creative")) {
             Block b = event.getClickedBlock();
             if (b != null) {
-                Material m = b.getType();
                 Player p = event.getPlayer();
+                if (p.isSneaking() && isBlock(p.getItemInHand().getType())) {
+                    return;
+                }
+                Material m = b.getType();
                 GameMode gm = p.getGameMode();
                 if (gm.equals(GameMode.CREATIVE) && containers.contains(m) && !p.hasPermission("gamemodeinventories.bypass") && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-                    if (bukkitversion.compareTo(prewoodbuttonversion) >= 0 && m.equals(Material.HOPPER) && p.isSneaking()) {
-                        return;
-                    }
                     event.setCancelled(true);
                     if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
                         p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_INVENTORY"));
@@ -175,5 +175,9 @@ public class GameModeInventoriesListener implements Listener {
                 }
             }
         }
+    }
+
+    private boolean isBlock(Material m) {
+        return !m.equals(Material.AIR) && m.isBlock();
     }
 }
