@@ -85,6 +85,9 @@ public class GameModeInventoriesListener implements Listener {
                 Player p = event.getPlayer();
                 GameMode gm = p.getGameMode();
                 if (gm.equals(GameMode.CREATIVE) && containers.contains(m) && !p.hasPermission("gamemodeinventories.bypass") && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                    if (bukkitversion.compareTo(prewoodbuttonversion) >= 0 && m.equals(Material.HOPPER) && p.isSneaking()) {
+                        return;
+                    }
                     event.setCancelled(true);
                     if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
                         p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_INVENTORY"));

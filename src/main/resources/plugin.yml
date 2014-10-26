@@ -4,7 +4,7 @@ main: me.eccentric_nz.gamemodeinventories.GameModeInventories
 name: GameModeInventories
 load: POSTWORLD
 softdepend: [CoreProtect,LogBlock,Prism]
-version: '2.5.3'
+version: '2.5.4'
 permissions:
   gamemodeinventories.use:
     default: true
