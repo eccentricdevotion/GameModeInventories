@@ -87,7 +87,7 @@ public class GameModeInventoriesListener implements Listener {
                 }
                 Material m = b.getType();
                 GameMode gm = p.getGameMode();
-                if (gm.equals(GameMode.CREATIVE) && containers.contains(m) && !p.hasPermission("gamemodeinventories.bypass") && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                if (gm.equals(GameMode.CREATIVE) && containers.contains(m) && !GameModeInventoriesBypass.canBypass(p, "inventories", plugin) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                     event.setCancelled(true);
                     if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
                         p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_INVENTORY"));
@@ -103,7 +103,7 @@ public class GameModeInventoriesListener implements Listener {
             Inventory inv = event.getInventory();
             if (inv.getType().equals(InventoryType.WORKBENCH)) {
                 Player p = (Player) event.getPlayer();
-                if (p.getGameMode().equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {
+                if (p.getGameMode().equals(GameMode.CREATIVE) && !GameModeInventoriesBypass.canBypass(p, "inventories", plugin)) {
                     boolean empty = true;
                     for (ItemStack is : inv.getContents()) {
                         if (!is.getType().equals(Material.AIR)) {
@@ -126,7 +126,7 @@ public class GameModeInventoriesListener implements Listener {
         if (plugin.getConfig().getBoolean("restrict_creative")) {
             Entity entity = event.getRightClicked();
             Player p = event.getPlayer();
-            if (p.getGameMode().equals(GameMode.CREATIVE) && plugin.getInventoryHandler().isInstanceOf(entity) && !p.hasPermission("gamemodeinventories.bypass")) {
+            if (p.getGameMode().equals(GameMode.CREATIVE) && plugin.getInventoryHandler().isInstanceOf(entity) && !GameModeInventoriesBypass.canBypass(p, "inventories", plugin)) {
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
                     p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_INVENTORY"));
                 }
@@ -140,7 +140,7 @@ public class GameModeInventoriesListener implements Listener {
         if (plugin.getConfig().getBoolean("no_drops")) {
             Player p = event.getPlayer();
             GameMode gm = p.getGameMode();
-            if (gm.equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {
+            if (gm.equals(GameMode.CREATIVE) && !GameModeInventoriesBypass.canBypass(p, "items", plugin)) {
                 event.setCancelled(true);
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
                     p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_PLAYER_DROPS"));
@@ -154,7 +154,7 @@ public class GameModeInventoriesListener implements Listener {
         if (plugin.getConfig().getBoolean("no_pickups")) {
             Player p = event.getPlayer();
             GameMode gm = p.getGameMode();
-            if (gm.equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {
+            if (gm.equals(GameMode.CREATIVE) && !GameModeInventoriesBypass.canBypass(p, "items", plugin)) {
                 event.setCancelled(true);
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
                     p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_PICKUP"));
@@ -168,7 +168,7 @@ public class GameModeInventoriesListener implements Listener {
         if (plugin.getConfig().getBoolean("restrict_creative") && plugin.getInventoryHandler().isInstanceOf(event.getInventory().getHolder())) {
             Player p = (Player) event.getPlayer();
             GameMode gm = p.getGameMode();
-            if (gm.equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {
+            if (gm.equals(GameMode.CREATIVE) && !GameModeInventoriesBypass.canBypass(p, "inventories", plugin)) {
                 event.setCancelled(true);
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
                     p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_HORSE"));

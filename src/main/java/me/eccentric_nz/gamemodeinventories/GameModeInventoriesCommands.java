@@ -30,6 +30,10 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
         this.plugin = plugin;
         firstArgs.put("armor", "armor");
         firstArgs.put("break_bedrock", "break_bedrock");
+        firstArgs.put("bypass.inventories", "bypass.inventories");
+        firstArgs.put("bypass.items", "bypass.items");
+        firstArgs.put("bypass.blacklist", "bypass.blacklist");
+        firstArgs.put("bypass.survival", "bypass.survival");
         firstArgs.put("command_blacklist", "command_blacklist");
         firstArgs.put("creative_blacklist", "creative_blacklist");
         firstArgs.put("custom_attributes", "custom_attributes");

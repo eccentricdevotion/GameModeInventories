@@ -27,4 +27,9 @@ commands:
 - buy
 - sell
 custom_attributes: false
+bypass:
+    inventories: true
+    items: true
+    blacklist: false
+    survival: false
 uuid_conversion_done: true

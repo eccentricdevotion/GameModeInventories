@@ -5,6 +5,7 @@ package me.eccentric_nz.gamemodeinventories;
 
 import org.bukkit.GameMode;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -26,10 +27,14 @@ public class GameModeInventoriesWorldListener implements Listener {
         if (!plugin.getConfig().getBoolean("survival_on_world_change")) {
             return;
         }
+        Player p = event.getPlayer();
+        if (GameModeInventoriesBypass.canBypass(p, "survival", plugin)) {
+            return;
+        }
         World from = event.getFrom();
-        World to = event.getPlayer().getWorld();
+        World to = p.getWorld();
         if (from != to) {
-            event.getPlayer().setGameMode(GameMode.SURVIVAL);
+            p.setGameMode(GameMode.SURVIVAL);
         }
     }
 }

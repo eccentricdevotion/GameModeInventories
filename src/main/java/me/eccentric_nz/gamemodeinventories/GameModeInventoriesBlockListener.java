@@ -10,6 +10,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -49,16 +50,17 @@ public class GameModeInventoriesBlockListener implements Listener {
         if (!plugin.getConfig().getBoolean("creative_blacklist")) {
             return;
         }
-        if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+        Player p = event.getPlayer();
+        if (!p.getGameMode().equals(GameMode.CREATIVE)) {
             return;
         }
         if (event.hasItem() && (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR))) {
             Material mat = event.getItem().getType();
-            if (plugin.getBlackList().contains(mat)) {
+            if (plugin.getBlackList().contains(mat) && !GameModeInventoriesBypass.canBypass(p, "blacklist", plugin)) {
                 event.setCancelled(true);
                 event.setUseItemInHand(Result.DENY);
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                    event.getPlayer().sendMessage(plugin.MY_PLUGIN_NAME + String.format(plugin.getM().getMessage().get("NO_CREATIVE_PLACE"), mat.toString()));
+                    p.sendMessage(plugin.MY_PLUGIN_NAME + String.format(plugin.getM().getMessage().get("NO_CREATIVE_PLACE"), mat.toString()));
                 }
             }
         }
@@ -70,8 +72,9 @@ public class GameModeInventoriesBlockListener implements Listener {
         if (!plugin.getConfig().getBoolean("track_creative_place.enabled")) {
             return;
         }
+        Player p = event.getPlayer();
         if (plugin.getCreativeBlocks().contains(event.getBlock().getLocation().toString())) {
-            if (event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+            if (p.getGameMode().equals(GameMode.CREATIVE)) {
                 plugin.getBlock().removeBlock(event.getBlock().getLocation().toString());
             } else {
                 String message;
@@ -80,7 +83,7 @@ public class GameModeInventoriesBlockListener implements Listener {
                     plugin.getBlock().removeBlock(event.getBlock().getLocation().toString());
                     if (plugin.getBlockLogger().isLogging()) {
                         Location loc = event.getBlock().getLocation();
-                        String pname = event.getPlayer().getName();
+                        String pname = p.getName();
                         switch (plugin.getBlockLogger().getWhichLogger()) {
                             case CORE_PROTECT: // log the block removal
                                 int type = event.getBlock().getTypeId();
@@ -107,7 +110,7 @@ public class GameModeInventoriesBlockListener implements Listener {
                     message = plugin.getM().getMessage().get("NO_CREATIVE_BREAK");
                 }
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                    event.getPlayer().sendMessage(plugin.MY_PLUGIN_NAME + message);
+                    p.sendMessage(plugin.MY_PLUGIN_NAME + message);
                 }
             }
         }
@@ -134,14 +137,15 @@ public class GameModeInventoriesBlockListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+        Player p = event.getPlayer();
+        if (!p.getGameMode().equals(GameMode.CREATIVE)) {
             return;
         }
         Material mat = event.getBlock().getType();
-        if (plugin.getConfig().getBoolean("creative_blacklist") && plugin.getBlackList().contains(mat)) {
+        if (plugin.getConfig().getBoolean("creative_blacklist") && plugin.getBlackList().contains(mat) && !GameModeInventoriesBypass.canBypass(p, "blacklist", plugin)) {
             event.setCancelled(true);
             if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                event.getPlayer().sendMessage(plugin.MY_PLUGIN_NAME + String.format(plugin.getM().getMessage().get("NO_CREATIVE_PLACE"), mat.toString()));
+                p.sendMessage(plugin.MY_PLUGIN_NAME + String.format(plugin.getM().getMessage().get("NO_CREATIVE_PLACE"), mat.toString()));
             }
             return;
         }

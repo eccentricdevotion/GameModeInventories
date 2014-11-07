@@ -38,6 +38,10 @@ public class GameModeInventoriesConfig {
         // boolean
         boolOptions.put("armor", true);
         boolOptions.put("break_bedrock", false);
+        boolOptions.put("bypass.inventories", true);
+        boolOptions.put("bypass.items", true);
+        boolOptions.put("bypass.blacklist", false);
+        boolOptions.put("bypass.survival", false);
         boolOptions.put("command_blacklist", false);
         boolOptions.put("creative_blacklist", false);
         boolOptions.put("custom_attributes", false);
