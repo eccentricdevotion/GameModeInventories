@@ -32,4 +32,5 @@ bypass:
     items: true
     blacklist: false
     survival: false
+    commands: false
 uuid_conversion_done: true

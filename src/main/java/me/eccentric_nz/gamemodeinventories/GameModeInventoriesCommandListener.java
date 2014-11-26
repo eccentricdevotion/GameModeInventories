@@ -26,7 +26,7 @@ public class GameModeInventoriesCommandListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onCommandUse(PlayerCommandPreprocessEvent event) {
-        if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE) || !plugin.getConfig().getBoolean("command_blacklist")) {
+        if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE) || !plugin.getConfig().getBoolean("command_blacklist") || GameModeInventoriesBypass.canBypass(event.getPlayer(), "commands", plugin)) {
             return;
         }
         String message = event.getMessage();
