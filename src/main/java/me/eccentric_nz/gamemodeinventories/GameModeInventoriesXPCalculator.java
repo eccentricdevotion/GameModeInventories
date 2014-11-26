@@ -184,7 +184,8 @@ public class GameModeInventoriesXPCalculator {
             // need to extend the lookup tables
             int newMax = calculateLevelForExp(exp) * 2;
             if (newMax > hardMaxLevel) {
-                throw new IllegalArgumentException("Level for exp " + exp + " > hard max level " + hardMaxLevel);
+                newMax = hardMaxLevel;
+                GameModeInventories.plugin.debug("Level for exp " + exp + " > hard max level " + hardMaxLevel);
             }
             initLookupTables(newMax);
         }
@@ -200,7 +201,8 @@ public class GameModeInventoriesXPCalculator {
      */
     public int getXpForLevel(int level) {
         if (level > hardMaxLevel) {
-            throw new IllegalArgumentException("Level " + level + " > hard max level " + hardMaxLevel);
+            level = hardMaxLevel;
+            GameModeInventories.plugin.debug("Level " + level + " > hard max level " + hardMaxLevel);
         }
         if (level >= xpTotalToReachLevel.length) {
             initLookupTables(level * 2);
