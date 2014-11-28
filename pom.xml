@@ -14,22 +14,16 @@
                     <name>env.BUILD_NUMBER</name>
                 </property>
             </activation>
-            <repositories>
-                <repository>
-                    <id>macgeek</id>
-                    <url>http://localhost:8888</url>
-                </repository>
-            </repositories>
         </profile>
     </profiles>
     <repositories>
-        <!--<repository>
-            <id>dev</id>
-            <url>http://localhost:8888</url>
-        </repository>-->
         <repository>
-            <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/groups/public</url>
+            <id>macgeek</id>
+            <url>http://tardisjenkins.duckdns.org:8888</url>
+        </repository>
+        <repository>
+            <id>Bromley Massive</id>
+            <url>http://tardisjenkins.duckdns.org:8080/plugin/repository/everything/</url>
         </repository>
     </repositories>
     <build>
@@ -48,9 +42,9 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.7.10-R0.1-SNAPSHOT</version>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.8-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>

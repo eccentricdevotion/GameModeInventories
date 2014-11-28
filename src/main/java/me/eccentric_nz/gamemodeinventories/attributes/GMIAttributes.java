@@ -6,7 +6,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.UUID;
-import javax.annotation.Nullable;
 import me.eccentric_nz.gamemodeinventories.attributes.GMINbtFactory.NbtCompound;
 import me.eccentric_nz.gamemodeinventories.attributes.GMINbtFactory.NbtList;
 import org.bukkit.inventory.ItemStack;
@@ -100,7 +99,7 @@ public class GMIAttributes {
                 return Iterators.transform(attributes.iterator(),
                         new Function<Object, GMIAttribute>() {
                             @Override
-                            public GMIAttribute apply(@Nullable Object element) {
+                            public GMIAttribute apply(Object element) {
                                 return new GMIAttribute((NbtCompound) element);
                             }
                         });
