@@ -45,6 +45,7 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
         firstArgs.put("no_pickups", "no_pickups");
         firstArgs.put("remove_potions", "remove_potions");
         firstArgs.put("restrict_creative", "restrict_creative");
+        firstArgs.put("restrict_spectator", "restrict_spectator");
         firstArgs.put("save_on_death", "save_on_death");
         firstArgs.put("survival_on_world_change", "survival_on_world_change");
         firstArgs.put("xp", "xp");

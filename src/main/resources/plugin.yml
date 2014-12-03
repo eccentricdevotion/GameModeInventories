@@ -15,6 +15,9 @@ permissions:
   gamemodeinventories.bypass:
     default: op
     description: Allow players to access inventories in CREATIVE mode even if 'restrict_creative' is true. Also allow CREATIVE players to drop and pickup items.
+  gamemodeinventories.spectator:
+    default: op
+    description: Allow players to switch to Gamemode SPECTATOR.
   gamemodeinventories.admin:
     default: op
     description: Allow players to change config options.

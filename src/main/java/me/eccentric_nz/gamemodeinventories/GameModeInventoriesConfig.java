@@ -54,6 +54,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("no_pickups", false);
         boolOptions.put("remove_potions", true);
         boolOptions.put("restrict_creative", false);
+        boolOptions.put("restrict_spectator", false);
         boolOptions.put("save_on_death", true);
         boolOptions.put("track_creative_place.break_no_drop", false);
         boolOptions.put("track_creative_place.enabled", true);

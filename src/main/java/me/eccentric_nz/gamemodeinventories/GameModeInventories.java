@@ -49,6 +49,7 @@ public class GameModeInventories extends JavaPlugin {
             }
         }
         m = new GameModeInventoriesMessage(this);
+        m.updateMessages();
         m.getMessages();
         inventoryHandler = new GameModeInventoriesInventory();
         pm.registerEvents(new GameModeInventoriesListener(this), this);

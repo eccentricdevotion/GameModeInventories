@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -73,5 +74,17 @@ public class GameModeInventoriesMessage {
             }
         }
         return file;
+    }
+
+    public void updateMessages() {
+        if (!messagesConfig.contains("NO_SPECTATOR")) {
+            messagesConfig.set("NO_SPECTATOR", "You are not allowed to be a SPECTATOR!");
+            try {
+                messagesConfig.save(new File(plugin.getDataFolder(), "messages.yml"));
+                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + "1" + ChatColor.RESET + " new item to messages.yml");
+            } catch (IOException io) {
+                plugin.debug("Could not save messages.yml, " + io);
+            }
+        }
     }
 }

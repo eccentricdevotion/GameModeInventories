@@ -28,6 +28,7 @@ public class GameModeInventoriesListener implements Listener {
     private final GameModeInventories plugin;
     List<Material> containers = new ArrayList<Material>();
     Version bukkitversion;
+    Version prespectatorversion = new Version("1.8");
     Version prewoodbuttonversion = new Version("1.5");
     Version preenchanttableversion = new Version("1.4.6");
     Version preanvilversion = new Version("1.4.2");
@@ -64,6 +65,11 @@ public class GameModeInventoriesListener implements Listener {
     public void onGameModeChange(PlayerGameModeChangeEvent event) {
         Player p = event.getPlayer();
         GameMode newGM = event.getNewGameMode();
+        if (bukkitversion.compareTo(prespectatorversion) >= 0 && newGM.equals(GameMode.SPECTATOR) && plugin.getConfig().getBoolean("restrict_spectator") && !p.hasPermission("gamemodeinventories.spectator")) {
+            event.setCancelled(true);
+            p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_SPECTATOR"));
+            return;
+        }
         if (p.hasPermission("gamemodeinventories.use")) {
             boolean savexp = plugin.getConfig().getBoolean("xp");
             boolean savearmour = plugin.getConfig().getBoolean("armor");
