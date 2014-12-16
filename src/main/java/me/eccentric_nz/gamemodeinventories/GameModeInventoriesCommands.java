@@ -30,9 +30,11 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
         this.plugin = plugin;
         firstArgs.put("armor", "armor");
         firstArgs.put("break_bedrock", "break_bedrock");
+        firstArgs.put("break_no_drop", "track_creative_place.break_no_drop");
+        firstArgs.put("bypass.blacklist", "bypass.blacklist");
+        firstArgs.put("bypass.commands", "bypass.commands");
         firstArgs.put("bypass.inventories", "bypass.inventories");
         firstArgs.put("bypass.items", "bypass.items");
-        firstArgs.put("bypass.blacklist", "bypass.blacklist");
         firstArgs.put("bypass.survival", "bypass.survival");
         firstArgs.put("command_blacklist", "command_blacklist");
         firstArgs.put("creative_blacklist", "creative_blacklist");
@@ -43,15 +45,14 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
         firstArgs.put("no_drops", "no_drops");
         firstArgs.put("no_falling_drops", "no_falling_drops");
         firstArgs.put("no_pickups", "no_pickups");
+        firstArgs.put("no_piston_move", "track_creative_place.no_piston_move");
         firstArgs.put("remove_potions", "remove_potions");
         firstArgs.put("restrict_creative", "restrict_creative");
         firstArgs.put("restrict_spectator", "restrict_spectator");
         firstArgs.put("save_on_death", "save_on_death");
         firstArgs.put("survival_on_world_change", "survival_on_world_change");
-        firstArgs.put("xp", "xp");
         firstArgs.put("track_creative_place", "track_creative_place.enabled");
-        firstArgs.put("break_no_drop", "track_creative_place.break_no_drop");
-        firstArgs.put("no_piston_move", "track_creative_place.no_piston_move");
+        firstArgs.put("xp", "xp");
         ROOT_SUBS = ImmutableList.copyOf(firstArgs.keySet());
     }
 
