@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -29,47 +31,54 @@ public class GameModeInventories extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-
-        saveDefaultConfig();
-        GameModeInventoriesConfig tc = new GameModeInventoriesConfig(this);
-        tc.checkConfig();
-
-        service = GameModeInventoriesDBConnection.getInstance();
-        loadDatabase();
         PluginManager pm = Bukkit.getServer().getPluginManager();
-        // update database add and populate uuid fields
-        if (!getConfig().getBoolean("uuid_conversion_done") && getConfig().getString("storage.database").equals("sqlite")) {
-            GameModeInventoriesUUIDConverter uc = new GameModeInventoriesUUIDConverter(this);
-            if (!uc.convert()) {
-                // conversion failed
-                System.out.println("[GameModeInventories]" + ChatColor.RED + "UUID conversion failed, disabling...");
-                pm.disablePlugin(this);
-                return;
-            } else {
-                getConfig().set("uuid_conversion_done", true);
-                saveConfig();
-                System.out.println("[GameModeInventories] UUID conversion successful :)");
+        Version bukkitversion = getServerVersion(getServer().getVersion());
+        Version minversion = new Version("1.8");
+        // check CraftBukkit version
+        if (bukkitversion.compareTo(minversion) >= 0) {
+            saveDefaultConfig();
+            GameModeInventoriesConfig tc = new GameModeInventoriesConfig(this);
+            tc.checkConfig();
+
+            service = GameModeInventoriesDBConnection.getInstance();
+            loadDatabase();
+            // update database add and populate uuid fields
+            if (!getConfig().getBoolean("uuid_conversion_done") && getConfig().getString("storage.database").equals("sqlite")) {
+                GameModeInventoriesUUIDConverter uc = new GameModeInventoriesUUIDConverter(this);
+                if (!uc.convert()) {
+                    // conversion failed
+                    System.out.println("[GameModeInventories]" + ChatColor.RED + "UUID conversion failed, disabling...");
+                    pm.disablePlugin(this);
+                    return;
+                } else {
+                    getConfig().set("uuid_conversion_done", true);
+                    saveConfig();
+                    System.out.println("[GameModeInventories] UUID conversion successful :)");
+                }
             }
+            m = new GameModeInventoriesMessage(this);
+            m.updateMessages();
+            m.getMessages();
+            inventoryHandler = new GameModeInventoriesInventory();
+            pm.registerEvents(new GameModeInventoriesListener(this), this);
+            pm.registerEvents(new GameModeInventoriesDeath(this), this);
+            pm.registerEvents(new GameModeInventoriesBlockListener(this), this);
+            pm.registerEvents(new GameModeInventoriesPistonListener(this), this);
+            pm.registerEvents(new GameModeInventoriesCommandListener(this), this);
+            pm.registerEvents(new GameModeInventoriesWorldListener(this), this);
+            pm.registerEvents(new GameModeInventoriesEntityListener(this), this);
+            GameModeInventoriesCommands command = new GameModeInventoriesCommands(this);
+            getCommand("gmi").setExecutor(command);
+            getCommand("gmi").setTabCompleter(command);
+            block = new GameModeInventoriesBlock(this);
+            block.loadBlocks();
+            new GameModeInventoriesStand(this).loadStands();
+            loadBlackList();
+            setUpBlockLogger();
+        } else {
+            getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + ChatColor.RED + "This plugin requires CraftBukkit/Spigot 1.8 or higher, disabling...");
+            pm.disablePlugin(this);
         }
-        m = new GameModeInventoriesMessage(this);
-        m.updateMessages();
-        m.getMessages();
-        inventoryHandler = new GameModeInventoriesInventory();
-        pm.registerEvents(new GameModeInventoriesListener(this), this);
-        pm.registerEvents(new GameModeInventoriesDeath(this), this);
-        pm.registerEvents(new GameModeInventoriesBlockListener(this), this);
-        pm.registerEvents(new GameModeInventoriesPistonListener(this), this);
-        pm.registerEvents(new GameModeInventoriesCommandListener(this), this);
-        pm.registerEvents(new GameModeInventoriesWorldListener(this), this);
-        pm.registerEvents(new GameModeInventoriesEntityListener(this), this);
-        GameModeInventoriesCommands command = new GameModeInventoriesCommands(this);
-        getCommand("gmi").setExecutor(command);
-        getCommand("gmi").setTabCompleter(command);
-        block = new GameModeInventoriesBlock(this);
-        block.loadBlocks();
-        new GameModeInventoriesStand(this).loadStands();
-        loadBlackList();
-        setUpBlockLogger();
     }
 
     @Override
@@ -93,6 +102,19 @@ public class GameModeInventories extends JavaPlugin {
         } catch (SQLException e) {
             System.err.println("[GameModeInventories] Could not close database connection: " + e);
         }
+    }
+
+    private Version getServerVersion(String s) {
+        Pattern pat = Pattern.compile("\\((.+?)\\)", Pattern.DOTALL);
+        Matcher mat = pat.matcher(s);
+        String v;
+        if (mat.find()) {
+            String[] split = mat.group(1).split(" ");
+            v = split[1];
+        } else {
+            v = "1.7.10";
+        }
+        return new Version(v);
     }
 
     /**

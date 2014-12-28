@@ -2,7 +2,6 @@ package me.eccentric_nz.gamemodeinventories;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -27,45 +26,29 @@ public class GameModeInventoriesListener implements Listener {
 
     private final GameModeInventories plugin;
     List<Material> containers = new ArrayList<Material>();
-    Version bukkitversion;
-    Version prespectatorversion = new Version("1.8");
-    Version prewoodbuttonversion = new Version("1.5");
-    Version preenchanttableversion = new Version("1.4.6");
-    Version preanvilversion = new Version("1.4.2");
-    Version preenderchestversion = new Version("1.3.1");
 
     public GameModeInventoriesListener(GameModeInventories plugin) {
         this.plugin = plugin;
+        containers.add(Material.ANVIL);
+        containers.add(Material.BEACON);
         containers.add(Material.BREWING_STAND);
+        containers.add(Material.BURNING_FURNACE);
         containers.add(Material.CHEST);
         containers.add(Material.DISPENSER);
+        containers.add(Material.DROPPER);
+        containers.add(Material.ENCHANTMENT_TABLE);
+        containers.add(Material.ENDER_CHEST);
         containers.add(Material.FURNACE);
-        containers.add(Material.BURNING_FURNACE);
+        containers.add(Material.HOPPER);
         containers.add(Material.JUKEBOX);
-        String[] v = Bukkit.getServer().getBukkitVersion().split("-");
-        bukkitversion = (!v[0].equalsIgnoreCase("unknown")) ? new Version(v[0]) : new Version("1.4.7");
-        if (bukkitversion.compareTo(preenderchestversion) >= 0) {
-            containers.add(Material.ENDER_CHEST);
-        }
-        if (bukkitversion.compareTo(preanvilversion) >= 0) {
-            containers.add(Material.ANVIL);
-            containers.add(Material.BEACON);
-        }
-        if (bukkitversion.compareTo(preenchanttableversion) >= 0) {
-            containers.add(Material.ENCHANTMENT_TABLE);
-        }
-        if (bukkitversion.compareTo(prewoodbuttonversion) >= 0) {
-            containers.add(Material.DROPPER);
-            containers.add(Material.HOPPER);
-            containers.add(Material.TRAPPED_CHEST);
-        }
+        containers.add(Material.TRAPPED_CHEST);
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onGameModeChange(PlayerGameModeChangeEvent event) {
         Player p = event.getPlayer();
         GameMode newGM = event.getNewGameMode();
-        if (bukkitversion.compareTo(prespectatorversion) >= 0 && newGM.equals(GameMode.SPECTATOR) && plugin.getConfig().getBoolean("restrict_spectator") && !p.hasPermission("gamemodeinventories.spectator")) {
+        if (newGM.equals(GameMode.SPECTATOR) && plugin.getConfig().getBoolean("restrict_spectator") && !p.hasPermission("gamemodeinventories.spectator")) {
             event.setCancelled(true);
             p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_SPECTATOR"));
             return;
