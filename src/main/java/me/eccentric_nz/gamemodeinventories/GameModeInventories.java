@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,6 +20,8 @@ public class GameModeInventories extends JavaPlugin {
     private GameModeInventoriesBlock block;
     private final List<String> creativeBlocks = new ArrayList<String>();
     private final List<Material> blackList = new ArrayList<Material>();
+    private final List<String> points = new ArrayList<String>();
+    private final List<UUID> stands = new ArrayList<UUID>();
     public final String MY_PLUGIN_NAME = ChatColor.GOLD + "[GameModeInventories] " + ChatColor.RESET;
     private GameModeInventoriesMessage m;
     private GameModeInventoriesBlockLogger blockLogger;
@@ -58,11 +61,13 @@ public class GameModeInventories extends JavaPlugin {
         pm.registerEvents(new GameModeInventoriesPistonListener(this), this);
         pm.registerEvents(new GameModeInventoriesCommandListener(this), this);
         pm.registerEvents(new GameModeInventoriesWorldListener(this), this);
+        pm.registerEvents(new GameModeInventoriesEntityListener(this), this);
         GameModeInventoriesCommands command = new GameModeInventoriesCommands(this);
         getCommand("gmi").setExecutor(command);
         getCommand("gmi").setTabCompleter(command);
         block = new GameModeInventoriesBlock(this);
         block.loadBlocks();
+        new GameModeInventoriesStand(this).loadStands();
         loadBlackList();
         setUpBlockLogger();
     }
@@ -73,7 +78,7 @@ public class GameModeInventories extends JavaPlugin {
         boolean savearmour = getConfig().getBoolean("armor");
         boolean saveenderchest = getConfig().getBoolean("enderchest");
         boolean potions = getConfig().getBoolean("remove_potions");
-        boolean attributes = plugin.getConfig().getBoolean("custom_attributes");
+        boolean attributes = getConfig().getBoolean("custom_attributes");
         for (Player p : getServer().getOnlinePlayers()) {
             if (p.hasPermission("gamemodeinventories.use")) {
                 if (p.isOnline()) {
@@ -82,6 +87,7 @@ public class GameModeInventories extends JavaPlugin {
             }
         }
         this.saveConfig();
+        new GameModeInventoriesStand(this).saveStands();
         try {
             service.connection.close();
         } catch (SQLException e) {
@@ -153,6 +159,14 @@ public class GameModeInventories extends JavaPlugin {
                 getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + String.format(m.getMessage().get("INVALID_MATERIAL"), s));
             }
         }
+    }
+
+    public List<String> getPoints() {
+        return points;
+    }
+
+    public List<UUID> getStands() {
+        return stands;
     }
 
     public GameModeInventoriesMessage getM() {

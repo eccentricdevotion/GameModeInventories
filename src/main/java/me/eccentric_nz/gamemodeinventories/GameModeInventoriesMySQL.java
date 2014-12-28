@@ -47,6 +47,10 @@ public class GameModeInventoriesMySQL {
             String queryBlocks = "CREATE TABLE IF NOT EXISTS blocks (id int(11) NOT NULL AUTO_INCREMENT, location text, PRIMARY KEY (id)) DEFAULT CHARSET=utf8 COLLATE utf8_general_ci";
             statement.executeUpdate(queryBlocks);
 
+            // add stands table
+            String queryStands = "CREATE TABLE IF NOT EXISTS stands (uuid varchar(48) NOT NULL, PRIMARY KEY (uuid)) DEFAULT CHARSET=utf8 COLLATE utf8_general_ci";
+            statement.executeUpdate(queryStands);
+
         } catch (SQLException e) {
             plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "MySQL create table error: " + e);
         } finally {

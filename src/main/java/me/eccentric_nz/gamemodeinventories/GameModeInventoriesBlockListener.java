@@ -47,20 +47,40 @@ public class GameModeInventoriesBlockListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (!plugin.getConfig().getBoolean("creative_blacklist")) {
-            return;
-        }
         Player p = event.getPlayer();
         if (!p.getGameMode().equals(GameMode.CREATIVE)) {
             return;
         }
-        if (event.hasItem() && (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR))) {
-            Material mat = event.getItem().getType();
-            if (plugin.getBlackList().contains(mat) && !GameModeInventoriesBypass.canBypass(p, "blacklist", plugin)) {
-                event.setCancelled(true);
-                event.setUseItemInHand(Result.DENY);
-                if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                    p.sendMessage(plugin.MY_PLUGIN_NAME + String.format(plugin.getM().getMessage().get("NO_CREATIVE_PLACE"), mat.toString()));
+        if (event.hasItem()) {
+            if (plugin.getConfig().getBoolean("track_creative_place.enabled") && event.getItem().getType().equals(Material.ARMOR_STAND)) {
+                Block b = event.getClickedBlock();
+                if (b != null) {
+                    Location l = b.getLocation();
+                    if (l != null) {
+                        final String gmip = l.getBlockX() + "," + l.getBlockZ();
+                        plugin.getPoints().add(gmip);
+                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                            @Override
+                            public void run() {
+                                if (plugin.getPoints().contains(gmip)) {
+                                    plugin.getPoints().remove(gmip);
+                                }
+                            }
+                        }, 600L);
+                    }
+                }
+            }
+            if (!plugin.getConfig().getBoolean("creative_blacklist")) {
+                return;
+            }
+            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+                Material mat = event.getItem().getType();
+                if (plugin.getBlackList().contains(mat) && !GameModeInventoriesBypass.canBypass(p, "blacklist", plugin)) {
+                    event.setCancelled(true);
+                    event.setUseItemInHand(Result.DENY);
+                    if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
+                        p.sendMessage(plugin.MY_PLUGIN_NAME + String.format(plugin.getM().getMessage().get("NO_CREATIVE_PLACE"), mat.toString()));
+                    }
                 }
             }
         }

@@ -75,6 +75,10 @@ public class GameModeInventoriesSQLite {
             String queryBlocks = "CREATE TABLE IF NOT EXISTS blocks (id INTEGER PRIMARY KEY NOT NULL, location TEXT)";
             statement.executeUpdate(queryBlocks);
 
+            // add stands table
+            String queryStands = "CREATE TABLE IF NOT EXISTS stands (uuid TEXT PRIMARY KEY NOT NULL)";
+            statement.executeUpdate(queryStands);
+
             statement.close();
         } catch (SQLException e) {
             plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "SQLite create table error: " + e);
