@@ -59,6 +59,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("track_creative_place.break_no_drop", false);
         boolOptions.put("track_creative_place.enabled", true);
         boolOptions.put("track_creative_place.no_piston_move", false);
+        boolOptions.put("track_creative_place.attached_block", false);
         boolOptions.put("xp", true);
         boolOptions.put("uuid_conversion_done", false);
         bl.add("TNT");

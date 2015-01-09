@@ -49,7 +49,7 @@ public class GameModeInventoriesPhysicsListener implements Listener {
         this.willdrop.add(Material.REDSTONE_COMPARATOR_ON);
         this.willdrop.add(Material.REDSTONE_TORCH_OFF);
         this.willdrop.add(Material.REDSTONE_TORCH_ON);
-        this.willdrop.add(Material.REDSTONE_WIRE);
+//        this.willdrop.add(Material.REDSTONE_WIRE);
         this.willdrop.add(Material.RED_MUSHROOM);
         this.willdrop.add(Material.RED_MUSHROOM);
         this.willdrop.add(Material.RED_ROSE);
@@ -74,7 +74,7 @@ public class GameModeInventoriesPhysicsListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onBlockPhysics(BlockPhysicsEvent event) {
-        if (!plugin.getConfig().getBoolean("track_creative_place.enabled")) {
+        if (!plugin.getConfig().getBoolean("track_creative_place.enabled") || !plugin.getConfig().getBoolean("track_creative_place.attached_block")) {
             return;
         }
         Block block = event.getBlock();
