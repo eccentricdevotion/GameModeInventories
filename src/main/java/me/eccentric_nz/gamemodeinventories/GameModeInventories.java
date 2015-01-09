@@ -96,7 +96,6 @@ public class GameModeInventories extends JavaPlugin {
                 }
             }
         }
-        this.saveConfig();
         new GameModeInventoriesStand(this).saveStands();
         try {
             service.connection.close();
