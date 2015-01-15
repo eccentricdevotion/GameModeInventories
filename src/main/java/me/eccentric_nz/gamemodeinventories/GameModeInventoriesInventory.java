@@ -23,6 +23,7 @@ import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributeType;
 import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributes;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.ItemFrame;
@@ -304,7 +305,7 @@ public class GameModeInventoriesInventory {
     }
 
     public boolean isInstanceOf(Entity e) {
-        return e instanceof PoweredMinecart || e instanceof StorageMinecart || e instanceof HopperMinecart || e instanceof ItemFrame;
+        return e instanceof PoweredMinecart || e instanceof StorageMinecart || e instanceof HopperMinecart || e instanceof ItemFrame || e instanceof ArmorStand;
     }
 
     public boolean isInstanceOf(InventoryHolder h) {

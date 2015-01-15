@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -122,6 +123,12 @@ public class GameModeInventoriesListener implements Listener {
                 event.setCancelled(true);
             }
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
+        //treat it the same as interacting with an entity in general
+        this.onEntityClick((PlayerInteractEntityEvent) event);
     }
 
     @EventHandler(ignoreCancelled = true)
