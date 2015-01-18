@@ -21,6 +21,14 @@
             <id>Spigot</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>macgeek</id>
+            <url>http://tardisjenkins.duckdns.org:8888</url>
+        </repository>
+        <repository>
+            <id>Bromley Massive</id>
+            <url>http://tardisjenkins.duckdns.org:8080/plugin/repository/everything/</url>
+        </repository>
     </repositories>
     <build>
         <finalName>GameModeInventories</finalName>
