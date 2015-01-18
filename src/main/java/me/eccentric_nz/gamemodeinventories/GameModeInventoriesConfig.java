@@ -25,6 +25,7 @@ public class GameModeInventoriesConfig {
     HashMap<String, Boolean> boolOptions = new HashMap<String, Boolean>();
     List<String> bl = new ArrayList<String>();
     List<String> com = new ArrayList<String>();
+    List<String> wor = new ArrayList<String>();
 
     public GameModeInventoriesConfig(GameModeInventories plugin) {
         this.plugin = plugin;
@@ -69,6 +70,7 @@ public class GameModeInventoriesConfig {
         com.add("i");
         com.add("buy");
         com.add("sell");
+        wor.add("world");
     }
 
     public void checkConfig() {
@@ -101,6 +103,10 @@ public class GameModeInventoriesConfig {
         }
         if (!config.contains("commands")) {
             plugin.getConfig().set("commands", com);
+            i++;
+        }
+        if (!config.contains("track_creative_place.worlds")) {
+            plugin.getConfig().set("track_creative_place.worlds", wor);
             i++;
         }
         if (i > 0) {

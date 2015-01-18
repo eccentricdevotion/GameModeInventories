@@ -78,6 +78,9 @@ public class GameModeInventoriesPhysicsListener implements Listener {
             return;
         }
         Block block = event.getBlock();
+        if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(block.getWorld().getName())) {
+            return;
+        }
         if (willdrop.contains(block.getType())) {
             // check if the block was placed in creative
             if (plugin.getCreativeBlocks().contains(event.getBlock().getLocation().toString())) {

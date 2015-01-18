@@ -33,6 +33,9 @@ public class GameModeInventoriesEntityListener implements Listener {
         }
         if (event.getEntityType().equals(EntityType.ARMOR_STAND)) {
             Location l = event.getLocation();
+            if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(l.getWorld().getName())) {
+                return;
+            }
             List<String> locs = Arrays.asList(l.getBlockX() + "," + l.getBlockZ(), (l.getBlockX()) + "," + (l.getBlockZ() - 1), (l.getBlockX() - 1) + "," + (l.getBlockZ()), (l.getBlockX()) + "," + (l.getBlockZ() + 1), (l.getBlockX() + 1) + "," + (l.getBlockZ()));
             for (String p : locs) {
                 if (plugin.getPoints().contains(p)) {

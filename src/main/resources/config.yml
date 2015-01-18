@@ -11,10 +11,12 @@ save_on_death: true
 survival_on_world_change: false
 xp: true
 track_creative_place:
-    enabled: true
+    enabled: false
     break_no_drop: false
     no_piston_move: false
     attached_block: false
+    worlds:
+        - world
 creative_blacklist: false
 blacklist:
 - TNT

@@ -55,6 +55,9 @@ public class GameModeInventoriesBlockListener implements Listener {
             if (plugin.getConfig().getBoolean("track_creative_place.enabled") && event.getItem().getType().equals(Material.ARMOR_STAND)) {
                 Block b = event.getClickedBlock();
                 if (b != null) {
+                    if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(b.getWorld().getName())) {
+                        return;
+                    }
                     Location l = b.getLocation();
                     if (l != null) {
                         final String gmip = l.getBlockX() + "," + l.getBlockZ();
@@ -170,8 +173,12 @@ public class GameModeInventoriesBlockListener implements Listener {
             return;
         }
         if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
-            if (!plugin.getCreativeBlocks().contains(event.getBlock().getLocation().toString())) {
-                plugin.getBlock().addBlock(event.getBlock().getLocation().toString());
+            Block block = event.getBlock();
+            if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(block.getWorld().getName())) {
+                return;
+            }
+            if (!plugin.getCreativeBlocks().contains(block.getLocation().toString())) {
+                plugin.getBlock().addBlock(block.getLocation().toString());
             }
         }
     }

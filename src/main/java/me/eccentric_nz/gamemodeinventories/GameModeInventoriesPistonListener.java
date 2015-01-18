@@ -60,9 +60,13 @@ public class GameModeInventoriesPistonListener implements Listener {
             return;
         }
         if (plugin.getConfig().getBoolean("track_creative_place.no_piston_move")) {
+            Block block = event.getBlock();
+            if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(block.getWorld().getName())) {
+                return;
+            }
             List<Block> blocks = new ArrayList<Block>();
             for (int i = 1; i < 13; i++) {
-                blocks.add(event.getBlock().getRelative(event.getDirection(), i));
+                blocks.add(block.getRelative(event.getDirection(), i));
             }
             for (Block b : blocks) {
                 if (plugin.getCreativeBlocks().contains(b.getLocation().toString()) && wouldDrop.contains(b.getType())) {
@@ -94,11 +98,15 @@ public class GameModeInventoriesPistonListener implements Listener {
         if (!plugin.getConfig().getBoolean("track_creative_place.enabled")) {
             return;
         }
-        if (plugin.getCreativeBlocks().contains(event.getBlock().getRelative(event.getDirection(), 2).getLocation().toString())) {
-            if (plugin.getCreativeBlocks().contains(event.getBlock().getLocation().toString())) {
+        Block block = event.getBlock();
+        if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(block.getWorld().getName())) {
+            return;
+        }
+        if (plugin.getCreativeBlocks().contains(block.getRelative(event.getDirection(), 2).getLocation().toString())) {
+            if (plugin.getCreativeBlocks().contains(block.getLocation().toString())) {
                 // update the location of the moved block
-                plugin.getCreativeBlocks().remove(event.getBlock().getRelative(event.getDirection(), 2).getLocation().toString());
-                plugin.getCreativeBlocks().add(event.getBlock().getRelative(event.getDirection()).getLocation().toString());
+                plugin.getCreativeBlocks().remove(block.getRelative(event.getDirection(), 2).getLocation().toString());
+                plugin.getCreativeBlocks().add(block.getRelative(event.getDirection()).getLocation().toString());
             } else {
                 event.setCancelled(true);
                 plugin.debug("Cancelled piston retraction because the moved block was a CREATIVE placed block");
