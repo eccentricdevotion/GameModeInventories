@@ -96,37 +96,41 @@ public class GameModeInventoriesBlockListener implements Listener {
             return;
         }
         Player p = event.getPlayer();
-        if (plugin.getCreativeBlocks().contains(event.getBlock().getLocation().toString())) {
+        Block block = event.getBlock();
+        if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(block.getWorld().getName())) {
+            return;
+        }
+        if (plugin.getCreativeBlocks().contains(block.getLocation().toString())) {
             if (p.getGameMode().equals(GameMode.CREATIVE)) {
-                plugin.getBlock().removeBlock(event.getBlock().getLocation().toString());
+                plugin.getBlock().removeBlock(block.getLocation().toString());
             } else {
                 String message;
                 if (plugin.getConfig().getBoolean("track_creative_place.break_no_drop")) {
                     // remove the location from the creative blocks list because we're removing the block!
-                    plugin.getBlock().removeBlock(event.getBlock().getLocation().toString());
+                    plugin.getBlock().removeBlock(block.getLocation().toString());
                     if (plugin.getBlockLogger().isLogging()) {
-                        Location loc = event.getBlock().getLocation();
+                        Location loc = block.getLocation();
                         String pname = p.getName();
                         switch (plugin.getBlockLogger().getWhichLogger()) {
                             case CORE_PROTECT: // log the block removal
-                                int type = event.getBlock().getTypeId();
-                                byte data = event.getBlock().getData();
+                                int type = block.getTypeId();
+                                byte data = block.getData();
                                 plugin.getBlockLogger().getCoreProtectAPI().logRemoval(pname, loc, type, data);
                                 break;
                             case LOG_BLOCK:
-                                plugin.getBlockLogger().getLogBlockConsumer().queueBlockBreak(pname, event.getBlock().getState());
+                                plugin.getBlockLogger().getLogBlockConsumer().queueBlockBreak(pname, block.getState());
                                 break;
                             case PRISM:
                                 if (plugin.getBlockLogger().getPrism() != null) {
-                                    GameModeInventoriesPrismHandler.log(loc, event.getBlock(), pname);
+                                    GameModeInventoriesPrismHandler.log(loc, block, pname);
                                 }
                                 break;
                             default:
                                 break;
                         }
                     }
-                    event.getBlock().setType(Material.AIR);
-                    event.getBlock().getDrops().clear();
+                    block.setType(Material.AIR);
+                    block.getDrops().clear();
                     message = plugin.getM().getMessage().get("NO_CREATIVE_DROPS");
                 } else {
                     event.setCancelled(true);
