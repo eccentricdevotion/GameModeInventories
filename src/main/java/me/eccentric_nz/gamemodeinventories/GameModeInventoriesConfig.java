@@ -36,7 +36,7 @@ public class GameModeInventoriesConfig {
         this.configFile = new File(plugin.getDataFolder(), "config.yml");
         this.config = YamlConfiguration.loadConfiguration(configFile);
         this.messagesFile = new File(plugin.getDataFolder(), "messages.yml");
-        this.messages = YamlConfiguration.loadConfiguration(configFile);
+        this.messages = YamlConfiguration.loadConfiguration(messagesFile);
         // database
         strOptions.put("storage.database", "sqlite");
         strOptions.put("storage.mysql.url", "mysql://localhost:3306/GMI");
@@ -129,7 +129,7 @@ public class GameModeInventoriesConfig {
             messages.set("INVALID_MATERIAL_TRACK", "Invalid material in dont_track list");
             try {
                 messages.save(new File(plugin.getDataFolder(), "messages.yml"));
-                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added 1 new item to message.yml");
+                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + "1" + ChatColor.RESET + " new item to message.yml");
             } catch (IOException io) {
 
             }
