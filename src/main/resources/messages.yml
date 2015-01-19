@@ -2,6 +2,7 @@
 CONFIG_SET: '%s was set to: %s'
 HELP: 'There is no help! Just switch game modes, and your inventory/armor/xp will change.'
 INVALID_MATERIAL: 'Invalid material in blacklist'
+INVALID_MATERIAL_TRACK: 'Invalid material in dont_track list'
 NO_CREATIVE_BREAK: 'You cannot break blocks that were placed in CREATIVE gamemode!'
 NO_CREATIVE_COMMAND: 'You are not allowed to use %s in CREATIVE!'
 NO_CREATIVE_DROPS: 'Blocks that were placed in CREATIVE gamemode, do not give drops!'

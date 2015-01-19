@@ -100,6 +100,9 @@ public class GameModeInventoriesBlockListener implements Listener {
         if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(block.getWorld().getName())) {
             return;
         }
+        if (plugin.getNoTrackList().contains(block.getType())) {
+            return;
+        }
         if (plugin.getCreativeBlocks().contains(block.getLocation().toString())) {
             if (p.getGameMode().equals(GameMode.CREATIVE)) {
                 plugin.getBlock().removeBlock(block.getLocation().toString());
@@ -179,6 +182,9 @@ public class GameModeInventoriesBlockListener implements Listener {
         if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
             Block block = event.getBlock();
             if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(block.getWorld().getName())) {
+                return;
+            }
+            if (plugin.getNoTrackList().contains(mat)) {
                 return;
             }
             if (!plugin.getCreativeBlocks().contains(block.getLocation().toString())) {

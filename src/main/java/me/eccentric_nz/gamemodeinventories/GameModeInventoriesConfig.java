@@ -4,6 +4,7 @@
 package me.eccentric_nz.gamemodeinventories;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,16 +22,21 @@ public class GameModeInventoriesConfig {
     private final GameModeInventories plugin;
     private FileConfiguration config = null;
     private File configFile = null;
+    private FileConfiguration messages = null;
+    private File messagesFile = null;
     HashMap<String, String> strOptions = new HashMap<String, String>();
     HashMap<String, Boolean> boolOptions = new HashMap<String, Boolean>();
     List<String> bl = new ArrayList<String>();
     List<String> com = new ArrayList<String>();
     List<String> wor = new ArrayList<String>();
+    List<String> no = new ArrayList<String>();
 
     public GameModeInventoriesConfig(GameModeInventories plugin) {
         this.plugin = plugin;
         this.configFile = new File(plugin.getDataFolder(), "config.yml");
         this.config = YamlConfiguration.loadConfiguration(configFile);
+        this.messagesFile = new File(plugin.getDataFolder(), "messages.yml");
+        this.messages = YamlConfiguration.loadConfiguration(configFile);
         // database
         strOptions.put("storage.database", "sqlite");
         strOptions.put("storage.mysql.url", "mysql://localhost:3306/GMI");
@@ -71,6 +77,8 @@ public class GameModeInventoriesConfig {
         com.add("buy");
         com.add("sell");
         wor.add("world");
+        no.add("STONE");
+        no.add("DIRT");
     }
 
     public void checkConfig() {
@@ -109,9 +117,22 @@ public class GameModeInventoriesConfig {
             plugin.getConfig().set("track_creative_place.worlds", wor);
             i++;
         }
+        if (!config.contains("track_creative_place.dont_track")) {
+            plugin.getConfig().set("track_creative_place.dont_track", no);
+            i++;
+        }
         if (i > 0) {
             plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + i + ChatColor.RESET + " new items to config");
         }
         plugin.saveConfig();
+        if (!messages.contains("INVALID_MATERIAL_TRACK")) {
+            messages.set("INVALID_MATERIAL_TRACK", "Invalid material in dont_track list");
+            try {
+                messages.save(new File(plugin.getDataFolder(), "messages.yml"));
+                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added 1 new item to message.yml");
+            } catch (IOException io) {
+
+            }
+        }
     }
 }

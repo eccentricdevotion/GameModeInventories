@@ -16,7 +16,10 @@ track_creative_place:
     no_piston_move: false
     attached_block: false
     worlds:
-        - world
+    - world
+    dont_track:
+    - STONE
+    - DIRT
 creative_blacklist: false
 blacklist:
 - TNT

@@ -22,6 +22,7 @@ public class GameModeInventories extends JavaPlugin {
     private GameModeInventoriesBlock block;
     private final List<String> creativeBlocks = new ArrayList<String>();
     private final List<Material> blackList = new ArrayList<Material>();
+    private final List<Material> noTrackList = new ArrayList<Material>();
     private final List<String> points = new ArrayList<String>();
     private final List<UUID> stands = new ArrayList<UUID>();
     public final String MY_PLUGIN_NAME = ChatColor.GOLD + "[GameModeInventories] " + ChatColor.RESET;
@@ -75,6 +76,7 @@ public class GameModeInventories extends JavaPlugin {
             block.loadBlocks();
             new GameModeInventoriesStand(this).loadStands();
             loadBlackList();
+            loadNoTrackList();
             setUpBlockLogger();
         } else {
             getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + ChatColor.RED + "This plugin requires CraftBukkit/Spigot 1.8 or higher, disabling...");
@@ -179,6 +181,21 @@ public class GameModeInventories extends JavaPlugin {
                 blackList.add(Material.valueOf(s));
             } catch (IllegalArgumentException iae) {
                 getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + String.format(m.getMessage().get("INVALID_MATERIAL"), s));
+            }
+        }
+    }
+
+    public List<Material> getNoTrackList() {
+        return noTrackList;
+    }
+
+    private void loadNoTrackList() {
+        List<String> ntl = getConfig().getStringList("track_creative_place.dont_track");
+        for (String s : ntl) {
+            try {
+                noTrackList.add(Material.valueOf(s));
+            } catch (IllegalArgumentException iae) {
+                getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + String.format(m.getMessage().get("INVALID_MATERIAL_TRACK"), s));
             }
         }
     }
