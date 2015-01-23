@@ -97,6 +97,9 @@ public class GameModeInventoriesBlockListener implements Listener {
         }
         Player p = event.getPlayer();
         Block block = event.getBlock();
+        if (block.getType().equals(Material.AIR)) {
+            return;
+        }
         if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(block.getWorld().getName())) {
             return;
         }
