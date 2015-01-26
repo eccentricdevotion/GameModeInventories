@@ -4,7 +4,6 @@
 package me.eccentric_nz.gamemodeinventories;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,14 +124,5 @@ public class GameModeInventoriesConfig {
             plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + i + ChatColor.RESET + " new items to config");
         }
         plugin.saveConfig();
-        if (!messages.contains("INVALID_MATERIAL_TRACK")) {
-            messages.set("INVALID_MATERIAL_TRACK", "Invalid material in dont_track list");
-            try {
-                messages.save(new File(plugin.getDataFolder(), "messages.yml"));
-                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + "1" + ChatColor.RESET + " new item to message.yml");
-            } catch (IOException io) {
-
-            }
-        }
     }
 }

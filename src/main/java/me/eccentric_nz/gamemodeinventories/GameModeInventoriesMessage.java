@@ -77,11 +77,19 @@ public class GameModeInventoriesMessage {
     }
 
     public void updateMessages() {
+        int i = 0;
         if (!messagesConfig.contains("NO_SPECTATOR")) {
             messagesConfig.set("NO_SPECTATOR", "You are not allowed to be a SPECTATOR!");
+            i++;
+        }
+        if (!messagesConfig.contains("INVALID_MATERIAL_TRACK")) {
+            messagesConfig.set("INVALID_MATERIAL_TRACK", "Invalid material in dont_track list");
+            i++;
+        }
+        if (i > 0) {
             try {
                 messagesConfig.save(new File(plugin.getDataFolder(), "messages.yml"));
-                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + "1" + ChatColor.RESET + " new item to messages.yml");
+                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + i + ChatColor.RESET + " new items to messages.yml");
             } catch (IOException io) {
                 plugin.debug("Could not save messages.yml, " + io);
             }
