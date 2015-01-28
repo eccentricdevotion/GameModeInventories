@@ -20,6 +20,8 @@ public class GameModeInventoriesPhysicsListener implements Listener {
 
     private final GameModeInventories plugin;
     private final List<Material> willdrop = new ArrayList<Material>();
+    private final List<Material> doors = new ArrayList<Material>();
+    private final List<Material> plates = new ArrayList<Material>();
 
     public GameModeInventoriesPhysicsListener(GameModeInventories plugin) {
         this.plugin = plugin;
@@ -37,6 +39,7 @@ public class GameModeInventoriesPhysicsListener implements Listener {
         this.willdrop.add(Material.DOUBLE_PLANT);
         this.willdrop.add(Material.GOLD_PLATE);
         this.willdrop.add(Material.FLOWER_POT);
+        this.willdrop.add(Material.IRON_DOOR_BLOCK);
         this.willdrop.add(Material.IRON_PLATE);
         this.willdrop.add(Material.IRON_TRAPDOOR);
         this.willdrop.add(Material.JUNGLE_DOOR);
@@ -69,11 +72,22 @@ public class GameModeInventoriesPhysicsListener implements Listener {
         this.willdrop.add(Material.WOOD_BUTTON);
         this.willdrop.add(Material.WOOD_PLATE);
         this.willdrop.add(Material.YELLOW_FLOWER);
+        this.doors.add(Material.ACACIA_DOOR);
+        this.doors.add(Material.BIRCH_DOOR);
+        this.doors.add(Material.DARK_OAK_DOOR);
+        this.doors.add(Material.IRON_DOOR_BLOCK);
+        this.doors.add(Material.JUNGLE_DOOR);
+        this.doors.add(Material.SPRUCE_DOOR);
+        this.doors.add(Material.WOODEN_DOOR);
+        this.plates.add(Material.GOLD_PLATE);
+        this.plates.add(Material.IRON_PLATE);
+        this.plates.add(Material.STONE_PLATE);
+        this.plates.add(Material.WOOD_PLATE);
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onBlockPhysics(BlockPhysicsEvent event) {
-        if (event.getBlock().getType().equals(Material.REDSTONE_WIRE)) {
+        if (!willdrop.contains(event.getBlock().getType())) {
             return;
         }
         if (!plugin.getConfig().getBoolean("track_creative_place.enabled") || !plugin.getConfig().getBoolean("track_creative_place.attached_block")) {
@@ -81,6 +95,9 @@ public class GameModeInventoriesPhysicsListener implements Listener {
         }
         Block block = event.getBlock();
         if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(block.getWorld().getName())) {
+            return;
+        }
+        if (doors.contains(block.getType()) && plates.contains(event.getChangedType())) {
             return;
         }
         if (willdrop.contains(block.getType())) {
