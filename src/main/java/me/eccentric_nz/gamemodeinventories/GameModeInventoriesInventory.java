@@ -21,7 +21,7 @@ import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributeData;
 import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributeSerialization;
 import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributeType;
 import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributes;
-import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesConnectionPool;
+import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;

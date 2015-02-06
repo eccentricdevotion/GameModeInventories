@@ -1,4 +1,4 @@
-package me.eccentric_nz.gamemodeinventories.queue;
+package me.eccentric_nz.gamemodeinventories.database;
 
 import java.util.concurrent.LinkedBlockingQueue;
 

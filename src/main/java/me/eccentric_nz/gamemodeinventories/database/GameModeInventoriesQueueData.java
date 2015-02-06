@@ -1,7 +1,7 @@
 /*
  *  Copyright 2015 eccentric_nz.
  */
-package me.eccentric_nz.gamemodeinventories.queue;
+package me.eccentric_nz.gamemodeinventories.database;
 
 /**
  *

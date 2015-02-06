@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.UUID;
-import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesConnectionPool;
+import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 
 /**
  *

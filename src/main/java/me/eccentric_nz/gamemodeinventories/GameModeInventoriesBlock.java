@@ -11,9 +11,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesConnectionPool;
-import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesQueueData;
-import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesRecordingQueue;
+import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
+import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesQueueData;
+import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesRecordingQueue;
 
 /**
  *

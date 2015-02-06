@@ -1,7 +1,7 @@
 /*
  *  Copyright 2014 eccentric_nz.
  */
-package me.eccentric_nz.gamemodeinventories.queue;
+package me.eccentric_nz.gamemodeinventories.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

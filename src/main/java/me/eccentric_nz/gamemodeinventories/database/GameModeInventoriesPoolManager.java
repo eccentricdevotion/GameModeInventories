@@ -10,7 +10,7 @@
 //
 // Please contact the author if you need another license.
 // This module is provided "as is", without warranties of any kind.
-package me.eccentric_nz.gamemodeinventories.queue;
+package me.eccentric_nz.gamemodeinventories.database;
 
 import java.io.PrintWriter;
 import java.sql.Connection;

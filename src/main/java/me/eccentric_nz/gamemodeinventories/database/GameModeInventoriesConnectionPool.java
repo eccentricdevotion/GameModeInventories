@@ -1,7 +1,7 @@
 /*
  *  Copyright 2015 eccentric_nz.
  */
-package me.eccentric_nz.gamemodeinventories.queue;
+package me.eccentric_nz.gamemodeinventories.database;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
 import java.sql.Connection;
