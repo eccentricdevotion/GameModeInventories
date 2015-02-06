@@ -101,8 +101,12 @@ public class GameModeInventoriesPhysicsListener implements Listener {
             return;
         }
         if (willdrop.contains(block.getType())) {
+            String gmiwc = block.getWorld().getName() + "," + block.getChunk().getX() + "," + block.getChunk().getZ();
+            if (!plugin.getCreativeBlocks().containsKey(gmiwc)) {
+                return;
+            }
             // check if the block was placed in creative
-            if (plugin.getCreativeBlocks().contains(event.getBlock().getLocation().toString())) {
+            if (plugin.getCreativeBlocks().get(gmiwc).contains(event.getBlock().getLocation().toString())) {
                 event.setCancelled(true);
             }
         }

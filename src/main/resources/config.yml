@@ -42,6 +42,7 @@ bypass:
     survival: false
     commands: false
 uuid_conversion_done: true
+blocks_conversion_done: true
 storage:
     mysql:
         url: mysql://localhost:3306/GMI

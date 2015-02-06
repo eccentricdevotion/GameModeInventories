@@ -36,8 +36,8 @@ public class GameModeInventoriesConfig {
         this.config = YamlConfiguration.loadConfiguration(configFile);
         this.messagesFile = new File(plugin.getDataFolder(), "messages.yml");
         this.messages = YamlConfiguration.loadConfiguration(messagesFile);
-        // database
-        strOptions.put("storage.database", "sqlite");
+        // string
+        strOptions.put("debug_level", "ERROR");
         strOptions.put("storage.mysql.url", "mysql://localhost:3306/GMI");
         strOptions.put("storage.mysql.user", "bukkit");
         strOptions.put("storage.mysql.password", "mysecurepassword");
@@ -68,6 +68,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("track_creative_place.attached_block", false);
         boolOptions.put("xp", true);
         boolOptions.put("uuid_conversion_done", false);
+        boolOptions.put("blocks_conversion_done", false);
         bl.add("TNT");
         bl.add("BEDROCK");
         bl.add("LAVA_BUCKET");

@@ -106,14 +106,18 @@ public class GameModeInventoriesBlockListener implements Listener {
         if (plugin.getNoTrackList().contains(block.getType())) {
             return;
         }
-        if (plugin.getCreativeBlocks().contains(block.getLocation().toString())) {
+        String gmiwc = block.getWorld().getName() + "," + block.getChunk().getX() + "," + block.getChunk().getZ();
+        if (!plugin.getCreativeBlocks().containsKey(gmiwc)) {
+            return;
+        }
+        if (plugin.getCreativeBlocks().get(gmiwc).contains(block.getLocation().toString())) {
             if (p.getGameMode().equals(GameMode.CREATIVE)) {
-                plugin.getBlock().removeBlock(block.getLocation().toString());
+                plugin.getBlock().removeBlock(gmiwc, block.getLocation().toString());
             } else {
                 String message;
                 if (plugin.getConfig().getBoolean("track_creative_place.break_no_drop")) {
                     // remove the location from the creative blocks list because we're removing the block!
-                    plugin.getBlock().removeBlock(block.getLocation().toString());
+                    plugin.getBlock().removeBlock(gmiwc, block.getLocation().toString());
                     if (plugin.getBlockLogger().isLogging()) {
                         Location loc = block.getLocation();
                         String pname = p.getName();
@@ -190,8 +194,9 @@ public class GameModeInventoriesBlockListener implements Listener {
             if (plugin.getNoTrackList().contains(mat)) {
                 return;
             }
-            if (!plugin.getCreativeBlocks().contains(block.getLocation().toString())) {
-                plugin.getBlock().addBlock(block.getLocation().toString());
+            String gmiwc = block.getWorld().getName() + "," + block.getChunk().getX() + "," + block.getChunk().getZ();
+            if (!plugin.getCreativeBlocks().containsKey(gmiwc) || !plugin.getCreativeBlocks().get(gmiwc).contains(block.getLocation().toString())) {
+                plugin.getBlock().addBlock(gmiwc, block.getLocation().toString());
             }
         }
     }

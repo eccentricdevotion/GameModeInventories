@@ -64,20 +64,20 @@ public class GameModeInventoriesPistonListener implements Listener {
             if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(block.getWorld().getName())) {
                 return;
             }
-//            List<Block> blocks = new ArrayList<Block>();
-//            for (int i = 1; i < 13; i++) {
-//                blocks.add(block.getRelative(event.getDirection(), i));
-//            }
             for (Block b : event.getBlocks()) {
-                if (plugin.getCreativeBlocks().contains(b.getLocation().toString())) {
+                String gmiwc = block.getWorld().getName() + "," + block.getChunk().getX() + "," + block.getChunk().getZ();
+                if (!plugin.getCreativeBlocks().containsKey(gmiwc)) {
+                    return;
+                }
+                if (plugin.getCreativeBlocks().get(gmiwc).contains(b.getLocation().toString())) {
                     if (wouldDrop.contains(b.getType())) {
                         event.setCancelled(true);
                         plugin.debug("Cancelled piston extension because one of the moved blocks would drop an item");
                         return;
-                    } else if (plugin.getCreativeBlocks().contains(event.getBlock().getLocation().toString())) {
+                    } else if (plugin.getCreativeBlocks().get(gmiwc).contains(block.getLocation().toString())) {
                         // update the location of the moved block
-                        plugin.getCreativeBlocks().remove(b.getLocation().toString());
-                        plugin.getCreativeBlocks().add(b.getRelative(event.getDirection()).getLocation().toString());
+                        plugin.getCreativeBlocks().get(gmiwc).remove(b.getLocation().toString());
+                        plugin.getCreativeBlocks().get(gmiwc).add(b.getRelative(event.getDirection()).getLocation().toString());
                     } else {
                         event.setCancelled(true);
                         plugin.debug("Cancelled piston extension because one of the moved blocks was a CREATIVE placed block");
@@ -85,11 +85,6 @@ public class GameModeInventoriesPistonListener implements Listener {
                 }
             }
         }
-//        for (Block b : event.getBlocks()) {
-//            if (plugin.getCreativeBlocks().contains(b.getLocation().toString())) {
-//
-//            }
-//        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -104,11 +99,15 @@ public class GameModeInventoriesPistonListener implements Listener {
         if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(block.getWorld().getName())) {
             return;
         }
-        if (plugin.getCreativeBlocks().contains(block.getRelative(event.getDirection(), 2).getLocation().toString())) {
-            if (plugin.getCreativeBlocks().contains(block.getLocation().toString())) {
+        String gmiwc = block.getWorld().getName() + "," + block.getChunk().getX() + "," + block.getChunk().getZ();
+        if (!plugin.getCreativeBlocks().containsKey(gmiwc)) {
+            return;
+        }
+        if (plugin.getCreativeBlocks().get(gmiwc).contains(block.getRelative(event.getDirection(), 2).getLocation().toString())) {
+            if (plugin.getCreativeBlocks().get(gmiwc).contains(block.getLocation().toString())) {
                 // update the location of the moved block
-                plugin.getCreativeBlocks().remove(block.getRelative(event.getDirection(), 2).getLocation().toString());
-                plugin.getCreativeBlocks().add(block.getRelative(event.getDirection()).getLocation().toString());
+                plugin.getCreativeBlocks().get(gmiwc).remove(block.getRelative(event.getDirection(), 2).getLocation().toString());
+                plugin.getCreativeBlocks().get(gmiwc).add(block.getRelative(event.getDirection()).getLocation().toString());
             } else {
                 event.setCancelled(true);
                 plugin.debug("Cancelled piston retraction because the moved block was a CREATIVE placed block");
