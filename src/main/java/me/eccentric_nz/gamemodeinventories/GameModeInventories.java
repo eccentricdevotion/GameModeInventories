@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesBlocksConverter;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesMySQL;
+import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesQueueDrain;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesRecordingTask;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesSQLite;
 import org.bukkit.Bukkit;
@@ -117,6 +118,7 @@ public class GameModeInventories extends JavaPlugin {
             }
         }
         new GameModeInventoriesStand(this).saveStands();
+        new GameModeInventoriesQueueDrain(this).forceDrainQueue();
     }
 
     private Version getServerVersion(String s) {
