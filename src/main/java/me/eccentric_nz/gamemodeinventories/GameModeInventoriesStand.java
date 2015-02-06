@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.UUID;
+import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesConnectionPool;
 
 /**
  *
@@ -17,8 +18,7 @@ import java.util.UUID;
 public class GameModeInventoriesStand {
 
     private final GameModeInventories plugin;
-    GameModeInventoriesDBConnection service = GameModeInventoriesDBConnection.getInstance();
-    Connection connection = service.getConnection();
+    private Connection connection = null;
     private Statement statement = null;
     private ResultSet rs = null;
     private PreparedStatement ps = null;
@@ -30,7 +30,7 @@ public class GameModeInventoriesStand {
     public void loadStands() {
         if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
             try {
-                service.testConnection(connection);
+                connection = GameModeInventoriesConnectionPool.dbc();
                 String standsQuery = "SELECT uuid FROM stands";
                 statement = connection.createStatement();
                 rs = statement.executeQuery(standsQuery);
@@ -51,6 +51,9 @@ public class GameModeInventoriesStand {
                     if (rs != null) {
                         rs.close();
                     }
+                    if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
+                        connection.close();
+                    }
                 } catch (SQLException ex) {
                     plugin.debug("Error closing stands statement or resultset: " + ex.getMessage());
                 }
@@ -60,6 +63,7 @@ public class GameModeInventoriesStand {
 
     public void saveStands() {
         try {
+            connection = GameModeInventoriesConnectionPool.dbc();
             ps = connection.prepareStatement("INSERT INTO stands (uuid) VALUES (?)");
             for (UUID uuid : plugin.getStands()) {
                 ps.setString(1, uuid.toString());
@@ -71,6 +75,9 @@ public class GameModeInventoriesStand {
             try {
                 if (ps != null) {
                     ps.close();
+                }
+                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
+                    connection.close();
                 }
             } catch (SQLException ex) {
                 plugin.debug("Error closing stands statement: " + ex.getMessage());

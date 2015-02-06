@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesConnectionPool;
 import org.bukkit.ChatColor;
 import org.bukkit.util.FileUtil;
 
@@ -40,8 +41,7 @@ import org.bukkit.util.FileUtil;
 public class GameModeInventoriesUUIDConverter {
 
     private final GameModeInventories plugin;
-    private final GameModeInventoriesDBConnection service = GameModeInventoriesDBConnection.getInstance();
-    private final Connection connection = service.getConnection();
+    private Connection connection = null;
     private final List<String> players = new ArrayList<String>();
 
     public GameModeInventoriesUUIDConverter(GameModeInventories plugin) {
@@ -67,7 +67,7 @@ public class GameModeInventoriesUUIDConverter {
         String inventories_update = "UPDATE inventories SET uuid = ? WHERE player = ?";
         int count = 0;
         try {
-            service.testConnection(connection);
+            connection = GameModeInventoriesConnectionPool.dbc();
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
             if (rs.isBeforeFirst()) {
@@ -108,6 +108,9 @@ public class GameModeInventoriesUUIDConverter {
                 }
                 if (ps != null) {
                     ps.close();
+                }
+                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
+                    connection.close();
                 }
             } catch (SQLException e) {
                 plugin.debug("Error closing inventories table! " + e.getMessage());

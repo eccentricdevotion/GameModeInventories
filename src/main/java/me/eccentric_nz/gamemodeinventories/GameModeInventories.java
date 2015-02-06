@@ -1,26 +1,31 @@
 package me.eccentric_nz.gamemodeinventories;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesBlocksConverter;
+import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesConnectionPool;
+import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesMySQL;
+import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesRecordingTask;
+import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesSQLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 public class GameModeInventories extends JavaPlugin {
 
     private GameModeInventoriesInventory inventoryHandler;
-    protected static GameModeInventories plugin;
-    GameModeInventoriesDBConnection service;
+    public static GameModeInventories plugin;
     private GameModeInventoriesBlock block;
-    private final List<String> creativeBlocks = new ArrayList<String>();
+    private final HashMap<String, List<String>> creativeBlocks = new HashMap<String, List<String>>();
     private final List<Material> blackList = new ArrayList<Material>();
     private final List<Material> noTrackList = new ArrayList<Material>();
     private final List<String> points = new ArrayList<String>();
@@ -28,6 +33,8 @@ public class GameModeInventories extends JavaPlugin {
     public final String MY_PLUGIN_NAME = ChatColor.GOLD + "[GameModeInventories] " + ChatColor.RESET;
     private GameModeInventoriesMessage m;
     private GameModeInventoriesBlockLogger blockLogger;
+    public BukkitTask recordingTask;
+    private GMIDebug db_level;
 
     @Override
     public void onEnable() {
@@ -40,8 +47,6 @@ public class GameModeInventories extends JavaPlugin {
             saveDefaultConfig();
             GameModeInventoriesConfig tc = new GameModeInventoriesConfig(this);
             tc.checkConfig();
-
-            service = GameModeInventoriesDBConnection.getInstance();
             loadDatabase();
             // update database add and populate uuid fields
             if (!getConfig().getBoolean("uuid_conversion_done") && getConfig().getString("storage.database").equals("sqlite")) {
@@ -57,9 +62,21 @@ public class GameModeInventories extends JavaPlugin {
                     System.out.println("[GameModeInventories] UUID conversion successful :)");
                 }
             }
+            // update database add and populate uuid fields
+            if (!getConfig().getBoolean("blocks_conversion_done")) {
+                new GameModeInventoriesBlocksConverter(this).convertBlocksTable();
+                getConfig().set("blocks_conversion_done", true);
+                saveConfig();
+                System.out.println("[GameModeInventories] Blocks conversion successful :)");
+            }
             m = new GameModeInventoriesMessage(this);
             m.updateMessages();
             m.getMessages();
+            try {
+                db_level = GMIDebug.valueOf(getConfig().getString("debug_level"));
+            } catch (IllegalArgumentException e) {
+                db_level = GMIDebug.ERROR;
+            }
             inventoryHandler = new GameModeInventoriesInventory();
             pm.registerEvents(new GameModeInventoriesListener(this), this);
             pm.registerEvents(new GameModeInventoriesDeath(this), this);
@@ -78,6 +95,7 @@ public class GameModeInventories extends JavaPlugin {
             loadBlackList();
             loadNoTrackList();
             setUpBlockLogger();
+            actionRecorderTask();
         } else {
             getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + ChatColor.RED + "This plugin requires CraftBukkit/Spigot 1.8 or higher, disabling...");
             pm.disablePlugin(this);
@@ -99,11 +117,6 @@ public class GameModeInventories extends JavaPlugin {
             }
         }
         new GameModeInventoriesStand(this).saveStands();
-        try {
-            service.connection.close();
-        } catch (SQLException e) {
-            System.err.println("[GameModeInventories] Could not close database connection: " + e);
-        }
     }
 
     private Version getServerVersion(String s) {
@@ -127,11 +140,11 @@ public class GameModeInventories extends JavaPlugin {
         try {
             if (dbtype.equals("sqlite")) {
                 String path = getDataFolder() + File.separator + "GMI.db";
-                service.setConnection(path);
+                GameModeInventoriesConnectionPool pool = new GameModeInventoriesConnectionPool(path);
                 GameModeInventoriesSQLite sqlite = new GameModeInventoriesSQLite(this);
                 sqlite.createTables();
             } else {
-                service.setConnection();
+                GameModeInventoriesConnectionPool pool = new GameModeInventoriesConnectionPool();
                 GameModeInventoriesMySQL mysql = new GameModeInventoriesMySQL(this);
                 mysql.createTables();
             }
@@ -152,10 +165,16 @@ public class GameModeInventories extends JavaPlugin {
         return blockLogger;
     }
 
-    public void debug(Object o) {
+    public void debug(Object o, GMIDebug b) {
         if (getConfig().getBoolean("debug") == true) {
-            System.out.println("[GameModeInventories Debug] " + o);
+            if (b.equals(db_level) || b.equals(GMIDebug.ALL)) {
+                System.out.println("[GameModeInventories Debug] " + o);
+            }
         }
+    }
+
+    public void debug(Object o) {
+        debug(o, GMIDebug.ERROR);
     }
 
     public GameModeInventoriesInventory getInventoryHandler() {
@@ -166,7 +185,7 @@ public class GameModeInventories extends JavaPlugin {
         return block;
     }
 
-    public List<String> getCreativeBlocks() {
+    public HashMap<String, List<String>> getCreativeBlocks() {
         return creativeBlocks;
     }
 
@@ -210,5 +229,11 @@ public class GameModeInventories extends JavaPlugin {
 
     public GameModeInventoriesMessage getM() {
         return m;
+    }
+
+    public void actionRecorderTask() {
+        int recorder_tick_delay = 3;
+        // we schedule it once, it will reschedule itself
+        recordingTask = getServer().getScheduler().runTaskLaterAsynchronously(this, new GameModeInventoriesRecordingTask(this), recorder_tick_delay);
     }
 }

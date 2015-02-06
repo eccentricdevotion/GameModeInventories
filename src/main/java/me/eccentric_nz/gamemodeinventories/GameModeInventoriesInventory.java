@@ -21,6 +21,7 @@ import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributeData;
 import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributeSerialization;
 import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributeType;
 import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributes;
+import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesConnectionPool;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
@@ -38,7 +39,6 @@ import org.bukkit.potion.PotionEffect;
 
 public class GameModeInventoriesInventory {
 
-    GameModeInventoriesDBConnection service = GameModeInventoriesDBConnection.getInstance();
     GameModeInventoriesXPCalculator xpc;
 
     @SuppressWarnings("deprecation")
@@ -55,8 +55,7 @@ public class GameModeInventoriesInventory {
             attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getContents()));
         }
         try {
-            Connection connection = service.getConnection();
-            service.testConnection(connection);
+            Connection connection = GameModeInventoriesConnectionPool.dbc();
             Statement statement = connection.createStatement();
             PreparedStatement ps;
             // get their current gamemode inventory from database
@@ -200,6 +199,9 @@ public class GameModeInventoriesInventory {
                 }
                 rsNewInv.close();
                 statement.close();
+                if (GameModeInventoriesConnectionPool.isIsMySQL()) {
+                    connection.close();
+                }
                 if (savexp) {
                     xpc.setExp(amount);
                 }
@@ -221,8 +223,7 @@ public class GameModeInventoriesInventory {
         String attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getContents()));
         String arm_attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getArmorContents()));
         try {
-            Connection connection = service.getConnection();
-            service.testConnection(connection);
+            Connection connection = GameModeInventoriesConnectionPool.dbc();
             Statement statement = connection.createStatement();
             // get their current gamemode inventory from database
             String getQuery = "SELECT id FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + gm + "'";
@@ -256,6 +257,10 @@ public class GameModeInventoriesInventory {
                 ps.close();
             }
             statement.close();
+            rsInv.close();
+            if (GameModeInventoriesConnectionPool.isIsMySQL()) {
+                connection.close();
+            }
         } catch (SQLException e) {
             System.err.println("Could not save inventories on player death, " + e);
         }
@@ -266,8 +271,7 @@ public class GameModeInventoriesInventory {
         String gm = p.getGameMode().name();
         // restore their inventory
         try {
-            Connection connection = service.getConnection();
-            service.testConnection(connection);
+            Connection connection = GameModeInventoriesConnectionPool.dbc();
             Statement statement = connection.createStatement();
             // get their current gamemode inventory from database
             String getQuery = "SELECT * FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + gm + "'";
@@ -299,6 +303,9 @@ public class GameModeInventoriesInventory {
             }
             rsInv.close();
             statement.close();
+            if (GameModeInventoriesConnectionPool.isIsMySQL()) {
+                connection.close();
+            }
         } catch (SQLException e) {
             System.err.println("Could not restore inventories on respawn, " + e);
         }

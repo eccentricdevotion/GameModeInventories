@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import me.eccentric_nz.gamemodeinventories.queue.GameModeInventoriesConnectionPool;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -76,10 +77,8 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                 } else if (args.length == 2 && option.equals("kit")) {
                     String uuid = "00000000-0000-0000-0000-000000000000";
                     Player p = (Player) sender;
-                    GameModeInventoriesDBConnection service = GameModeInventoriesDBConnection.getInstance();
                     try {
-                        Connection connection = service.getConnection();
-                        service.testConnection(connection);
+                        Connection connection = GameModeInventoriesConnectionPool.dbc();
                         Statement statement = connection.createStatement();
                         if (args[1].toLowerCase().equals("save")) {
                             String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
@@ -131,6 +130,9 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                             p.sendMessage(plugin.MY_PLUGIN_NAME + "Kit inventory loaded.");
                         }
                         statement.close();
+                        if (GameModeInventoriesConnectionPool.isIsMySQL()) {
+                            connection.close();
+                        }
                     } catch (SQLException e) {
                         plugin.debug("Could not save inventory for kit, " + e);
                     }
