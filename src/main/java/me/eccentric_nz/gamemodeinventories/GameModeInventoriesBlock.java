@@ -64,7 +64,11 @@ public class GameModeInventoriesBlock {
 
     public void addBlock(String gmiwc, String l) {
         GameModeInventoriesQueueData data = new GameModeInventoriesQueueData(gmiwc, l);
-        GameModeInventoriesRecordingQueue.addToQueue(data);
+        if (GameModeInventoriesConnectionPool.isIsMySQL()) {
+            GameModeInventoriesRecordingQueue.addToQueue(data);
+        } else {
+            saveBlockNow(data);
+        }
         if (plugin.getCreativeBlocks().containsKey(gmiwc)) {
             plugin.getCreativeBlocks().get(gmiwc).add(l);
         } else {
@@ -89,6 +93,19 @@ public class GameModeInventoriesBlock {
         }
         if (plugin.getCreativeBlocks().containsKey(gmiwc)) {
             plugin.getCreativeBlocks().get(gmiwc).remove(l);
+        }
+    }
+
+    private void saveBlockNow(GameModeInventoriesQueueData data) {
+        try {
+            Connection connection = GameModeInventoriesConnectionPool.dbc();
+            String insertQuery = "INSERT INTO blocks (worldchunk, location) VALUES (?,?)";
+            PreparedStatement ps = connection.prepareStatement(insertQuery);
+            ps.setString(1, data.getWorldChunk());
+            ps.setString(2, data.getLocation());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Could not save block, " + e);
         }
     }
 }

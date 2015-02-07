@@ -74,6 +74,7 @@ public class GameModeInventoriesRecordingTask implements Runnable {
                     plugin.debug("GMI database error. We have to bail in the middle of building primary bulk insert query.", GMIDebug.ERROR);
                 } else {
                     conn.commit();
+                    conn.setAutoCommit(true);
                     plugin.debug("Batch insert was commit: " + System.currentTimeMillis(), GMIDebug.INFO);
                 }
             }

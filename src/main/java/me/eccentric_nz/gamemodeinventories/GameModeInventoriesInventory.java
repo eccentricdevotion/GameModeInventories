@@ -155,16 +155,18 @@ public class GameModeInventoriesInventory {
                     amount = rsNewInv.getInt("xp");
                     if (savearmour) {
                         String savedarmour = rsNewInv.getString("armour");
-                        ItemStack[] a;
-                        if (savedarmour.startsWith("[")) {
-                            a = GameModeInventoriesJSONSerialization.toItemStacks(savedarmour);
-                        } else {
-                            a = GameModeInventoriesBukkitSerialization.fromDatabase(savedarmour);
-                        }
-                        p.getInventory().setArmorContents(a);
-                        if (retain) {
-                            // reapply custom attributes
-                            reapplyCustomAttributes(p, rsNewInv.getString("armour_attributes"));
+                        if (savedarmour != null) {
+                            ItemStack[] a;
+                            if (savedarmour.startsWith("[")) {
+                                a = GameModeInventoriesJSONSerialization.toItemStacks(savedarmour);
+                            } else {
+                                a = GameModeInventoriesBukkitSerialization.fromDatabase(savedarmour);
+                            }
+                            p.getInventory().setArmorContents(a);
+                            if (retain) {
+                                // reapply custom attributes
+                                reapplyCustomAttributes(p, rsNewInv.getString("armour_attributes"));
+                            }
                         }
                     }
                     if (saveender) {
@@ -355,6 +357,7 @@ public class GameModeInventoriesInventory {
             }
         } catch (IOException e) {
             System.err.println("Could not reapply custom attributes, " + e);
+            e.printStackTrace();
         }
     }
 }
