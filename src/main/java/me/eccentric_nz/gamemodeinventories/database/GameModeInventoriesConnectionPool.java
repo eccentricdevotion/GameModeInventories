@@ -6,6 +6,7 @@ package me.eccentric_nz.gamemodeinventories.database;
 import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.sql.ConnectionPoolDataSource;
 import me.eccentric_nz.gamemodeinventories.GameModeInventories;
 
@@ -30,16 +31,9 @@ public class GameModeInventoriesConnectionPool {
     }
 
     public static Connection dbc() {
-        Connection con = null;
+        Connection con;
         if (isMySQL) {
-            try {
-                con = poolMgr.getConnection();
-            } catch (final SQLException e) {
-                GameModeInventories.plugin.debug("Database connection failed. " + e.getMessage());
-                if (!e.getMessage().contains("Pool empty")) {
-                    e.printStackTrace();
-                }
-            }
+            con = poolMgr.getValidConnection();
         } else {
             service = GameModeInventoriesSQLiteConnection.getInstance();
             con = service.getConnection();
@@ -73,11 +67,35 @@ public class GameModeInventoriesConnectionPool {
         ds.setPassword(pass);
         ds.setAutoReconnect(true);
         ds.setAutoReconnectForConnectionPools(true);
+        ds.setAutoReconnectForPools(true);
         poolMgr = new GameModeInventoriesPoolManager(ds, 10);
         dataSource = ds;
     }
 
     public static boolean isIsMySQL() {
         return isMySQL;
+    }
+
+    public static boolean testConnection(Connection connection) {
+        if (isMySQL) {
+            Statement statement = null;
+            try {
+                statement = connection.createStatement();
+                statement.executeQuery("SELECT 1");
+                return true;
+            } catch (Exception e) {
+                GameModeInventories.plugin.debug("Database connection was NULL!");
+                return false;
+            } finally {
+                if (statement != null) {
+                    try {
+                        statement.close();
+                    } catch (SQLException ex) {
+                        GameModeInventories.plugin.debug("Could not close test statement!");
+                    }
+                }
+            }
+        }
+        return true;
     }
 }
