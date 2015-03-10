@@ -82,6 +82,11 @@ public class GameModeInventories extends JavaPlugin {
             pm.registerEvents(new GameModeInventoriesListener(this), this);
             pm.registerEvents(new GameModeInventoriesDeath(this), this);
             pm.registerEvents(new GameModeInventoriesBlockListener(this), this);
+            if (getConfig().getBoolean("track_creative_place.dont_track_is_whitelist")) {
+                pm.registerEvents(new GameModeInventoriesTrackWhiteListener(this), this);
+            } else {
+                pm.registerEvents(new GameModeInventoriesTrackBlackListener(this), this);
+            }
             pm.registerEvents(new GameModeInventoriesPistonListener(this), this);
             pm.registerEvents(new GameModeInventoriesCommandListener(this), this);
             pm.registerEvents(new GameModeInventoriesWorldListener(this), this);

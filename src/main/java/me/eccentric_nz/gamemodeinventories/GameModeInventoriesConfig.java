@@ -66,6 +66,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("track_creative_place.enabled", true);
         boolOptions.put("track_creative_place.no_piston_move", false);
         boolOptions.put("track_creative_place.attached_block", false);
+        boolOptions.put("track_creative_place.dont_track_is_whitelist", false);
         boolOptions.put("xp", true);
         boolOptions.put("uuid_conversion_done", false);
         boolOptions.put("blocks_conversion_done", false);

@@ -20,6 +20,7 @@ track_creative_place:
     dont_track:
     - STONE
     - DIRT
+    dont_track_is_whitelist: false
 creative_blacklist: false
 blacklist:
 - TNT
