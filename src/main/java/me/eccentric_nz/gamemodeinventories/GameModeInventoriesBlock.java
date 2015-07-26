@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,9 +32,9 @@ public class GameModeInventoriesBlock {
                 Connection connection = GameModeInventoriesConnectionPool.dbc();
                 String worldsQuery = "SELECT DISTINCT worldchunk FROM blocks";
                 String blocksQuery = "SELECT * FROM blocks WHERE worldchunk = ?";
-                Statement statement = connection.createStatement();
+                PreparedStatement statement = connection.prepareStatement(worldsQuery);
                 PreparedStatement psb = connection.prepareStatement(blocksQuery);
-                ResultSet rw = statement.executeQuery(worldsQuery);
+                ResultSet rw = statement.executeQuery();
                 if (rw.isBeforeFirst()) {
                     while (rw.next()) {
                         String w = rw.getString("worldchunk");

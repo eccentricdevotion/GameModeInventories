@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import me.eccentric_nz.gamemodeinventories.GMIDebug;
 import me.eccentric_nz.gamemodeinventories.GameModeInventories;
 
@@ -19,7 +18,7 @@ public class GameModeInventoriesBlocksConverter {
 
     private final GameModeInventories plugin;
     private Connection connection = null;
-    Statement statement = null;
+    PreparedStatement statement = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
 
@@ -30,13 +29,11 @@ public class GameModeInventoriesBlocksConverter {
     public void convertBlocksTable() {
         try {
             connection = GameModeInventoriesConnectionPool.dbc();
-            String query = "SELECT id, location FROM blocks";
-            String update = "UPDATE blocks SET worldchunk = ? WHERE id = ?";
-            statement = connection.createStatement();
-            ps = connection.prepareStatement(update);
-            rs = statement.executeQuery(query);
-            connection.setAutoCommit(false);
+            statement = connection.prepareStatement("SELECT id, location FROM blocks");
+            rs = statement.executeQuery();
             if (rs.isBeforeFirst()) {
+                ps = connection.prepareStatement("UPDATE blocks SET worldchunk = ? WHERE id = ?");
+                connection.setAutoCommit(false);
                 while (rs.next()) {
                     String l = rs.getString("location");
                     // Location{world=CraftWorld{name=world},x=-87.0,y=61.0,z=237.0,pitch=0.0,yaw=0.0}
@@ -52,8 +49,8 @@ public class GameModeInventoriesBlocksConverter {
                     ps.addBatch();
                 }
                 ps.executeBatch();
+                connection.setAutoCommit(true);
             }
-            connection.setAutoCommit(true);
         } catch (SQLException ex) {
             plugin.debug("Blocks updater error: " + ex.getMessage(), GMIDebug.ERROR);
         } finally {

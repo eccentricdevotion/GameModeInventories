@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -79,13 +78,13 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                     Player p = (Player) sender;
                     try {
                         Connection connection = GameModeInventoriesConnectionPool.dbc();
-                        Statement statement = connection.createStatement();
+                        PreparedStatement statement = connection.prepareStatement("SELECT id FROM inventories WHERE uuid = ? AND gamemode = 'SURVIVAL'");
                         if (args[1].toLowerCase().equals("save")) {
                             String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
                             PreparedStatement ps;
                             // get their current gamemode inventory from database
-                            String getQuery = "SELECT id FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = 'SURVIVAL'";
-                            ResultSet rsInv = statement.executeQuery(getQuery);
+                            statement.setString(1, uuid);
+                            ResultSet rsInv = statement.executeQuery();
                             int id;
                             if (rsInv.next()) {
                                 // update it with their current inventory

@@ -11,7 +11,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,11 +56,12 @@ public class GameModeInventoriesInventory {
         try {
             Connection connection = GameModeInventoriesConnectionPool.dbc();
             if (connection != null && !connection.isClosed()) {
-                Statement statement = connection.createStatement();
+                PreparedStatement statement = connection.prepareStatement("SELECT id FROM inventories WHERE uuid = ? AND gamemode = ?");
                 PreparedStatement ps;
                 // get their current gamemode inventory from database
-                String getQuery = "SELECT id FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + currentGM + "'";
-                ResultSet rsInv = statement.executeQuery(getQuery);
+                statement.setString(1, uuid);
+                statement.setString(2, currentGM);
+                ResultSet rsInv = statement.executeQuery();
                 int id = 0;
                 if (rsInv.next()) {
                     // update it with their current inventory
@@ -231,10 +231,11 @@ public class GameModeInventoriesInventory {
         String arm_attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getArmorContents()));
         try {
             Connection connection = GameModeInventoriesConnectionPool.dbc();
-            Statement statement = connection.createStatement();
+            PreparedStatement statement = connection.prepareStatement("SELECT id FROM inventories WHERE uuid = ? AND gamemode = ?");
             // get their current gamemode inventory from database
-            String getQuery = "SELECT id FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + gm + "'";
-            ResultSet rsInv = statement.executeQuery(getQuery);
+            statement.setString(1, uuid);
+            statement.setString(2, gm);
+            ResultSet rsInv = statement.executeQuery();
             PreparedStatement ps;
             if (rsInv.next()) {
                 // update it with their current inventory
@@ -279,10 +280,11 @@ public class GameModeInventoriesInventory {
         // restore their inventory
         try {
             Connection connection = GameModeInventoriesConnectionPool.dbc();
-            Statement statement = connection.createStatement();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM inventories WHERE uuid = ? AND gamemode = ?");
             // get their current gamemode inventory from database
-            String getQuery = "SELECT * FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + gm + "'";
-            ResultSet rsInv = statement.executeQuery(getQuery);
+            statement.setString(1, uuid);
+            statement.setString(2, gm);
+            ResultSet rsInv = statement.executeQuery();
             if (rsInv.next()) {
                 try {
                     // set their inventory to the saved one

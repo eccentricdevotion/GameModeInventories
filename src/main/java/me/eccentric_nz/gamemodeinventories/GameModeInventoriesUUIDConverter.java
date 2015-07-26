@@ -24,7 +24,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -60,16 +59,15 @@ public class GameModeInventoriesUUIDConverter {
         File newFile = new File(plugin.getDataFolder() + File.separator + "GMI_" + System.currentTimeMillis() + ".db");
         FileUtil.copy(oldFile, newFile);
         // get all TARDIS owners from database
-        Statement statement = null;
+        PreparedStatement statement = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String query = "SELECT DISTINCT player FROM inventories";
         String inventories_update = "UPDATE inventories SET uuid = ? WHERE player = ?";
         int count = 0;
         try {
             connection = GameModeInventoriesConnectionPool.dbc();
-            statement = connection.createStatement();
-            rs = statement.executeQuery(query);
+            statement = connection.prepareStatement("SELECT DISTINCT player FROM inventories");
+            rs = statement.executeQuery();
             if (rs.isBeforeFirst()) {
                 while (rs.next()) {
                     if (!rs.getString("player").isEmpty()) {

@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.UUID;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 
@@ -19,28 +18,27 @@ public class GameModeInventoriesStand {
 
     private final GameModeInventories plugin;
     private Connection connection = null;
-    private Statement statement = null;
-    private ResultSet rs = null;
-    private PreparedStatement ps = null;
 
     public GameModeInventoriesStand(GameModeInventories plugin) {
         this.plugin = plugin;
     }
 
     public void loadStands() {
+        PreparedStatement statement = null;
+        ResultSet rs = null;
         if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
             try {
                 connection = GameModeInventoriesConnectionPool.dbc();
-                String standsQuery = "SELECT uuid FROM stands";
-                statement = connection.createStatement();
-                rs = statement.executeQuery(standsQuery);
+                statement = connection.prepareStatement("SELECT uuid FROM stands");
+                rs = statement.executeQuery();
                 if (rs.isBeforeFirst()) {
                     while (rs.next()) {
                         plugin.getStands().add(UUID.fromString(rs.getString("uuid")));
                     }
                 }
                 // clear stands
-                statement.executeUpdate("DELETE FROM stands");
+                statement = connection.prepareStatement("DELETE FROM stands");
+                statement.executeUpdate();
             } catch (SQLException e) {
                 System.err.println("Could not load stands, " + e);
             } finally {
@@ -62,6 +60,7 @@ public class GameModeInventoriesStand {
     }
 
     public void saveStands() {
+        PreparedStatement ps = null;
         try {
             connection = GameModeInventoriesConnectionPool.dbc();
             ps = connection.prepareStatement("INSERT INTO stands (uuid) VALUES (?)");
