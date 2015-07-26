@@ -57,7 +57,6 @@ public class GameModeInventoriesInventory {
         try {
             Connection connection = GameModeInventoriesConnectionPool.dbc();
             if (!GameModeInventoriesConnectionPool.testConnection(connection)) {
-                GameModeInventoriesConnectionPool.rebuildPool();
                 connection = GameModeInventoriesConnectionPool.dbc();
             }
             if (connection != null && !connection.isClosed()) {

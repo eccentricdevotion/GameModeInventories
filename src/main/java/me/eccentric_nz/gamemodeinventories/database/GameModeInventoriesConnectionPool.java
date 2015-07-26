@@ -3,11 +3,10 @@
  */
 package me.eccentric_nz.gamemodeinventories.database;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
+import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.sql.ConnectionPoolDataSource;
 import me.eccentric_nz.gamemodeinventories.GameModeInventories;
 
 /**
@@ -16,8 +15,7 @@ import me.eccentric_nz.gamemodeinventories.GameModeInventories;
  */
 public class GameModeInventoriesConnectionPool {
 
-    private static ConnectionPoolDataSource dataSource;
-    private static GameModeInventoriesPoolManager poolMgr;
+    private static HikariDataSource hikari;
     private static boolean isMySQL = false;
     private static GameModeInventoriesSQLiteConnection service;
 
@@ -31,9 +29,13 @@ public class GameModeInventoriesConnectionPool {
     }
 
     public static Connection dbc() {
-        Connection con;
+        Connection con = null;
         if (isMySQL) {
-            con = poolMgr.getValidConnection();
+            try {
+                con = hikari.getConnection();
+            } catch (SQLException e) {
+                GameModeInventories.plugin.debug("Could not get database connection: " + e.getMessage());
+            }
         } else {
             service = GameModeInventoriesSQLiteConnection.getInstance();
             con = service.getConnection();
@@ -41,35 +43,23 @@ public class GameModeInventoriesConnectionPool {
         return con;
     }
 
-    /**
-     * Attempt to rebuild the pool, useful for reloads and failed database
-     * connections being restored
-     *
-     * @throws java.sql.SQLException
-     */
-    public static void rebuildPool() throws SQLException {
-        // Close pool connections when plugin disables
-        if (poolMgr != null) {
-            poolMgr.dispose();
-        }
-        poolMgr = new GameModeInventoriesPoolManager(dataSource, 10);
-    }
-
     public GameModeInventoriesConnectionPool() throws ClassNotFoundException {
         isMySQL = true;
         Class.forName("com.mysql.jdbc.Driver");
-        String host = "jdbc:" + GameModeInventories.plugin.getConfig().getString("storage.mysql.url");
+        String host = GameModeInventories.plugin.getConfig().getString("storage.mysql.server");
+        String port = GameModeInventories.plugin.getConfig().getString("storage.mysql.port");
+        String databaseName = GameModeInventories.plugin.getConfig().getString("storage.mysql.database");
         String user = GameModeInventories.plugin.getConfig().getString("storage.mysql.user");
-        String pass = GameModeInventories.plugin.getConfig().getString("storage.mysql.password");
-        MysqlConnectionPoolDataSource ds = new MysqlConnectionPoolDataSource();
-        ds.setUrl(host);
-        ds.setUser(user);
-        ds.setPassword(pass);
-        ds.setAutoReconnect(true);
-        ds.setAutoReconnectForConnectionPools(true);
-        ds.setAutoReconnectForPools(true);
-        poolMgr = new GameModeInventoriesPoolManager(ds, 10);
-        dataSource = ds;
+        String password = GameModeInventories.plugin.getConfig().getString("storage.mysql.password");
+        int pool_size = GameModeInventories.plugin.getConfig().getInt("storage.mysql.pool_size");
+        hikari = new HikariDataSource();
+        hikari.setMaximumPoolSize(pool_size);
+        hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+        hikari.addDataSourceProperty("serverName", host);
+        hikari.addDataSourceProperty("port", port);
+        hikari.addDataSourceProperty("databaseName", databaseName);
+        hikari.addDataSourceProperty("user", user);
+        hikari.addDataSourceProperty("password", password);
     }
 
     public static boolean isIsMySQL() {

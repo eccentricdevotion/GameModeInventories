@@ -46,7 +46,10 @@ uuid_conversion_done: true
 blocks_conversion_done: true
 storage:
     mysql:
-        url: mysql://localhost:3306/GMI
+        server: localhost
+        port: 3306
+        database: GMI
         user: bukkit
         password: mysecurepassword
+        pool_size: 10
     database: sqlite

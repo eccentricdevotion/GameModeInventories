@@ -3,8 +3,6 @@ package me.eccentric_nz.gamemodeinventories.database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import me.eccentric_nz.gamemodeinventories.GMIDebug;
 import me.eccentric_nz.gamemodeinventories.GameModeInventories;
 
@@ -98,13 +96,6 @@ public class GameModeInventoriesRecordingTask implements Runnable {
 
     @Override
     public void run() {
-        if (GameModeInventoriesRecordingManager.failedDbConnectionCount > 5) {
-            try {
-                GameModeInventoriesConnectionPool.rebuildPool();
-            } catch (SQLException ex) {
-                Logger.getLogger(GameModeInventoriesRecordingTask.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         save();
         scheduleNextRecording();
     }

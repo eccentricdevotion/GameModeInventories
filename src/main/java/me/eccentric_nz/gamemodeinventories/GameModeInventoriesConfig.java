@@ -24,6 +24,7 @@ public class GameModeInventoriesConfig {
     private FileConfiguration messages = null;
     private File messagesFile = null;
     HashMap<String, String> strOptions = new HashMap<String, String>();
+    HashMap<String, Integer> intOptions = new HashMap<String, Integer>();
     HashMap<String, Boolean> boolOptions = new HashMap<String, Boolean>();
     List<String> bl = new ArrayList<String>();
     List<String> com = new ArrayList<String>();
@@ -38,9 +39,13 @@ public class GameModeInventoriesConfig {
         this.messages = YamlConfiguration.loadConfiguration(messagesFile);
         // string
         strOptions.put("debug_level", "ERROR");
-        strOptions.put("storage.mysql.url", "mysql://localhost:3306/GMI");
+        strOptions.put("storage.mysql.server", "localhost");
+        strOptions.put("storage.mysql.port", "3306");
+        strOptions.put("storage.mysql.database", "GMI");
         strOptions.put("storage.mysql.user", "bukkit");
         strOptions.put("storage.mysql.password", "mysecurepassword");
+        // int
+        intOptions.put("storage.mysql.pool_size", 10);
         // boolean
         boolOptions.put("armor", true);
         boolOptions.put("break_bedrock", false);
@@ -91,6 +96,13 @@ public class GameModeInventoriesConfig {
                 i++;
             }
         }
+        // int values
+        for (Map.Entry<String, Integer> entry : intOptions.entrySet()) {
+            if (!config.contains(entry.getKey())) {
+                plugin.getConfig().set(entry.getKey(), entry.getValue());
+                i++;
+            }
+        }
         // boolean values
         for (Map.Entry<String, Boolean> entry : boolOptions.entrySet()) {
             if (!config.contains(entry.getKey())) {
@@ -121,6 +133,16 @@ public class GameModeInventoriesConfig {
         if (!config.contains("track_creative_place.dont_track")) {
             plugin.getConfig().set("track_creative_place.dont_track", no);
             i++;
+        }
+        if (config.contains("storage.mysql.url")) {
+            String url = config.getString("storage.mysql.url");
+            // mysql://localhost:3306/GMI
+            String[] split = url.split("/");
+            String[] sp = split[2].split(":");
+            plugin.getConfig().set("storage.mysql.server", sp[0]);
+            plugin.getConfig().set("storage.mysql.port", sp[1]);
+            plugin.getConfig().set("storage.mysql.database", split[3]);
+            plugin.getConfig().set("storage.mysql.url", null);
         }
         if (i > 0) {
             plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + i + ChatColor.RESET + " new items to config");
