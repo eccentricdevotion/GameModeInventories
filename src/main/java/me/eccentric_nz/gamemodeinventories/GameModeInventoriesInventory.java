@@ -53,15 +53,23 @@ public class GameModeInventoriesInventory {
         if (retain) {
             attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getContents()));
         }
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet rsInv = null;
+        PreparedStatement ps = null;
+        ResultSet idRS = null;
+        PreparedStatement psx = null;
+        PreparedStatement psa = null;
+        PreparedStatement pse = null;
+        ResultSet rsNewInv = null;
         try {
-            Connection connection = GameModeInventoriesConnectionPool.dbc();
+            connection = GameModeInventoriesConnectionPool.dbc();
             if (connection != null && !connection.isClosed()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT id FROM inventories WHERE uuid = ? AND gamemode = ?");
-                PreparedStatement ps;
+                statement = connection.prepareStatement("SELECT id FROM inventories WHERE uuid = ? AND gamemode = ?");
                 // get their current gamemode inventory from database
                 statement.setString(1, uuid);
                 statement.setString(2, currentGM);
-                ResultSet rsInv = statement.executeQuery();
+                rsInv = statement.executeQuery();
                 int id = 0;
                 if (rsInv.next()) {
                     // update it with their current inventory
@@ -72,7 +80,6 @@ public class GameModeInventoriesInventory {
                     ps.setString(2, attr);
                     ps.setInt(3, id);
                     ps.executeUpdate();
-                    ps.close();
                 } else {
                     // they haven't got an inventory saved yet so make one with their current inventory
                     String insertQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory, attributes) VALUES (?, ?, ?, ?, ?)";
@@ -83,22 +90,19 @@ public class GameModeInventoriesInventory {
                     ps.setString(4, inv);
                     ps.setString(5, attr);
                     ps.executeUpdate();
-                    ResultSet idRS = ps.getGeneratedKeys();
+                    idRS = ps.getGeneratedKeys();
                     if (idRS.next()) {
                         id = idRS.getInt(1);
                     }
-                    ps.close();
                 }
-                rsInv.close();
                 if (savexp) {
                     // get players XP
                     int a = xpc.getCurrentExp();
                     String xpQuery = "UPDATE inventories SET xp = ? WHERE id = ?";
-                    PreparedStatement psx = connection.prepareStatement(xpQuery);
+                    psx = connection.prepareStatement(xpQuery);
                     psx.setInt(1, a);
                     psx.setInt(2, id);
                     psx.executeUpdate();
-                    psx.close();
                 }
                 if (savearmour) {
                     // get players armour
@@ -108,12 +112,11 @@ public class GameModeInventoriesInventory {
                         arm_attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getArmorContents()));
                     }
                     String armourQuery = "UPDATE inventories SET armour = ?, armour_attributes = ? WHERE id = ?";
-                    PreparedStatement psa = connection.prepareStatement(armourQuery);
+                    psa = connection.prepareStatement(armourQuery);
                     psa.setString(1, arm);
                     psa.setString(2, arm_attr);
                     psa.setInt(3, id);
                     psa.executeUpdate();
-                    psa.close();
                 }
                 if (saveender) {
                     // get players enderchest
@@ -121,11 +124,10 @@ public class GameModeInventoriesInventory {
                     if (ec != null) {
                         String ender = GameModeInventoriesBukkitSerialization.toDatabase(ec.getContents());
                         String enderQuery = "UPDATE inventories SET enderchest = ? WHERE id = ?";
-                        PreparedStatement pse = connection.prepareStatement(enderQuery);
+                        pse = connection.prepareStatement(enderQuery);
                         pse.setString(1, ender);
                         pse.setInt(2, id);
                         pse.executeUpdate();
-                        pse.close();
                     }
                 }
                 if (potions && currentGM.equals("CREATIVE") && newGM.equals(GameMode.SURVIVAL)) {
@@ -136,8 +138,9 @@ public class GameModeInventoriesInventory {
                 }
                 // check if they have an inventory for the new gamemode
                 try {
-                    String getNewQuery = "SELECT * FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = '" + newGM + "'";
-                    ResultSet rsNewInv = statement.executeQuery(getNewQuery);
+                    statement.setString(1, uuid);
+                    statement.setString(2, newGM.name());
+                    rsNewInv = statement.executeQuery();
                     int amount;
                     if (rsNewInv.next()) {
                         // set their inventory to the saved one
@@ -200,11 +203,7 @@ public class GameModeInventoriesInventory {
                         }
                         amount = 0;
                     }
-                    rsNewInv.close();
-                    statement.close();
-                    if (GameModeInventoriesConnectionPool.isIsMySQL()) {
-                        connection.close();
-                    }
+
                     if (savexp) {
                         xpc.setExp(amount);
                     }
@@ -218,6 +217,38 @@ public class GameModeInventoriesInventory {
             }
         } catch (SQLException e) {
             GameModeInventories.plugin.debug("Could not save inventory on gamemode change, " + e);
+        } finally {
+            try {
+                if (rsNewInv != null) {
+                    rsNewInv.close();
+                }
+                if (pse != null) {
+                    pse.close();
+                }
+                if (psa != null) {
+                    psa.close();
+                }
+                if (psx != null) {
+                    psx.close();
+                }
+                if (idRS != null) {
+                    idRS.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rsInv != null) {
+                    rsInv.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Could not close resultsets, statements or connection, " + e);
+            }
         }
     }
 
@@ -229,14 +260,17 @@ public class GameModeInventoriesInventory {
         String arm = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getArmorContents());
         String attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getContents()));
         String arm_attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getArmorContents()));
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet rsInv = null;
+        PreparedStatement ps = null;
         try {
-            Connection connection = GameModeInventoriesConnectionPool.dbc();
-            PreparedStatement statement = connection.prepareStatement("SELECT id FROM inventories WHERE uuid = ? AND gamemode = ?");
+            connection = GameModeInventoriesConnectionPool.dbc();
+            statement = connection.prepareStatement("SELECT id FROM inventories WHERE uuid = ? AND gamemode = ?");
             // get their current gamemode inventory from database
             statement.setString(1, uuid);
             statement.setString(2, gm);
-            ResultSet rsInv = statement.executeQuery();
-            PreparedStatement ps;
+            rsInv = statement.executeQuery();
             if (rsInv.next()) {
                 // update it with their current inventory
                 int id = rsInv.getInt("id");
@@ -248,8 +282,7 @@ public class GameModeInventoriesInventory {
                 ps.setString(4, arm_attr);
                 ps.setInt(5, id);
                 ps.executeUpdate();
-                ps.close();
-                rsInv.close();
+
             } else {
                 // they haven't got an inventory saved yet so make one with their current inventory
                 String invQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory, armour, attributes, armour_attributes) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -262,15 +295,27 @@ public class GameModeInventoriesInventory {
                 ps.setString(6, attr);
                 ps.setString(7, arm_attr);
                 ps.executeUpdate();
-                ps.close();
             }
-            statement.close();
-            rsInv.close();
-            if (GameModeInventoriesConnectionPool.isIsMySQL()) {
-                connection.close();
-            }
+
         } catch (SQLException e) {
             GameModeInventories.plugin.debug("Could not save inventories on player death, " + e);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rsInv != null) {
+                    rsInv.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Could not close resultsets, statements or connection, " + e);
+            }
         }
     }
 
@@ -278,13 +323,16 @@ public class GameModeInventoriesInventory {
         String uuid = p.getUniqueId().toString();
         String gm = p.getGameMode().name();
         // restore their inventory
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet rsInv = null;
         try {
-            Connection connection = GameModeInventoriesConnectionPool.dbc();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM inventories WHERE uuid = ? AND gamemode = ?");
+            connection = GameModeInventoriesConnectionPool.dbc();
+            statement = connection.prepareStatement("SELECT * FROM inventories WHERE uuid = ? AND gamemode = ?");
             // get their current gamemode inventory from database
             statement.setString(1, uuid);
             statement.setString(2, gm);
-            ResultSet rsInv = statement.executeQuery();
+            rsInv = statement.executeQuery();
             if (rsInv.next()) {
                 try {
                     // set their inventory to the saved one
@@ -310,13 +358,22 @@ public class GameModeInventoriesInventory {
                     GameModeInventories.plugin.debug("Could not restore inventories on respawn, " + e);
                 }
             }
-            rsInv.close();
-            statement.close();
-            if (GameModeInventoriesConnectionPool.isIsMySQL()) {
-                connection.close();
-            }
         } catch (SQLException e) {
             GameModeInventories.plugin.debug("Could not restore inventories on respawn, " + e);
+        } finally {
+            try {
+                if (rsInv != null) {
+                    rsInv.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Could not close resultsets, statements or connection, " + e);
+            }
         }
     }
 

@@ -15,8 +15,6 @@ import me.eccentric_nz.gamemodeinventories.GameModeInventories;
  */
 public class GameModeInventoriesMySQL {
 
-    Connection connection = null;
-    private Statement statement = null;
     private final GameModeInventories plugin;
 
     public GameModeInventoriesMySQL(GameModeInventories plugin) {
@@ -24,6 +22,10 @@ public class GameModeInventoriesMySQL {
     }
 
     public void createTables() {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rsAttr = null;
+        ResultSet rsWorld = null;
         try {
             connection = GameModeInventoriesConnectionPool.dbc();
             statement = connection.createStatement();
@@ -33,7 +35,7 @@ public class GameModeInventoriesMySQL {
 
             // update inventories if there is no attributes column
             String queryAttr = "SHOW COLUMNS FROM inventories LIKE 'attributes'";
-            ResultSet rsAttr = statement.executeQuery(queryAttr);
+            rsAttr = statement.executeQuery(queryAttr);
             if (!rsAttr.next()) {
                 String queryAlter4 = "ALTER TABLE inventories ADD attributes text";
                 statement.executeUpdate(queryAlter4);
@@ -48,7 +50,7 @@ public class GameModeInventoriesMySQL {
 
             // update blocks if there is no world column
             String queryWorld = "SHOW COLUMNS FROM blocks LIKE 'worldchunk'";
-            ResultSet rsWorld = statement.executeQuery(queryWorld);
+            rsWorld = statement.executeQuery(queryWorld);
             if (!rsWorld.next()) {
                 String queryAlter6 = "ALTER TABLE blocks ADD worldchunk varchar(128)";
                 statement.executeUpdate(queryAlter6);
@@ -63,6 +65,12 @@ public class GameModeInventoriesMySQL {
             plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "MySQL create table error: " + e);
         } finally {
             try {
+                if (rsWorld != null) {
+                    rsWorld.close();
+                }
+                if (rsAttr != null) {
+                    rsAttr.close();
+                }
                 if (statement != null) {
                     statement.close();
                 }

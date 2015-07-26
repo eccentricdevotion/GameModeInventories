@@ -76,15 +76,19 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                 } else if (args.length == 2 && option.equals("kit")) {
                     String uuid = "00000000-0000-0000-0000-000000000000";
                     Player p = (Player) sender;
+                    Connection connection = null;
+                    PreparedStatement statement = null;
+                    ResultSet rsInv = null;
+                    ResultSet rsNewInv = null;
                     try {
-                        Connection connection = GameModeInventoriesConnectionPool.dbc();
-                        PreparedStatement statement = connection.prepareStatement("SELECT id FROM inventories WHERE uuid = ? AND gamemode = 'SURVIVAL'");
+                        connection = GameModeInventoriesConnectionPool.dbc();
+                        statement = connection.prepareStatement("SELECT id FROM inventories WHERE uuid = ? AND gamemode = 'SURVIVAL'");
                         if (args[1].toLowerCase().equals("save")) {
                             String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
                             PreparedStatement ps;
                             // get their current gamemode inventory from database
                             statement.setString(1, uuid);
-                            ResultSet rsInv = statement.executeQuery();
+                            rsInv = statement.executeQuery();
                             int id;
                             if (rsInv.next()) {
                                 // update it with their current inventory
@@ -104,12 +108,11 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                                 ps.executeUpdate();
                                 ps.close();
                             }
-                            rsInv.close();
                             p.sendMessage(plugin.MY_PLUGIN_NAME + "Kit inventory saved.");
                         } else {
                             // load
                             String getNewQuery = "SELECT inventory FROM inventories WHERE uuid = '" + uuid + "' AND gamemode = 'SURVIVAL'";
-                            ResultSet rsNewInv = statement.executeQuery(getNewQuery);
+                            rsNewInv = statement.executeQuery(getNewQuery);
                             if (rsNewInv.next()) {
                                 try {
                                     // set the inventory to the kit
@@ -125,15 +128,27 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                                     plugin.debug("Could not set inventory for kit, " + e);
                                 }
                             }
-                            rsNewInv.close();
                             p.sendMessage(plugin.MY_PLUGIN_NAME + "Kit inventory loaded.");
-                        }
-                        statement.close();
-                        if (GameModeInventoriesConnectionPool.isIsMySQL()) {
-                            connection.close();
                         }
                     } catch (SQLException e) {
                         plugin.debug("Could not save inventory for kit, " + e);
+                    } finally {
+                        try {
+                            if (rsInv != null) {
+                                rsInv.close();
+                            }
+                            if (rsNewInv != null) {
+                                rsNewInv.close();
+                            }
+                            if (statement != null) {
+                                statement.close();
+                            }
+                            if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
+                                connection.close();
+                            }
+                        } catch (SQLException e) {
+                            System.err.println("Could not remove block, " + e);
+                        }
                     }
                     return true;
                 }

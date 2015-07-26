@@ -17,16 +17,16 @@ import me.eccentric_nz.gamemodeinventories.GameModeInventories;
 public class GameModeInventoriesBlocksConverter {
 
     private final GameModeInventories plugin;
-    private Connection connection = null;
-    PreparedStatement statement = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
 
     public GameModeInventoriesBlocksConverter(GameModeInventories plugin) {
         this.plugin = plugin;
     }
 
     public void convertBlocksTable() {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             connection = GameModeInventoriesConnectionPool.dbc();
             statement = connection.prepareStatement("SELECT id, location FROM blocks");

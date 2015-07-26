@@ -79,17 +79,14 @@ public class GameModeInventoriesRecordingTask implements Runnable {
         } catch (final SQLException e) {
             e.printStackTrace();
         } finally {
-            if (s != null) {
-                try {
+            try {
+                if (s != null) {
                     s.close();
-                } catch (final SQLException ignored) {
                 }
-            }
-            if (conn != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
-                try {
+                if (conn != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
                     conn.close();
-                } catch (final SQLException ignored) {
                 }
+            } catch (final SQLException ignored) {
             }
         }
     }

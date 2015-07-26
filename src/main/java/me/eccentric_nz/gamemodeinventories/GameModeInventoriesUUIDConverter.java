@@ -40,8 +40,6 @@ import org.bukkit.util.FileUtil;
 public class GameModeInventoriesUUIDConverter {
 
     private final GameModeInventories plugin;
-    private Connection connection = null;
-    private final List<String> players = new ArrayList<String>();
 
     public GameModeInventoriesUUIDConverter(GameModeInventories plugin) {
         this.plugin = plugin;
@@ -58,7 +56,9 @@ public class GameModeInventoriesUUIDConverter {
         File oldFile = new File(plugin.getDataFolder() + File.separator + "GMI.db");
         File newFile = new File(plugin.getDataFolder() + File.separator + "GMI_" + System.currentTimeMillis() + ".db");
         FileUtil.copy(oldFile, newFile);
+        List<String> players = new ArrayList<String>();
         // get all TARDIS owners from database
+        Connection connection = null;
         PreparedStatement statement = null;
         PreparedStatement ps = null;
         ResultSet rs = null;

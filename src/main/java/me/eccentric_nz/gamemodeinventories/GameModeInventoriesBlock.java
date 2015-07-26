@@ -27,14 +27,18 @@ public class GameModeInventoriesBlock {
     }
 
     public void loadBlocks() {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        PreparedStatement psb = null;
+        ResultSet rw = null;
         if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
             try {
-                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                connection = GameModeInventoriesConnectionPool.dbc();
                 String worldsQuery = "SELECT DISTINCT worldchunk FROM blocks";
                 String blocksQuery = "SELECT * FROM blocks WHERE worldchunk = ?";
-                PreparedStatement statement = connection.prepareStatement(worldsQuery);
-                PreparedStatement psb = connection.prepareStatement(blocksQuery);
-                ResultSet rw = statement.executeQuery();
+                statement = connection.prepareStatement(worldsQuery);
+                psb = connection.prepareStatement(blocksQuery);
+                rw = statement.executeQuery();
                 if (rw.isBeforeFirst()) {
                     while (rw.next()) {
                         String w = rw.getString("worldchunk");
@@ -49,14 +53,25 @@ public class GameModeInventoriesBlock {
                         plugin.getCreativeBlocks().put(w, l);
                     }
                 }
-                rw.close();
-                psb.close();
-                statement.close();
-                if (GameModeInventoriesConnectionPool.isIsMySQL()) {
-                    connection.close();
-                }
             } catch (SQLException e) {
                 System.err.println("Could not load blocks, " + e);
+            } finally {
+                try {
+                    if (rw != null) {
+                        rw.close();
+                    }
+                    if (psb != null) {
+                        psb.close();
+                    }
+                    if (statement != null) {
+                        statement.close();
+                    }
+                    if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
+                        connection.close();
+                    }
+                } catch (SQLException e) {
+                    System.err.println("Could not load blocks, " + e);
+                }
             }
         }
     }
@@ -76,19 +91,32 @@ public class GameModeInventoriesBlock {
     }
 
     public void removeBlock(String gmiwc, String l) {
+        Connection connection = null;
+        PreparedStatement ps = null;
         try {
-            Connection connection = GameModeInventoriesConnectionPool.dbc();
+            connection = GameModeInventoriesConnectionPool.dbc();
             String deleteQuery = "DELETE FROM blocks WHERE worldchunk = ? AND location = ?";
-            PreparedStatement ps = connection.prepareStatement(deleteQuery);
+            ps = connection.prepareStatement(deleteQuery);
             ps.setString(1, gmiwc);
             ps.setString(2, l);
             ps.executeUpdate();
-            ps.close();
+
             if (GameModeInventoriesConnectionPool.isIsMySQL()) {
                 connection.close();
             }
         } catch (SQLException e) {
             System.err.println("Could not remove block, " + e);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Could not remove block, " + e);
+            }
         }
         if (plugin.getCreativeBlocks().containsKey(gmiwc)) {
             plugin.getCreativeBlocks().get(gmiwc).remove(l);
@@ -96,15 +124,28 @@ public class GameModeInventoriesBlock {
     }
 
     private void saveBlockNow(GameModeInventoriesQueueData data) {
+        Connection connection = null;
+        PreparedStatement ps = null;
         try {
-            Connection connection = GameModeInventoriesConnectionPool.dbc();
+            connection = GameModeInventoriesConnectionPool.dbc();
             String insertQuery = "INSERT INTO blocks (worldchunk, location) VALUES (?,?)";
-            PreparedStatement ps = connection.prepareStatement(insertQuery);
+            ps = connection.prepareStatement(insertQuery);
             ps.setString(1, data.getWorldChunk());
             ps.setString(2, data.getLocation());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Could not save block, " + e);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Could not remove block, " + e);
+            }
         }
     }
 }
