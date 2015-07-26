@@ -6,7 +6,6 @@ package me.eccentric_nz.gamemodeinventories.database;
 import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import me.eccentric_nz.gamemodeinventories.GameModeInventories;
 
 /**
@@ -60,32 +59,15 @@ public class GameModeInventoriesConnectionPool {
         hikari.addDataSourceProperty("databaseName", databaseName);
         hikari.addDataSourceProperty("user", user);
         hikari.addDataSourceProperty("password", password);
+        hikari.addDataSourceProperty("cachePrepStmts", "true");
+        hikari.addDataSourceProperty("prepStmtCacheSize", "250");
+        hikari.addDataSourceProperty("prepStmtCacheSqlLimit", "1024");
+        if (GameModeInventories.plugin.getConfig().getBoolean("storage.mysql.test_connection")) {
+            hikari.addDataSourceProperty("connectionTestQuery", "SELECT 1");
+        }
     }
 
     public static boolean isIsMySQL() {
         return isMySQL;
-    }
-
-    public static boolean testConnection(Connection connection) {
-        if (isMySQL) {
-            Statement statement = null;
-            try {
-                statement = connection.createStatement();
-                statement.executeQuery("SELECT 1");
-                return true;
-            } catch (Exception e) {
-                GameModeInventories.plugin.debug("Database connection was NULL!");
-                return false;
-            } finally {
-                if (statement != null) {
-                    try {
-                        statement.close();
-                    } catch (SQLException ex) {
-                        GameModeInventories.plugin.debug("Could not close test statement!");
-                    }
-                }
-            }
-        }
-        return true;
     }
 }

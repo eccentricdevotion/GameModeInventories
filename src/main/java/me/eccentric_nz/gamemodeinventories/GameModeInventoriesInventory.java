@@ -56,9 +56,6 @@ public class GameModeInventoriesInventory {
         }
         try {
             Connection connection = GameModeInventoriesConnectionPool.dbc();
-            if (!GameModeInventoriesConnectionPool.testConnection(connection)) {
-                connection = GameModeInventoriesConnectionPool.dbc();
-            }
             if (connection != null && !connection.isClosed()) {
                 Statement statement = connection.createStatement();
                 PreparedStatement ps;

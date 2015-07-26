@@ -52,4 +52,5 @@ storage:
         user: bukkit
         password: mysecurepassword
         pool_size: 10
+        test_connection: false
     database: sqlite
