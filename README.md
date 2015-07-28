@@ -1,4 +1,4 @@
-##GameModeInventories 2
+##GameModeInventories
 
 A CraftBukkit plugin for Minecraft Server.
 
