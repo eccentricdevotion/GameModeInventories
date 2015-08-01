@@ -65,7 +65,7 @@ public class GameModeInventoriesInventory {
         try {
             connection = GameModeInventoriesConnectionPool.dbc();
             if (connection != null && !connection.isClosed()) {
-                statement = connection.prepareStatement("SELECT id FROM inventories WHERE uuid = ? AND gamemode = ?");
+                statement = connection.prepareStatement("SELECT * FROM inventories WHERE uuid = ? AND gamemode = ?");
                 // get their current gamemode inventory from database
                 statement.setString(1, uuid);
                 statement.setString(2, currentGM);
