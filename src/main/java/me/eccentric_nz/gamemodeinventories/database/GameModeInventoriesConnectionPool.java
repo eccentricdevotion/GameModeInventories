@@ -3,6 +3,7 @@
  */
 package me.eccentric_nz.gamemodeinventories.database;
 
+import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -51,20 +52,23 @@ public class GameModeInventoriesConnectionPool {
         String user = GameModeInventories.plugin.getConfig().getString("storage.mysql.user");
         String password = GameModeInventories.plugin.getConfig().getString("storage.mysql.password");
         int pool_size = GameModeInventories.plugin.getConfig().getInt("storage.mysql.pool_size");
-        hikari = new HikariDataSource();
-        hikari.setMaximumPoolSize(pool_size);
-        hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
-        hikari.addDataSourceProperty("serverName", host);
-        hikari.addDataSourceProperty("port", port);
-        hikari.addDataSourceProperty("databaseName", databaseName);
-        hikari.addDataSourceProperty("user", user);
-        hikari.addDataSourceProperty("password", password);
-        hikari.addDataSourceProperty("cachePrepStmts", "true");
-        hikari.addDataSourceProperty("prepStmtCacheSize", "250");
-        hikari.addDataSourceProperty("prepStmtCacheSqlLimit", "1024");
+        HikariConfig config = new HikariConfig();
+        config.setMinimumIdle(1);
+        config.setMaximumPoolSize(pool_size);
+        config.setInitializationFailFast(true);
+        config.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+        config.addDataSourceProperty("serverName", host);
+        config.addDataSourceProperty("port", port);
+        config.addDataSourceProperty("databaseName", databaseName);
+        config.addDataSourceProperty("user", user);
+        config.addDataSourceProperty("password", password);
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "1024");
         if (GameModeInventories.plugin.getConfig().getBoolean("storage.mysql.test_connection")) {
-            hikari.addDataSourceProperty("connectionTestQuery", "SELECT 1");
+            config.setConnectionTestQuery("SELECT 1");
         }
+        hikari = new HikariDataSource(config);
     }
 
     public static boolean isIsMySQL() {
