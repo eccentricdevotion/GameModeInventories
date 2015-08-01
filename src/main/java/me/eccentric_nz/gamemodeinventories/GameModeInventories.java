@@ -70,6 +70,7 @@ public class GameModeInventories extends JavaPlugin {
                 saveConfig();
                 System.out.println("[GameModeInventories] Blocks conversion successful :)");
             }
+            block = new GameModeInventoriesBlock(this);
             m = new GameModeInventoriesMessage(this);
             m.updateMessages();
             m.getMessages();
@@ -80,6 +81,7 @@ public class GameModeInventories extends JavaPlugin {
             }
             inventoryHandler = new GameModeInventoriesInventory();
             pm.registerEvents(new GameModeInventoriesListener(this), this);
+            pm.registerEvents(new GameModeInventoriesChunkLoadListener(this), this);
             pm.registerEvents(new GameModeInventoriesDeath(this), this);
             pm.registerEvents(new GameModeInventoriesBlockListener(this), this);
             if (getConfig().getBoolean("track_creative_place.dont_track_is_whitelist")) {
@@ -95,8 +97,6 @@ public class GameModeInventories extends JavaPlugin {
             GameModeInventoriesCommands command = new GameModeInventoriesCommands(this);
             getCommand("gmi").setExecutor(command);
             getCommand("gmi").setTabCompleter(command);
-            block = new GameModeInventoriesBlock(this);
-            block.loadBlocks();
             new GameModeInventoriesStand(this).loadStands();
             loadBlackList();
             loadNoTrackList();

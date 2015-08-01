@@ -5,11 +5,9 @@ package me.eccentric_nz.gamemodeinventories;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesQueueData;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesRecordingQueue;
@@ -24,56 +22,6 @@ public class GameModeInventoriesBlock {
 
     public GameModeInventoriesBlock(GameModeInventories plugin) {
         this.plugin = plugin;
-    }
-
-    public void loadBlocks() {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        PreparedStatement psb = null;
-        ResultSet rw = null;
-        if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
-            try {
-                connection = GameModeInventoriesConnectionPool.dbc();
-                String worldsQuery = "SELECT DISTINCT worldchunk FROM blocks";
-                String blocksQuery = "SELECT * FROM blocks WHERE worldchunk = ?";
-                statement = connection.prepareStatement(worldsQuery);
-                psb = connection.prepareStatement(blocksQuery);
-                rw = statement.executeQuery();
-                if (rw.isBeforeFirst()) {
-                    while (rw.next()) {
-                        String w = rw.getString("worldchunk");
-                        psb.setString(1, w);
-                        ResultSet rb = psb.executeQuery();
-                        List<String> l = new ArrayList<String>();
-                        if (rb.isBeforeFirst()) {
-                            while (rb.next()) {
-                                l.add(rb.getString("location"));
-                            }
-                        }
-                        plugin.getCreativeBlocks().put(w, l);
-                    }
-                }
-            } catch (SQLException e) {
-                System.err.println("Could not load blocks, " + e);
-            } finally {
-                try {
-                    if (rw != null) {
-                        rw.close();
-                    }
-                    if (psb != null) {
-                        psb.close();
-                    }
-                    if (statement != null) {
-                        statement.close();
-                    }
-                    if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
-                        connection.close();
-                    }
-                } catch (SQLException e) {
-                    System.err.println("Could not load blocks, " + e);
-                }
-            }
-        }
     }
 
     public void addBlock(String gmiwc, String l) {
