@@ -21,8 +21,8 @@ public class GameModeInventoriesConfig {
     private final GameModeInventories plugin;
     private FileConfiguration config = null;
     private File configFile = null;
-    private FileConfiguration messages = null;
-    private File messagesFile = null;
+//    private FileConfiguration messages = null;
+//    private File messagesFile = null;
     HashMap<String, String> strOptions = new HashMap<String, String>();
     HashMap<String, Integer> intOptions = new HashMap<String, Integer>();
     HashMap<String, Boolean> boolOptions = new HashMap<String, Boolean>();
@@ -35,8 +35,8 @@ public class GameModeInventoriesConfig {
         this.plugin = plugin;
         this.configFile = new File(plugin.getDataFolder(), "config.yml");
         this.config = YamlConfiguration.loadConfiguration(configFile);
-        this.messagesFile = new File(plugin.getDataFolder(), "messages.yml");
-        this.messages = YamlConfiguration.loadConfiguration(messagesFile);
+//        this.messagesFile = new File(plugin.getDataFolder(), "messages.yml");
+//        this.messages = YamlConfiguration.loadConfiguration(messagesFile);
         // string
         strOptions.put("debug_level", "ERROR");
         strOptions.put("storage.mysql.server", "localhost");
@@ -44,6 +44,7 @@ public class GameModeInventoriesConfig {
         strOptions.put("storage.mysql.database", "GMI");
         strOptions.put("storage.mysql.user", "bukkit");
         strOptions.put("storage.mysql.password", "mysecurepassword");
+        strOptions.put("storage.database", "sqlite");
         // int
         intOptions.put("storage.mysql.pool_size", 10);
         // boolean
