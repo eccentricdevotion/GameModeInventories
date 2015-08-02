@@ -56,9 +56,9 @@ public class GameModeInventoriesBlockLoader extends BukkitRunnable {
                 if (psb != null) {
                     psb.close();
                 }
-//                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
-//                    connection.close();
-//                }
+                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
+                    connection.close();
+                }
             } catch (SQLException e) {
                 System.err.println("Could not load blocks, " + e);
             }
