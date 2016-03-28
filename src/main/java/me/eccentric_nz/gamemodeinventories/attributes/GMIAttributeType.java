@@ -13,11 +13,14 @@ import java.util.concurrent.ConcurrentMap;
 public class GMIAttributeType {
 
     private static final ConcurrentMap<String, GMIAttributeType> LOOKUP = Maps.newConcurrentMap();
-    public static final GMIAttributeType GENERIC_MAX_HEALTH = new GMIAttributeType("generic.maxHealth").register();
-    public static final GMIAttributeType GENERIC_FOLLOW_RANGE = new GMIAttributeType("generic.followRange").register();
+    public static final GMIAttributeType GENERIC_ARMOR = new GMIAttributeType("generic.armor").register();
     public static final GMIAttributeType GENERIC_ATTACK_DAMAGE = new GMIAttributeType("generic.attackDamage").register();
-    public static final GMIAttributeType GENERIC_MOVEMENT_SPEED = new GMIAttributeType("generic.movementSpeed").register();
+    public static final GMIAttributeType GENERIC_ATTACK_SPEED = new GMIAttributeType("generic.attackSpeed").register();
+    public static final GMIAttributeType GENERIC_FOLLOW_RANGE = new GMIAttributeType("generic.followRange").register();
     public static final GMIAttributeType GENERIC_KNOCKBACK_RESISTANCE = new GMIAttributeType("generic.knockbackResistance").register();
+    public static final GMIAttributeType GENERIC_LUCK = new GMIAttributeType("generic.luck").register();
+    public static final GMIAttributeType GENERIC_MAX_HEALTH = new GMIAttributeType("generic.maxHealth").register();
+    public static final GMIAttributeType GENERIC_MOVEMENT_SPEED = new GMIAttributeType("generic.movementSpeed").register();
 
     private final String minecraftId;
 
