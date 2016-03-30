@@ -14,6 +14,7 @@ public class GMIAttributeType {
 
     private static final ConcurrentMap<String, GMIAttributeType> LOOKUP = Maps.newConcurrentMap();
     public static final GMIAttributeType GENERIC_ARMOR = new GMIAttributeType("generic.armor").register();
+    public static final GMIAttributeType GENERIC_ARMOR_TOUGHNESS = new GMIAttributeType("generic.armorToughness").register();
     public static final GMIAttributeType GENERIC_ATTACK_DAMAGE = new GMIAttributeType("generic.attackDamage").register();
     public static final GMIAttributeType GENERIC_ATTACK_SPEED = new GMIAttributeType("generic.attackSpeed").register();
     public static final GMIAttributeType GENERIC_FOLLOW_RANGE = new GMIAttributeType("generic.followRange").register();
