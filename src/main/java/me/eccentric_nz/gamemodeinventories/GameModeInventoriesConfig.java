@@ -45,6 +45,8 @@ public class GameModeInventoriesConfig {
         strOptions.put("storage.mysql.user", "bukkit");
         strOptions.put("storage.mysql.password", "mysecurepassword");
         strOptions.put("storage.database", "sqlite");
+        strOptions.put("creative_world.world", "creative");
+        strOptions.put("creative_world.location", "last_known");
         // int
         intOptions.put("storage.mysql.pool_size", 10);
         // boolean
@@ -68,6 +70,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("restrict_creative", false);
         boolOptions.put("restrict_spectator", false);
         boolOptions.put("save_on_death", true);
+        boolOptions.put("creative_world.switch_to", false);
         boolOptions.put("track_creative_place.break_no_drop", false);
         boolOptions.put("track_creative_place.enabled", true);
         boolOptions.put("track_creative_place.no_piston_move", false);

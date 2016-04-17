@@ -52,6 +52,7 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
         firstArgs.put("restrict_spectator", "restrict_spectator");
         firstArgs.put("save_on_death", "save_on_death");
         firstArgs.put("survival_on_world_change", "survival_on_world_change");
+        firstArgs.put("switch_to", "creative_world.switch_to");
         firstArgs.put("track_creative_place", "track_creative_place.enabled");
         firstArgs.put("xp", "xp");
         ROOT_SUBS = ImmutableList.copyOf(firstArgs.keySet());

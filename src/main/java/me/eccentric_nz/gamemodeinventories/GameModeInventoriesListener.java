@@ -1,9 +1,16 @@
 package me.eccentric_nz.gamemodeinventories;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -62,12 +69,66 @@ public class GameModeInventoriesListener implements Listener {
             boolean attributes = plugin.getConfig().getBoolean("custom_attributes");
             if (p.isOnline()) {
                 plugin.getInventoryHandler().switchInventories(p, p.getInventory(), savexp, savearmour, saveenderchest, potions, attributes, newGM);
+                if (newGM.equals(GameMode.CREATIVE) && plugin.getConfig().getBoolean("creative_world.switch_to")) {
+                    // get spawn location
+                    Location loc = plugin.getServer().getWorld(plugin.getConfig().getString("creative_world.world")).getSpawnLocation();
+                    if (plugin.getConfig().getString("creative_world.location").equals("last_known")) {
+                        //get last known position in world
+                        String uuid = p.getUniqueId().toString();
+                        // player changed worlds, record last location
+                        Connection connection = null;
+                        PreparedStatement statement = null;
+                        ResultSet rs = null;
+                        try {
+                            connection = GameModeInventoriesConnectionPool.dbc();
+                            if (connection != null && !connection.isClosed()) {
+                                // check if the player has a record for this world
+                                statement = connection.prepareStatement("SELECT * FROM worlds WHERE uuid = ? AND world = ?");
+                                statement.setString(1, uuid);
+                                statement.setString(2, plugin.getConfig().getString("creative_world.world"));
+                                rs = statement.executeQuery();
+                                if (rs.next()) {
+                                    World w = plugin.getServer().getWorld(rs.getString("world"));
+                                    if (w != null) {
+                                        double x = rs.getDouble("x");
+                                        double y = rs.getDouble("y");
+                                        double z = rs.getDouble("z");
+                                        float yaw = rs.getFloat("yaw");
+                                        float pitch = rs.getFloat("pitch");
+                                        // send to last location
+                                        loc = new Location(w, x, y, z, yaw, pitch);
+                                    }
+                                }
+                            }
+                        } catch (SQLException e) {
+                            plugin.debug("Could not get creative world location, " + e);
+                        } finally {
+                            try {
+                                if (rs != null) {
+                                    rs.close();
+                                }
+                                if (statement != null) {
+                                    statement.close();
+                                }
+                                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
+                                    connection.close();
+                                }
+                            } catch (SQLException e) {
+                                System.err.println("Could not close resultsets, statements or connection [worlds], " + e);
+                            }
+                        }
+                    }
+                    if (loc != null) {
+                        p.teleport(loc);
+                    }
+                }
             }
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryOpen(PlayerInteractEvent event) {
+    public void onInventoryOpen(PlayerInteractEvent event
+    ) {
         if (plugin.getConfig().getBoolean("restrict_creative")) {
             Block b = event.getClickedBlock();
             if (b != null) {
@@ -88,7 +149,8 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryClose(InventoryCloseEvent event) {
+    public void onInventoryClose(InventoryCloseEvent event
+    ) {
         if (plugin.getConfig().getBoolean("no_drops")) {
             Inventory inv = event.getInventory();
             if (inv.getType().equals(InventoryType.WORKBENCH)) {
@@ -112,7 +174,8 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onEntityClick(PlayerInteractEntityEvent event) {
+    public void onEntityClick(PlayerInteractEntityEvent event
+    ) {
         if (plugin.getConfig().getBoolean("restrict_creative")) {
             Entity entity = event.getRightClicked();
             Player p = event.getPlayer();
@@ -126,13 +189,15 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
+    public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event
+    ) {
         //treat it the same as interacting with an entity in general
         this.onEntityClick((PlayerInteractEntityEvent) event);
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerDrop(PlayerDropItemEvent event) {
+    public void onPlayerDrop(PlayerDropItemEvent event
+    ) {
         if (plugin.getConfig().getBoolean("no_drops")) {
             Player p = event.getPlayer();
             GameMode gm = p.getGameMode();
@@ -146,7 +211,8 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void noPickup(PlayerPickupItemEvent event) {
+    public void noPickup(PlayerPickupItemEvent event
+    ) {
         if (plugin.getConfig().getBoolean("no_pickups")) {
             Player p = event.getPlayer();
             GameMode gm = p.getGameMode();
@@ -160,7 +226,8 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void noHorseInventory(InventoryOpenEvent event) {
+    public void noHorseInventory(InventoryOpenEvent event
+    ) {
         if (plugin.getConfig().getBoolean("restrict_creative") && plugin.getInventoryHandler().isInstanceOf(event.getInventory().getHolder())) {
             Player p = (Player) event.getPlayer();
             GameMode gm = p.getGameMode();

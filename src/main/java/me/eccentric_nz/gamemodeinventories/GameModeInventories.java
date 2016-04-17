@@ -16,6 +16,7 @@ import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesSQLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,7 +43,7 @@ public class GameModeInventories extends JavaPlugin {
         plugin = this;
         PluginManager pm = Bukkit.getServer().getPluginManager();
         Version bukkitversion = getServerVersion(getServer().getVersion());
-        Version minversion = new Version("1.8");
+        Version minversion = new Version("1.9");
         // check CraftBukkit version
         if (bukkitversion.compareTo(minversion) >= 0) {
             saveDefaultConfig();
@@ -63,12 +64,21 @@ public class GameModeInventories extends JavaPlugin {
                     System.out.println("[GameModeInventories] UUID conversion successful :)");
                 }
             }
-            // update database add and populate uuid fields
+            // update database add and populate block fields
             if (!getConfig().getBoolean("blocks_conversion_done")) {
                 new GameModeInventoriesBlocksConverter(this).convertBlocksTable();
                 getConfig().set("blocks_conversion_done", true);
                 saveConfig();
                 System.out.println("[GameModeInventories] Blocks conversion successful :)");
+            }
+            // check if creative world exists
+            if (getConfig().getBoolean("creative_world.switch_to")) {
+                World creative = getServer().getWorld(getConfig().getString("creative_world.world"));
+                if (creative == null) {
+                    getConfig().set("creative_world.switch_to", false);
+                    saveConfig();
+                    System.out.println("[GameModeInventories] Creative world specified in the config was not found, disabling world switching!");
+                }
             }
             block = new GameModeInventoriesBlock(this);
             m = new GameModeInventoriesMessage(this);
@@ -103,7 +113,7 @@ public class GameModeInventories extends JavaPlugin {
             setUpBlockLogger();
             actionRecorderTask();
         } else {
-            getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + ChatColor.RED + "This plugin requires CraftBukkit/Spigot 1.8 or higher, disabling...");
+            getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + ChatColor.RED + "This plugin requires CraftBukkit/Spigot 1.9 or higher, disabling...");
             pm.disablePlugin(this);
         }
     }
