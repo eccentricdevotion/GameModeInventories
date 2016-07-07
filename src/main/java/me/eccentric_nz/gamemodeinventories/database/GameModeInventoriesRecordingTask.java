@@ -73,7 +73,7 @@ public class GameModeInventoriesRecordingTask implements Runnable {
                 } else {
                     conn.commit();
                     conn.setAutoCommit(true);
-                    plugin.debug("Batch insert was commit: " + System.currentTimeMillis(), GMIDebug.INFO);
+                    plugin.debug("Batch insert was committed: " + System.currentTimeMillis(), GMIDebug.INFO);
                 }
             }
         } catch (final SQLException e) {
