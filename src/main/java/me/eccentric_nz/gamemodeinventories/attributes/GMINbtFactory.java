@@ -81,12 +81,13 @@ public class GMINbtFactory {
         }
 
         private String getFieldName() {
-            if (this == TAG_COMPOUND) {
-                return "map";
-            } else if (this == TAG_LIST) {
-                return "list";
-            } else {
-                return "data";
+            switch (this) {
+                case TAG_COMPOUND:
+                    return "map";
+                case TAG_LIST:
+                    return "list";
+                default:
+                    return "data";
             }
         }
     }
