@@ -43,6 +43,7 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
         firstArgs.put("debug", "debug");
         firstArgs.put("dont_spam_chat", "dont_spam_chat");
         firstArgs.put("enderchest", "enderchest");
+        firstArgs.put("no_creative_pvp", "no_creative_pvp");
         firstArgs.put("no_drops", "no_drops");
         firstArgs.put("no_falling_drops", "no_falling_drops");
         firstArgs.put("no_pickups", "no_pickups");

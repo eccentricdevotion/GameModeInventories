@@ -2,6 +2,7 @@ armor: true
 debug: false
 dont_spam_chat: false
 enderchest: true
+no_creative_pvp: false
 no_drops: false
 no_falling_drops: false
 no_pickups: false

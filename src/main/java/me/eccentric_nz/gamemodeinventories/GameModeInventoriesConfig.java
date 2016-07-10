@@ -63,6 +63,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("debug", false);
         boolOptions.put("dont_spam_chat", false);
         boolOptions.put("enderchest", true);
+        boolOptions.put("no_creative_pvp", false);
         boolOptions.put("no_drops", false);
         boolOptions.put("no_falling_drops", false);
         boolOptions.put("no_pickups", false);
