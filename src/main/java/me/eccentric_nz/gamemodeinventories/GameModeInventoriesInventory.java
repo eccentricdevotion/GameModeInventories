@@ -406,22 +406,24 @@ public class GameModeInventoriesInventory {
     }
 
     private void reapplyCustomAttributes(Player p, String data) {
-        try {
-            HashMap<Integer, List<GMIAttributeData>> cus = GMIAttributeSerialization.fromDatabase(data);
-            for (Map.Entry<Integer, List<GMIAttributeData>> m : cus.entrySet()) {
-                int slot = m.getKey();
-                if (slot != -1) {
-                    ItemStack is = p.getInventory().getItem(slot);
-                    GMIAttributes attributes = new GMIAttributes(is);
-                    for (GMIAttributeData ad : m.getValue()) {
-                        attributes.add(GMIAttribute.newBuilder().name(ad.getAttribute()).type(GMIAttributeType.fromId(ad.getAttributeID())).operation(ad.getOperation()).amount(ad.getValue()).build());
-                        p.getInventory().setItem(m.getKey(), attributes.getStack());
+        if (!data.isEmpty()) {
+            try {
+                HashMap<Integer, List<GMIAttributeData>> cus = GMIAttributeSerialization.fromDatabase(data);
+                for (Map.Entry<Integer, List<GMIAttributeData>> m : cus.entrySet()) {
+                    int slot = m.getKey();
+                    if (slot != -1) {
+                        ItemStack is = p.getInventory().getItem(slot);
+                        GMIAttributes attributes = new GMIAttributes(is);
+                        for (GMIAttributeData ad : m.getValue()) {
+                            attributes.add(GMIAttribute.newBuilder().name(ad.getAttribute()).type(GMIAttributeType.fromId(ad.getAttributeID())).operation(ad.getOperation()).amount(ad.getValue()).build());
+                            p.getInventory().setItem(m.getKey(), attributes.getStack());
+                        }
                     }
                 }
+            } catch (IOException e) {
+                GameModeInventories.plugin.debug("Could not reapply custom attributes, " + e);
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            GameModeInventories.plugin.debug("Could not reapply custom attributes, " + e);
-            e.printStackTrace();
         }
     }
 }
