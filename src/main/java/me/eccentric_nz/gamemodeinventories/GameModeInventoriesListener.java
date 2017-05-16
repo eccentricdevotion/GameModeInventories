@@ -50,6 +50,22 @@ public class GameModeInventoriesListener implements Listener {
         containers.add(Material.HOPPER);
         containers.add(Material.JUKEBOX);
         containers.add(Material.TRAPPED_CHEST);
+        containers.add(Material.BLACK_SHULKER_BOX);
+        containers.add(Material.BLUE_SHULKER_BOX);
+        containers.add(Material.BROWN_SHULKER_BOX);
+        containers.add(Material.CYAN_SHULKER_BOX);
+        containers.add(Material.GRAY_SHULKER_BOX);
+        containers.add(Material.GREEN_SHULKER_BOX);
+        containers.add(Material.LIGHT_BLUE_SHULKER_BOX);
+        containers.add(Material.LIME_SHULKER_BOX);
+        containers.add(Material.MAGENTA_SHULKER_BOX);
+        containers.add(Material.ORANGE_SHULKER_BOX);
+        containers.add(Material.PINK_SHULKER_BOX);
+        containers.add(Material.PURPLE_SHULKER_BOX);
+        containers.add(Material.RED_SHULKER_BOX);
+        containers.add(Material.SILVER_SHULKER_BOX);
+        containers.add(Material.WHITE_SHULKER_BOX);
+        containers.add(Material.YELLOW_SHULKER_BOX);
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -127,13 +143,12 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryOpen(PlayerInteractEvent event
-    ) {
+    public void onInventoryOpen(PlayerInteractEvent event) {
         if (plugin.getConfig().getBoolean("restrict_creative")) {
             Block b = event.getClickedBlock();
             if (b != null) {
                 Player p = event.getPlayer();
-                if (p.isSneaking() && isBlock(p.getItemInHand().getType())) {
+                if (p.isSneaking() && isBlock(p.getInventory().getItemInMainHand().getType())) {
                     return;
                 }
                 Material m = b.getType();
@@ -149,8 +164,7 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryClose(InventoryCloseEvent event
-    ) {
+    public void onInventoryClose(InventoryCloseEvent event) {
         if (plugin.getConfig().getBoolean("no_drops")) {
             Inventory inv = event.getInventory();
             if (inv.getType().equals(InventoryType.WORKBENCH)) {
@@ -174,8 +188,7 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onEntityClick(PlayerInteractEntityEvent event
-    ) {
+    public void onEntityClick(PlayerInteractEntityEvent event) {
         if (plugin.getConfig().getBoolean("restrict_creative")) {
             Entity entity = event.getRightClicked();
             Player p = event.getPlayer();
@@ -189,15 +202,13 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event
-    ) {
+    public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
         //treat it the same as interacting with an entity in general
         this.onEntityClick((PlayerInteractEntityEvent) event);
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerDrop(PlayerDropItemEvent event
-    ) {
+    public void onPlayerDrop(PlayerDropItemEvent event) {
         if (plugin.getConfig().getBoolean("no_drops")) {
             Player p = event.getPlayer();
             GameMode gm = p.getGameMode();
@@ -211,8 +222,7 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void noPickup(PlayerPickupItemEvent event
-    ) {
+    public void noPickup(PlayerPickupItemEvent event) {
         if (plugin.getConfig().getBoolean("no_pickups")) {
             Player p = event.getPlayer();
             GameMode gm = p.getGameMode();
@@ -226,8 +236,7 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void noHorseInventory(InventoryOpenEvent event
-    ) {
+    public void noHorseInventory(InventoryOpenEvent event) {
         if (plugin.getConfig().getBoolean("restrict_creative") && plugin.getInventoryHandler().isInstanceOf(event.getInventory().getHolder())) {
             Player p = (Player) event.getPlayer();
             GameMode gm = p.getGameMode();
