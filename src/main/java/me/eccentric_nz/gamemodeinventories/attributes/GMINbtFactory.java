@@ -5,19 +5,9 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
-import com.google.common.io.Closeables;
-import com.google.common.io.Files;
-import com.google.common.io.InputSupplier;
-import com.google.common.io.OutputSupplier;
 import com.google.common.primitives.Primitives;
-import java.io.BufferedInputStream;
 import java.io.DataInput;
-import java.io.DataInputStream;
 import java.io.DataOutput;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -31,8 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -49,12 +37,6 @@ public class GMINbtFactory {
      *
      * @author Kristian
      */
-    public enum StreamOptions {
-
-        NO_COMPRESSION,
-        GZIP_COMPRESSION,
-    }
-
     private enum NbtType {
 
         TAG_END(0, Void.class),
@@ -231,6 +213,7 @@ public class GMINbtFactory {
          * compounds. The retrieval operation will be cancelled if any of them
          * are missing.
          *
+         * @param <T>
          * @param path - path to the entry.
          * @return The value, or NULL if not found.
          */
@@ -243,20 +226,6 @@ public class GMINbtFactory {
                 return (T) map.get(entries.get(entries.size() - 1));
             }
             return null;
-        }
-
-        /**
-         * Save the content of a NBT compound to a stream.
-         * <p>
-         * Use {@link Files#newOutputStreamSupplier(java.io.File)} to provide a
-         * stream supplier to a file.
-         *
-         * @param stream - the output stream.
-         * @param option - whether or not to compress the output.
-         * @throws IOException If anything went wrong.
-         */
-        public void saveTo(OutputSupplier<? extends OutputStream> stream, StreamOptions option) throws IOException {
-            saveStream(this, stream, option);
         }
 
         /**
@@ -413,6 +382,7 @@ public class GMINbtFactory {
     /**
      * Construct a new NBT list of an unspecified type.
      *
+     * @param content
      * @return The NBT list.
      */
     public static NbtList createList(Object... content) {
@@ -422,6 +392,7 @@ public class GMINbtFactory {
     /**
      * Construct a new NBT list of an unspecified type.
      *
+     * @param iterable
      * @return The NBT list.
      */
     public static NbtList createList(Iterable<? extends Object> iterable) {
@@ -457,75 +428,6 @@ public class GMINbtFactory {
      */
     public static NbtList fromList(Object nmsList) {
         return get().new NbtList(nmsList);
-    }
-
-    /**
-     * Load the content of a file from a stream.
-     * <p>
-     * Use {@link Files#newInputStreamSupplier(java.io.File)} to provide a
-     * stream from a file.
-     *
-     * @param stream - the stream supplier.
-     * @param option - whether or not to decompress the input stream.
-     * @return The decoded NBT compound.
-     * @throws IOException If anything went wrong.
-     */
-    public static NbtCompound fromStream(InputSupplier<? extends InputStream> stream, StreamOptions option) throws IOException {
-        InputStream input = null;
-        DataInputStream data = null;
-        boolean suppress = true;
-
-        try {
-            input = stream.getInput();
-            data = new DataInputStream(new BufferedInputStream(
-                    option == StreamOptions.GZIP_COMPRESSION ? new GZIPInputStream(input) : input
-            ));
-
-            NbtCompound result = fromCompound(get().LOAD_COMPOUND.loadNbt(data));
-            suppress = false;
-            return result;
-
-        } finally {
-            if (data != null) {
-                Closeables.close(data, suppress);
-            } else if (input != null) {
-                Closeables.close(input, suppress);
-            }
-        }
-    }
-
-    /**
-     * Save the content of a NBT compound to a stream.
-     * <p>
-     * Use {@link Files#newOutputStreamSupplier(java.io.File)} to provide a
-     * stream supplier to a file.
-     *
-     * @param source - the NBT compound to save.
-     * @param stream - the stream.
-     * @param option - whether or not to compress the output.
-     * @throws IOException If anything went wrong.
-     */
-    public static void saveStream(NbtCompound source, OutputSupplier<? extends OutputStream> stream, StreamOptions option) throws IOException {
-        OutputStream output = null;
-        DataOutputStream data = null;
-        boolean suppress = true;
-
-        try {
-            output = stream.getOutput();
-            data = new DataOutputStream(
-                    option == StreamOptions.GZIP_COMPRESSION ? new GZIPOutputStream(output) : output
-            );
-
-            invokeMethod(get().SAVE_COMPOUND, null, source.getHandle(), data);
-            suppress = false;
-
-        } finally {
-            if (data != null) {
-                Closeables.close(data, suppress);
-            } else if (output != null) {
-                Closeables.close(output, suppress);
-            }
-        }
     }
 
     /**
@@ -771,7 +673,7 @@ public class GMINbtFactory {
     }
 
     /**
-     * Search for the first publically and privately defined method of the given
+     * Search for the first publicly and privately defined method of the given
      * name and parameter count.
      *
      * @param requireMod - modifiers that are required.
@@ -887,8 +789,7 @@ public class GMINbtFactory {
         // Modification
         @Override
         public Object put(String key, Object value) {
-            return wrapOutgoing(original.put(
-                    (String) key,
+            return wrapOutgoing(original.put(key,
                     unwrapIncoming(value)
             ));
         }

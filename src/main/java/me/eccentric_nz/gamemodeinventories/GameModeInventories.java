@@ -142,7 +142,12 @@ public class GameModeInventories extends JavaPlugin {
         String v;
         if (mat.find()) {
             String[] split = mat.group(1).split(" ");
-            v = split[1];
+            String[] tmp = split[1].split("-");
+            if (tmp.length > 1) {
+                v = tmp[0];
+            } else {
+                v = split[1];
+            }
         } else {
             v = "1.7.10";
         }
