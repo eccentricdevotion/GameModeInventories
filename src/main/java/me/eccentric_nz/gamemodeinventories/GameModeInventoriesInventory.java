@@ -23,9 +23,9 @@ import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributes;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.HopperMinecart;
@@ -382,7 +382,7 @@ public class GameModeInventoriesInventory {
     }
 
     public boolean isInstanceOf(InventoryHolder h) {
-        return h instanceof Horse;
+        return (h instanceof AbstractHorse);
     }
 
     private HashMap<Integer, List<GMIAttributeData>> getAttributeMap(ItemStack[] stacks) {
