@@ -34,11 +34,12 @@ public class GMIAttributeSerialization {
     public static String toDatabase(HashMap<Integer, List<GMIAttributeData>> map) {
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
             // Save every element in the map
-            dataOutput.writeObject(map);
-            // Serialize that array
-            dataOutput.close();
+            try (BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream)) {
+                // Save every element in the map
+                dataOutput.writeObject(map);
+                // Serialize that array
+            }
             return Base64Coder.encodeLines(outputStream.toByteArray());
         } catch (IOException e) {
             throw new IllegalStateException("Unable to save attributes.", e);
@@ -49,10 +50,12 @@ public class GMIAttributeSerialization {
     public static HashMap<Integer, List<GMIAttributeData>> fromDatabase(String data) throws IOException {
         try {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
-            BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
+            HashMap<Integer, List<GMIAttributeData>> map;
             // Read the serialized map
-            HashMap<Integer, List<GMIAttributeData>> map = (HashMap<Integer, List<GMIAttributeData>>) dataInput.readObject();
-            dataInput.close();
+            try (BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream)) {
+                // Read the serialized map
+                map = (HashMap<Integer, List<GMIAttributeData>>) dataInput.readObject();
+            }
             return map;
         } catch (ClassNotFoundException e) {
             throw new IOException("Unable to decode attributes.", e);

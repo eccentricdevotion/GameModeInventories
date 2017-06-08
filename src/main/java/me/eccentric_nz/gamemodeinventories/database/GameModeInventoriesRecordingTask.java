@@ -15,7 +15,7 @@ public class GameModeInventoriesRecordingTask implements Runnable {
     }
 
     public void save() {
-        if (!GameModeInventoriesRecordingQueue.getQueue().isEmpty()) {
+        if (!GameModeInventoriesRecordingQueue.getQUEUE().isEmpty()) {
             insertIntoDatabase();
         }
     }
@@ -25,7 +25,7 @@ public class GameModeInventoriesRecordingTask implements Runnable {
         Connection conn = null;
         try {
             int perBatch = 1000;
-            if (!GameModeInventoriesRecordingQueue.getQueue().isEmpty()) {
+            if (!GameModeInventoriesRecordingQueue.getQUEUE().isEmpty()) {
                 plugin.debug("Beginning batch insert from queue. " + System.currentTimeMillis(), GMIDebug.INFO);
                 conn = GameModeInventoriesConnectionPool.dbc();
                 // Handle dead connections
@@ -47,12 +47,12 @@ public class GameModeInventoriesRecordingTask implements Runnable {
                 conn.setAutoCommit(false);
                 s = conn.prepareStatement("INSERT INTO blocks (worldchunk,location) VALUES (?,?)");
                 int i = 0;
-                while (!GameModeInventoriesRecordingQueue.getQueue().isEmpty()) {
+                while (!GameModeInventoriesRecordingQueue.getQUEUE().isEmpty()) {
                     if (conn.isClosed()) {
                         plugin.debug("GMI database error. We have to bail in the middle of building primary bulk insert query.", GMIDebug.ERROR);
                         break;
                     }
-                    final GameModeInventoriesQueueData a = GameModeInventoriesRecordingQueue.getQueue().poll();
+                    final GameModeInventoriesQueueData a = GameModeInventoriesRecordingQueue.getQUEUE().poll();
                     // poll() returns null if queue is empty
                     if (a == null) {
                         break;
@@ -62,7 +62,7 @@ public class GameModeInventoriesRecordingTask implements Runnable {
                     s.addBatch();
                     // Break out of the loop and just commit what we have
                     if (i >= perBatch) {
-                        plugin.debug("Recorder: Batch max exceeded, running insert. Queue remaining: " + GameModeInventoriesRecordingQueue.getQueue().size(), GMIDebug.INFO);
+                        plugin.debug("Recorder: Batch max exceeded, running insert. Queue remaining: " + GameModeInventoriesRecordingQueue.getQUEUE().size(), GMIDebug.INFO);
                         break;
                     }
                     i++;
@@ -77,7 +77,7 @@ public class GameModeInventoriesRecordingTask implements Runnable {
                 }
             }
         } catch (final SQLException e) {
-            e.printStackTrace();
+            plugin.debug("SQL error: " + e.getMessage(), GMIDebug.ERROR);
         } finally {
             try {
                 if (s != null) {

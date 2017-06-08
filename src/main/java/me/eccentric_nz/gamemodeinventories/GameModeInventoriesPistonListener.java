@@ -19,7 +19,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 public class GameModeInventoriesPistonListener implements Listener {
 
     private final GameModeInventories plugin;
-    private final List<Material> wouldDrop = new ArrayList<Material>();
+    private final List<Material> wouldDrop = new ArrayList<>();
 
     public GameModeInventoriesPistonListener(GameModeInventories plugin) {
         this.plugin = plugin;

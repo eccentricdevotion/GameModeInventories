@@ -56,7 +56,7 @@ public class GameModeInventoriesUUIDConverter {
         File oldFile = new File(plugin.getDataFolder() + File.separator + "GMI.db");
         File newFile = new File(plugin.getDataFolder() + File.separator + "GMI_" + System.currentTimeMillis() + ".db");
         FileUtil.copy(oldFile, newFile);
-        List<String> players = new ArrayList<String>();
+        List<String> players = new ArrayList<>();
         // get all TARDIS owners from database
         Connection connection = null;
         PreparedStatement statement = null;
@@ -76,7 +76,7 @@ public class GameModeInventoriesUUIDConverter {
                 }
                 GameModeInventoriesUUIDFetcher fetcher = new GameModeInventoriesUUIDFetcher(players);
                 // get UUIDs
-                Map<String, UUID> response = null;
+                Map<String, UUID> response;
                 try {
                     response = fetcher.call();
                 } catch (Exception e) {

@@ -8,7 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
@@ -37,11 +36,11 @@ public class GameModeInventoriesBlockListener implements Listener {
         if (!plugin.getConfig().getBoolean("no_falling_drops")) {
             return;
         }
-        for (Entity e : event.getEntity().getNearbyEntities(0.5, 0.5, 0.5)) {
+        event.getEntity().getNearbyEntities(0.5, 0.5, 0.5).forEach((e) -> {
             if (e instanceof FallingBlock) {
                 event.setCancelled(true);
             }
-        }
+        });
     }
 
     @EventHandler
@@ -61,12 +60,9 @@ public class GameModeInventoriesBlockListener implements Listener {
                     if (l != null) {
                         final String gmip = l.getBlockX() + "," + l.getBlockZ();
                         plugin.getPoints().add(gmip);
-                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                            @Override
-                            public void run() {
-                                if (plugin.getPoints().contains(gmip)) {
-                                    plugin.getPoints().remove(gmip);
-                                }
+                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                            if (plugin.getPoints().contains(gmip)) {
+                                plugin.getPoints().remove(gmip);
                             }
                         }, 600L);
                     }

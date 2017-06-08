@@ -17,7 +17,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -27,11 +26,11 @@ public class GameModeInventories extends JavaPlugin {
     private GameModeInventoriesInventory inventoryHandler;
     public static GameModeInventories plugin;
     private GameModeInventoriesBlock block;
-    private final HashMap<String, List<String>> creativeBlocks = new HashMap<String, List<String>>();
-    private final List<Material> blackList = new ArrayList<Material>();
-    private final List<Material> noTrackList = new ArrayList<Material>();
-    private final List<String> points = new ArrayList<String>();
-    private final List<UUID> stands = new ArrayList<UUID>();
+    private final HashMap<String, List<String>> creativeBlocks = new HashMap<>();
+    private final List<Material> blackList = new ArrayList<>();
+    private final List<Material> noTrackList = new ArrayList<>();
+    private final List<String> points = new ArrayList<>();
+    private final List<UUID> stands = new ArrayList<>();
     public final String MY_PLUGIN_NAME = ChatColor.GOLD + "[GameModeInventories] " + ChatColor.RESET;
     private GameModeInventoriesMessage m;
     private GameModeInventoriesBlockLogger blockLogger;
@@ -125,13 +124,13 @@ public class GameModeInventories extends JavaPlugin {
         boolean saveenderchest = getConfig().getBoolean("enderchest");
         boolean potions = getConfig().getBoolean("remove_potions");
         boolean attributes = getConfig().getBoolean("custom_attributes");
-        for (Player p : getServer().getOnlinePlayers()) {
+        getServer().getOnlinePlayers().forEach((p) -> {
             if (p.hasPermission("gamemodeinventories.use")) {
                 if (p.isOnline()) {
                     inventoryHandler.switchInventories(p, p.getInventory(), savexp, savearmour, saveenderchest, potions, attributes, p.getGameMode());
                 }
             }
-        }
+        });
         new GameModeInventoriesStand(this).saveStands();
         new GameModeInventoriesQueueDrain(this).forceDrainQueue();
     }
@@ -170,7 +169,7 @@ public class GameModeInventories extends JavaPlugin {
                 GameModeInventoriesMySQL mysql = new GameModeInventoriesMySQL(this);
                 mysql.createTables();
             }
-        } catch (Exception e) {
+        } catch (ClassNotFoundException e) {
             getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + "Connection and Tables Error: " + e);
         }
     }
@@ -217,13 +216,13 @@ public class GameModeInventories extends JavaPlugin {
 
     private void loadBlackList() {
         List<String> bl = getConfig().getStringList("blacklist");
-        for (String s : bl) {
+        bl.forEach((s) -> {
             try {
                 blackList.add(Material.valueOf(s));
             } catch (IllegalArgumentException iae) {
                 getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + String.format(m.getMessage().get("INVALID_MATERIAL"), s));
             }
-        }
+        });
     }
 
     public List<Material> getNoTrackList() {
@@ -232,13 +231,13 @@ public class GameModeInventories extends JavaPlugin {
 
     private void loadNoTrackList() {
         List<String> ntl = getConfig().getStringList("track_creative_place.dont_track");
-        for (String s : ntl) {
+        ntl.forEach((s) -> {
             try {
                 noTrackList.add(Material.valueOf(s));
             } catch (IllegalArgumentException iae) {
                 getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + String.format(m.getMessage().get("INVALID_MATERIAL_TRACK"), s));
             }
-        }
+        });
     }
 
     public List<String> getPoints() {

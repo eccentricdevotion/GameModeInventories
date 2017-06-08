@@ -10,6 +10,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.AbstractList;
@@ -499,7 +500,7 @@ public class GMINbtFactory {
             Constructor<?> caller = INSTANCE.CRAFT_STACK.getDeclaredConstructor(ItemStack.class);
             caller.setAccessible(true);
             return (ItemStack) caller.newInstance(stack);
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             throw new IllegalStateException("Unable to convert " + stack + " + to a CraftItemStack.");
         }
     }
@@ -651,7 +652,7 @@ public class GMINbtFactory {
     private static Object invokeMethod(Method method, Object target, Object... params) {
         try {
             return method.invoke(target, params);
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new RuntimeException("Unable to invoke method " + method + " for " + target, e);
         }
     }
@@ -659,7 +660,7 @@ public class GMINbtFactory {
     private static void setFieldValue(Field field, Object target, Object value) {
         try {
             field.set(target, value);
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException e) {
             throw new RuntimeException("Unable to set " + field + " for " + target, e);
         }
     }
@@ -667,7 +668,7 @@ public class GMINbtFactory {
     private static Object getFieldValue(Field field, Object target) {
         try {
             return field.get(target);
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException e) {
             throw new RuntimeException("Unable to retrieve " + field + " for " + target, e);
         }
     }
@@ -847,7 +848,7 @@ public class GMINbtFactory {
                 public Entry<String, Object> next() {
                     Entry<String, Object> entry = proxy.next();
 
-                    return new SimpleEntry<String, Object>(
+                    return new SimpleEntry<>(
                             entry.getKey(), wrapOutgoing(entry.getValue())
                     );
                 }
@@ -916,7 +917,7 @@ public class GMINbtFactory {
             Object nbt = unwrapIncoming(element);
 
             // Set the list type if its the first element
-            if (size() == 0) {
+            if (isEmpty()) {
                 setFieldValue(NBT_LIST_TYPE, handle, (byte) getNbtType(nbt).id);
             }
             original.add(index, nbt);
@@ -993,7 +994,7 @@ public class GMINbtFactory {
                 if (readLimiterClass.isAssignableFrom(field.getType())) {
                     try {
                         readLimiter = field.get(null);
-                    } catch (Exception e) {
+                    } catch (IllegalAccessException | IllegalArgumentException e) {
                         throw new RuntimeException("Cannot retrieve read limiter.", e);
                     }
                 }

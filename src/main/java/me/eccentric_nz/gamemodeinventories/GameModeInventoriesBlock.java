@@ -34,7 +34,7 @@ public class GameModeInventoriesBlock {
         if (plugin.getCreativeBlocks().containsKey(gmiwc)) {
             plugin.getCreativeBlocks().get(gmiwc).add(l);
         } else {
-            plugin.getCreativeBlocks().put(gmiwc, new ArrayList<String>(Arrays.asList(l)));
+            plugin.getCreativeBlocks().put(gmiwc, new ArrayList<>(Arrays.asList(l)));
         }
     }
 

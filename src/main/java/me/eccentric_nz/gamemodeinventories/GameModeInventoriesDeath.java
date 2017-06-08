@@ -51,11 +51,8 @@ public class GameModeInventoriesDeath implements Listener {
     public void onRespawn(final PlayerRespawnEvent event) {
         final Player p = event.getPlayer();
         if (p.hasPermission("gamemodeinventories.death") && plugin.getConfig().getBoolean("save_on_death")) {
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    plugin.getInventoryHandler().restoreOnSpawn(p);
-                }
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                plugin.getInventoryHandler().restoreOnSpawn(p);
             });
         }
     }

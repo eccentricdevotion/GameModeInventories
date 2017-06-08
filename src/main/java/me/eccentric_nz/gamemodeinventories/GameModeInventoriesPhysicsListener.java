@@ -19,9 +19,9 @@ import org.bukkit.event.block.BlockPhysicsEvent;
 public class GameModeInventoriesPhysicsListener implements Listener {
 
     private final GameModeInventories plugin;
-    private final List<Material> willdrop = new ArrayList<Material>();
-    private final List<Material> doors = new ArrayList<Material>();
-    private final List<Material> plates = new ArrayList<Material>();
+    private final List<Material> willdrop = new ArrayList<>();
+    private final List<Material> doors = new ArrayList<>();
+    private final List<Material> plates = new ArrayList<>();
 
     public GameModeInventoriesPhysicsListener(GameModeInventories plugin) {
         this.plugin = plugin;

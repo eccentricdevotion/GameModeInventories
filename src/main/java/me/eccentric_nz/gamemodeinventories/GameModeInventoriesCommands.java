@@ -23,7 +23,7 @@ import org.bukkit.util.StringUtil;
 public class GameModeInventoriesCommands implements CommandExecutor, TabCompleter {
 
     private final GameModeInventories plugin;
-    private final HashMap<String, String> firstArgs = new HashMap<String, String>();
+    private final HashMap<String, String> firstArgs = new HashMap<>();
     private final ImmutableList<String> ROOT_SUBS;
 
     public GameModeInventoriesCommands(GameModeInventories plugin) {
@@ -176,6 +176,6 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
     }
 
     private List<String> partial(String token, Collection<String> from) {
-        return StringUtil.copyPartialMatches(token, from, new ArrayList<String>(from.size()));
+        return StringUtil.copyPartialMatches(token, from, new ArrayList<>(from.size()));
     }
 }

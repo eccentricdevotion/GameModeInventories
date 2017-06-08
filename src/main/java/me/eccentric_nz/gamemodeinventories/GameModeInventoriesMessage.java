@@ -23,7 +23,7 @@ public class GameModeInventoriesMessage {
     private final GameModeInventories plugin;
     private FileConfiguration messagesConfig = null;
     private File messagesFile = null;
-    private final HashMap<String, String> message = new HashMap<String, String>();
+    private final HashMap<String, String> message = new HashMap<>();
 
     public GameModeInventoriesMessage(GameModeInventories plugin) {
         this.plugin = plugin;
@@ -32,9 +32,9 @@ public class GameModeInventoriesMessage {
     }
 
     public void getMessages() {
-        for (String m : messagesConfig.getKeys(false)) {
+        messagesConfig.getKeys(false).forEach((m) -> {
             message.put(m, messagesConfig.getString(m));
-        }
+        });
     }
 
     public HashMap<String, String> getMessage() {
@@ -45,7 +45,7 @@ public class GameModeInventoriesMessage {
         File file = new File(plugin.getDataFolder(), "messages.yml");
         InputStream in = plugin.getResource("messages.yml");
         if (!file.exists()) {
-            OutputStream out = null;
+            OutputStream out;
             try {
                 out = new FileOutputStream(file);
                 byte[] buf = new byte[1024];

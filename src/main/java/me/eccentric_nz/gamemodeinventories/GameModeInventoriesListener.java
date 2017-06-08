@@ -33,7 +33,7 @@ import org.bukkit.inventory.ItemStack;
 public class GameModeInventoriesListener implements Listener {
 
     private final GameModeInventories plugin;
-    List<Material> containers = new ArrayList<Material>();
+    List<Material> containers = new ArrayList<>();
 
     public GameModeInventoriesListener(GameModeInventories plugin) {
         this.plugin = plugin;

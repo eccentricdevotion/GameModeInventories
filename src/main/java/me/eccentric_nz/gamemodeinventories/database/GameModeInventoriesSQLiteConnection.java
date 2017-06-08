@@ -12,10 +12,10 @@ import java.sql.DriverManager;
  */
 public class GameModeInventoriesSQLiteConnection {
 
-    private static final GameModeInventoriesSQLiteConnection instance = new GameModeInventoriesSQLiteConnection();
+    private static final GameModeInventoriesSQLiteConnection INSTANCE = new GameModeInventoriesSQLiteConnection();
 
-    public static synchronized GameModeInventoriesSQLiteConnection getInstance() {
-        return instance;
+    public static synchronized GameModeInventoriesSQLiteConnection getINSTANCE() {
+        return INSTANCE;
     }
     public Connection connection = null;
 

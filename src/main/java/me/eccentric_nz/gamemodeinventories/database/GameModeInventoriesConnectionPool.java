@@ -21,7 +21,7 @@ public class GameModeInventoriesConnectionPool {
 
     public GameModeInventoriesConnectionPool(String path) {
         try {
-            service = GameModeInventoriesSQLiteConnection.getInstance();
+            service = GameModeInventoriesSQLiteConnection.getINSTANCE();
             service.setConnection(path);
         } catch (Exception e) {
             GameModeInventories.plugin.debug("Database connection failed. " + e.getMessage());
@@ -37,7 +37,7 @@ public class GameModeInventoriesConnectionPool {
                 GameModeInventories.plugin.debug("Could not get database connection: " + e.getMessage());
             }
         } else {
-            service = GameModeInventoriesSQLiteConnection.getInstance();
+            service = GameModeInventoriesSQLiteConnection.getINSTANCE();
             con = service.getConnection();
         }
         return con;

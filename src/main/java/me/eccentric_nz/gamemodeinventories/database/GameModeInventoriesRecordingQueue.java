@@ -4,14 +4,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class GameModeInventoriesRecordingQueue {
 
-    private static final LinkedBlockingQueue<GameModeInventoriesQueueData> queue = new LinkedBlockingQueue<GameModeInventoriesQueueData>();
+    private static final LinkedBlockingQueue<GameModeInventoriesQueueData> QUEUE = new LinkedBlockingQueue<GameModeInventoriesQueueData>();
 
     /**
      *
-     * @return the size of the queue
+     * @return the size of the QUEUE
      */
     public static int getQueueSize() {
-        return queue.size();
+        return QUEUE.size();
     }
 
     /**
@@ -22,14 +22,14 @@ public class GameModeInventoriesRecordingQueue {
         if (data == null) {
             return;
         }
-        queue.add(data);
+        QUEUE.add(data);
     }
 
     /**
      *
-     * @return the queue
+     * @return the QUEUE
      */
-    public static LinkedBlockingQueue<GameModeInventoriesQueueData> getQueue() {
-        return queue;
+    public static LinkedBlockingQueue<GameModeInventoriesQueueData> getQUEUE() {
+        return QUEUE;
     }
 }

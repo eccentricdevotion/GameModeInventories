@@ -23,13 +23,13 @@ public class GameModeInventoriesConfig {
     private File configFile = null;
 //    private FileConfiguration messages = null;
 //    private File messagesFile = null;
-    HashMap<String, String> strOptions = new HashMap<String, String>();
-    HashMap<String, Integer> intOptions = new HashMap<String, Integer>();
-    HashMap<String, Boolean> boolOptions = new HashMap<String, Boolean>();
-    List<String> bl = new ArrayList<String>();
-    List<String> com = new ArrayList<String>();
-    List<String> wor = new ArrayList<String>();
-    List<String> no = new ArrayList<String>();
+    HashMap<String, String> strOptions = new HashMap<>();
+    HashMap<String, Integer> intOptions = new HashMap<>();
+    HashMap<String, Boolean> boolOptions = new HashMap<>();
+    List<String> bl = new ArrayList<>();
+    List<String> com = new ArrayList<>();
+    List<String> wor = new ArrayList<>();
+    List<String> no = new ArrayList<>();
 
     public GameModeInventoriesConfig(GameModeInventories plugin) {
         this.plugin = plugin;

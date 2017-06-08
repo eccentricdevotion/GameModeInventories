@@ -34,7 +34,6 @@ import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 
 public class GameModeInventoriesInventory {
 
@@ -132,9 +131,9 @@ public class GameModeInventoriesInventory {
                 }
                 if (potions && currentGM.equals("CREATIVE") && newGM.equals(GameMode.SURVIVAL)) {
                     // remove all potion effects
-                    for (PotionEffect effect : p.getActivePotionEffects()) {
+                    p.getActivePotionEffects().forEach((effect) -> {
                         p.removePotionEffect(effect.getType());
-                    }
+                    });
                 }
                 // check if they have an inventory for the new gamemode
                 try {
@@ -386,14 +385,14 @@ public class GameModeInventoriesInventory {
     }
 
     private HashMap<Integer, List<GMIAttributeData>> getAttributeMap(ItemStack[] stacks) {
-        HashMap<Integer, List<GMIAttributeData>> map = new HashMap<Integer, List<GMIAttributeData>>();
+        HashMap<Integer, List<GMIAttributeData>> map = new HashMap<>();
         int add = (stacks.length == 4) ? 36 : 0;
         for (int s = 0; s < stacks.length; s++) {
             ItemStack i = stacks[s];
             if (i != null && !i.getType().equals(Material.AIR)) {
                 GMIAttributes attributes = new GMIAttributes(i);
                 if (attributes.size() > 0) {
-                    List<GMIAttributeData> ist = new ArrayList<GMIAttributeData>();
+                    List<GMIAttributeData> ist = new ArrayList<>();
                     for (GMIAttribute a : attributes.values()) {
                         GMIAttributeData data = new GMIAttributeData(a.getName(), a.getAttributeType().getMinecraftId(), a.getAmount(), a.getOperation());
                         ist.add(data);
@@ -409,20 +408,19 @@ public class GameModeInventoriesInventory {
         if (!data.isEmpty()) {
             try {
                 HashMap<Integer, List<GMIAttributeData>> cus = GMIAttributeSerialization.fromDatabase(data);
-                for (Map.Entry<Integer, List<GMIAttributeData>> m : cus.entrySet()) {
+                cus.entrySet().forEach((Map.Entry<Integer, List<GMIAttributeData>> m) -> {
                     int slot = m.getKey();
                     if (slot != -1) {
                         ItemStack is = p.getInventory().getItem(slot);
                         GMIAttributes attributes = new GMIAttributes(is);
-                        for (GMIAttributeData ad : m.getValue()) {
+                        m.getValue().forEach((ad) -> {
                             attributes.add(GMIAttribute.newBuilder().name(ad.getAttribute()).type(GMIAttributeType.fromId(ad.getAttributeID())).operation(ad.getOperation()).amount(ad.getValue()).build());
                             p.getInventory().setItem(m.getKey(), attributes.getStack());
-                        }
+                        });
                     }
-                }
+                });
             } catch (IOException e) {
                 GameModeInventories.plugin.debug("Could not reapply custom attributes, " + e);
-                e.printStackTrace();
             }
         }
     }
