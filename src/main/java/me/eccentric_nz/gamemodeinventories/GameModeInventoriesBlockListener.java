@@ -16,6 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -100,6 +101,29 @@ public class GameModeInventoriesBlockListener implements Listener {
             event.setCancelled(true);
         } else if (br.getWorld().getEnvironment().equals(Environment.NETHER) && br.getLocation().getY() > 122) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityExplode(EntityExplodeEvent event) {
+        if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
+            if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(event.getLocation().getWorld().getName())) {
+                return;
+            }
+            for (Block b : event.blockList()) {
+                if (plugin.getNoTrackList().contains(b.getType())) {
+                    continue;
+                }
+                String gmiwc = b.getWorld().getName() + "," + b.getChunk().getX() + "," + b.getChunk().getZ();
+                if (!plugin.getCreativeBlocks().containsKey(gmiwc)) {
+                    continue;
+                }
+                if (plugin.getCreativeBlocks().get(gmiwc).contains(b.getLocation().toString())) {
+                    event.setYield(0);
+                    event.setCancelled(true);
+                    return;
+                }
+            }
         }
     }
 }
