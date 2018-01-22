@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -26,7 +27,6 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -39,31 +39,30 @@ public class GameModeInventoriesListener implements Listener {
         this.plugin = plugin;
         containers.add(Material.ANVIL);
         containers.add(Material.BEACON);
-        containers.add(Material.BREWING_STAND);
-        containers.add(Material.BURNING_FURNACE);
-        containers.add(Material.CHEST);
-        containers.add(Material.DISPENSER);
-        containers.add(Material.DROPPER);
-        containers.add(Material.ENCHANTMENT_TABLE);
-        containers.add(Material.ENDER_CHEST);
-        containers.add(Material.FURNACE);
-        containers.add(Material.HOPPER);
-        containers.add(Material.JUKEBOX);
-        containers.add(Material.TRAPPED_CHEST);
         containers.add(Material.BLACK_SHULKER_BOX);
         containers.add(Material.BLUE_SHULKER_BOX);
+        containers.add(Material.BREWING_STAND);
         containers.add(Material.BROWN_SHULKER_BOX);
+        containers.add(Material.CHEST);
         containers.add(Material.CYAN_SHULKER_BOX);
+        containers.add(Material.DISPENSER);
+        containers.add(Material.DROPPER);
+        containers.add(Material.ENCHANTING_TABLE);
+        containers.add(Material.ENDER_CHEST);
+        containers.add(Material.FURNACE);
         containers.add(Material.GRAY_SHULKER_BOX);
         containers.add(Material.GREEN_SHULKER_BOX);
+        containers.add(Material.HOPPER);
+        containers.add(Material.JUKEBOX);
         containers.add(Material.LIGHT_BLUE_SHULKER_BOX);
+        containers.add(Material.LIGHT_GRAY_SHULKER_BOX);
         containers.add(Material.LIME_SHULKER_BOX);
         containers.add(Material.MAGENTA_SHULKER_BOX);
         containers.add(Material.ORANGE_SHULKER_BOX);
         containers.add(Material.PINK_SHULKER_BOX);
         containers.add(Material.PURPLE_SHULKER_BOX);
         containers.add(Material.RED_SHULKER_BOX);
-        containers.add(Material.SILVER_SHULKER_BOX);
+        containers.add(Material.TRAPPED_CHEST);
         containers.add(Material.WHITE_SHULKER_BOX);
         containers.add(Material.YELLOW_SHULKER_BOX);
     }
@@ -222,9 +221,9 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void noPickup(PlayerPickupItemEvent event) {
+    public void noPickup(EntityPickupItemEvent event) {
         if (plugin.getConfig().getBoolean("no_pickups")) {
-            Player p = event.getPlayer();
+            Player p = (Player) event.getEntity();
             GameMode gm = p.getGameMode();
             if (gm.equals(GameMode.CREATIVE) && !GameModeInventoriesBypass.canBypass(p, "items", plugin)) {
                 event.setCancelled(true);

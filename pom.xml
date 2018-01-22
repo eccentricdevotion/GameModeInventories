@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.eccentric_nz.gamemodeinventories</groupId>
     <artifactId>GameModeInventories</artifactId>
-    <version>2.9</version>
+    <version>3.0</version>
     <name>GameModeInventories</name>
     <!-- use a profile here so that the Jenkins build can fetch the
     CoreProtect dependency locally - there is no repo available! -->
@@ -72,9 +72,9 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.12-R0.1-SNAPSHOT</version>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>18w03b-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>provided</scope>
             <exclusions>

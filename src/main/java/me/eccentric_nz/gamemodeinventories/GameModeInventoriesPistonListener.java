@@ -23,35 +23,87 @@ public class GameModeInventoriesPistonListener implements Listener {
 
     public GameModeInventoriesPistonListener(GameModeInventories plugin) {
         this.plugin = plugin;
-        wouldDrop.add(Material.BED_BLOCK); // Still Breaks
+        wouldDrop.add(Material.ACACIA_DOOR);
+        wouldDrop.add(Material.ACACIA_PRESSURE_PLATE);
+        wouldDrop.add(Material.ACACIA_SAPLING);
+        wouldDrop.add(Material.ACACIA_TRAPDOOR);
+        wouldDrop.add(Material.ALLIUM);
+        wouldDrop.add(Material.AZURE_BLUET);
+        wouldDrop.add(Material.BIRCH_DOOR);
+        wouldDrop.add(Material.BIRCH_PRESSURE_PLATE);
+        wouldDrop.add(Material.BIRCH_SAPLING);
+        wouldDrop.add(Material.BIRCH_TRAPDOOR);
+        wouldDrop.add(Material.BLACK_BED);
+        wouldDrop.add(Material.BLUE_BED);
+        wouldDrop.add(Material.BLUE_ORCHID);
+        wouldDrop.add(Material.BROWN_BED);
         wouldDrop.add(Material.BROWN_MUSHROOM);
-        wouldDrop.add(Material.DIODE_BLOCK_OFF);
-        wouldDrop.add(Material.DIODE_BLOCK_ON);
-        wouldDrop.add(Material.GOLD_PLATE);
-        wouldDrop.add(Material.IRON_DOOR_BLOCK); // Still Breaks
-        wouldDrop.add(Material.IRON_PLATE);
+        wouldDrop.add(Material.COBWEB);
+        wouldDrop.add(Material.CYAN_BED);
+        wouldDrop.add(Material.DANDELION);
+        wouldDrop.add(Material.DARK_OAK_DOOR);
+        wouldDrop.add(Material.DARK_OAK_PRESSURE_PLATE);
+        wouldDrop.add(Material.DARK_OAK_SAPLING);
+        wouldDrop.add(Material.DARK_OAK_TRAPDOOR);
+        wouldDrop.add(Material.DEAD_BUSH);
+        wouldDrop.add(Material.FERN);
+        wouldDrop.add(Material.GRASS);
+        wouldDrop.add(Material.GRAY_BED);
+        wouldDrop.add(Material.GREEN_BED);
+        wouldDrop.add(Material.HEAVY_WEIGHTED_PRESSURE_PLATE);
+        wouldDrop.add(Material.IRON_DOOR); // Still Breaks
+        wouldDrop.add(Material.IRON_TRAPDOOR);
         wouldDrop.add(Material.JACK_O_LANTERN);
+        wouldDrop.add(Material.JUNGLE_DOOR);
+        wouldDrop.add(Material.JUNGLE_PRESSURE_PLATE);
+        wouldDrop.add(Material.JUNGLE_SAPLING);
+        wouldDrop.add(Material.JUNGLE_TRAPDOOR);
         wouldDrop.add(Material.LADDER);
+        wouldDrop.add(Material.LARGE_FERN);
         wouldDrop.add(Material.LEVER);
+        wouldDrop.add(Material.LIGHT_BLUE_BED);
+        wouldDrop.add(Material.LIGHT_GRAY_BED);
+        wouldDrop.add(Material.LIGHT_WEIGHTED_PRESSURE_PLATE);
+        wouldDrop.add(Material.LILAC);
+        wouldDrop.add(Material.LILY_PAD);
+        wouldDrop.add(Material.LIME_BED);
+        wouldDrop.add(Material.MAGENTA_BED);
         wouldDrop.add(Material.MELON_BLOCK);
+        wouldDrop.add(Material.OAK_DOOR); // Still Breaks
+        wouldDrop.add(Material.OAK_PRESSURE_PLATE);
+        wouldDrop.add(Material.OAK_SAPLING);
+        wouldDrop.add(Material.OAK_TRAPDOOR);
+        wouldDrop.add(Material.ORANGE_BED);
+        wouldDrop.add(Material.ORANGE_TULIP);
+        wouldDrop.add(Material.OXEYE_DAISY);
+        wouldDrop.add(Material.PEONY);
+        wouldDrop.add(Material.PINK_BED);
+        wouldDrop.add(Material.PINK_TULIP);
+        wouldDrop.add(Material.POPPY);
         wouldDrop.add(Material.PUMPKIN);
+        wouldDrop.add(Material.PURPLE_BED);
         wouldDrop.add(Material.REDSTONE);
-        wouldDrop.add(Material.REDSTONE_TORCH_OFF);
-        wouldDrop.add(Material.REDSTONE_TORCH_ON);
+        wouldDrop.add(Material.REDSTONE_TORCH);
+        wouldDrop.add(Material.REDSTONE_WALL_TORCH);
         wouldDrop.add(Material.REDSTONE_WIRE);
+        wouldDrop.add(Material.RED_BED);
         wouldDrop.add(Material.RED_MUSHROOM);
-        wouldDrop.add(Material.RED_ROSE);
-        wouldDrop.add(Material.SAPLING);
+        wouldDrop.add(Material.RED_TULIP);
+        wouldDrop.add(Material.REPEATER);
+        wouldDrop.add(Material.ROSE_BUSH);
+        wouldDrop.add(Material.SPRUCE_DOOR);
+        wouldDrop.add(Material.SPRUCE_PRESSURE_PLATE);
+        wouldDrop.add(Material.SPRUCE_SAPLING);
+        wouldDrop.add(Material.SPRUCE_TRAPDOOR);
         wouldDrop.add(Material.STONE_BUTTON);
-        wouldDrop.add(Material.STONE_PLATE);
+        wouldDrop.add(Material.STONE_PRESSURE_PLATE);
+        wouldDrop.add(Material.SUNFLOWER);
+        wouldDrop.add(Material.TALL_GRASS);
         wouldDrop.add(Material.TORCH);
-        wouldDrop.add(Material.TRAP_DOOR);
         wouldDrop.add(Material.TRIPWIRE_HOOK);
-        wouldDrop.add(Material.WATER_LILY);
-        wouldDrop.add(Material.WEB);
-        wouldDrop.add(Material.WOODEN_DOOR); // Still Breaks
-        wouldDrop.add(Material.WOOD_PLATE);
-        wouldDrop.add(Material.YELLOW_FLOWER);
+        wouldDrop.add(Material.WHITE_BED); // Still Breaks
+        wouldDrop.add(Material.WHITE_TULIP);
+        wouldDrop.add(Material.YELLOW_BED);
     }
 
     @EventHandler(ignoreCancelled = true)
