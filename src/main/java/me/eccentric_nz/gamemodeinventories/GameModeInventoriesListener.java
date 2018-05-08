@@ -222,6 +222,9 @@ public class GameModeInventoriesListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void noPickup(EntityPickupItemEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
         if (plugin.getConfig().getBoolean("no_pickups")) {
             Player p = (Player) event.getEntity();
             GameMode gm = p.getGameMode();
