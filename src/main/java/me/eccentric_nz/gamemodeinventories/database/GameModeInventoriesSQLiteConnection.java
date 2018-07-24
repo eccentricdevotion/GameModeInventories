@@ -12,20 +12,19 @@ import java.sql.DriverManager;
 public class GameModeInventoriesSQLiteConnection {
 
     private static final GameModeInventoriesSQLiteConnection INSTANCE = new GameModeInventoriesSQLiteConnection();
+    public Connection connection = null;
 
     public static synchronized GameModeInventoriesSQLiteConnection getINSTANCE() {
         return INSTANCE;
     }
 
-    public Connection connection = null;
+    public Connection getConnection() {
+        return connection;
+    }
 
     public void setConnection(String path) throws Exception {
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection("jdbc:sqlite:" + path);
-    }
-
-    public Connection getConnection() {
-        return connection;
     }
 
     /**

@@ -25,11 +25,11 @@ import java.sql.SQLException;
 public class GameModeInventoriesInventory {
 
     private final GameModeInventories plugin;
-    GameModeInventoriesXPCalculator xpc;
     private final boolean saveXP;
     private final boolean saveArmour;
     private final boolean saveEnderChest;
     private final boolean potions;
+    GameModeInventoriesXPCalculator xpc;
 
     public GameModeInventoriesInventory(GameModeInventories plugin) {
         this.plugin = plugin;

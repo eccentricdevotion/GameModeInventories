@@ -26,13 +26,6 @@ public class GameModeInventoriesBlockLogger {
         this.plugin = plugin;
     }
 
-    public enum GMIBlockLogger {
-
-        CORE_PROTECT,
-        LOG_BLOCK,
-        PRISM
-    }
-
     public CoreProtectAPI getCoreProtectAPI() {
         return coreProtectAPI;
     }
@@ -71,27 +64,34 @@ public class GameModeInventoriesBlockLogger {
                 return;
             }
             plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Connecting to CoreProtect");
-            this.coreProtectAPI = CoreProtect;
-            this.whichLogger = GMIBlockLogger.CORE_PROTECT;
-            this.logging = true;
+            coreProtectAPI = CoreProtect;
+            whichLogger = GMIBlockLogger.CORE_PROTECT;
+            logging = true;
         }
         if (pm.isPluginEnabled("LogBlock")) {
             LogBlock lb = (LogBlock) pm.getPlugin("LogBlock");
             if (lb != null) {
                 plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Connecting to LogBlock");
-                this.logBlockConsumer = lb.getConsumer();
-                this.whichLogger = GMIBlockLogger.LOG_BLOCK;
-                this.logging = true;
+                logBlockConsumer = lb.getConsumer();
+                whichLogger = GMIBlockLogger.LOG_BLOCK;
+                logging = true;
             }
         }
         if (pm.isPluginEnabled("Prism")) {
             Prism tmp_prism = (Prism) pm.getPlugin("Prism");
             if (tmp_prism != null) {
                 plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Connecting to Prism");
-                this.prism = tmp_prism;
-                this.whichLogger = GMIBlockLogger.PRISM;
-                this.logging = true;
+                prism = tmp_prism;
+                whichLogger = GMIBlockLogger.PRISM;
+                logging = true;
             }
         }
+    }
+
+    public enum GMIBlockLogger {
+
+        CORE_PROTECT,
+        LOG_BLOCK,
+        PRISM
     }
 }

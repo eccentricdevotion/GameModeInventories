@@ -19,19 +19,32 @@ import java.util.regex.Pattern;
 
 public class GameModeInventories extends JavaPlugin {
 
-    private GameModeInventoriesInventory inventoryHandler;
     public static GameModeInventories plugin;
-    private GameModeInventoriesBlock block;
+    public final String MY_PLUGIN_NAME = ChatColor.GOLD + "[GameModeInventories] " + ChatColor.RESET;
     private final HashMap<String, List<String>> creativeBlocks = new HashMap<>();
     private final List<Material> blackList = new ArrayList<>();
     private final List<Material> noTrackList = new ArrayList<>();
     private final List<String> points = new ArrayList<>();
     private final List<UUID> stands = new ArrayList<>();
-    public final String MY_PLUGIN_NAME = ChatColor.GOLD + "[GameModeInventories] " + ChatColor.RESET;
+    public BukkitTask recordingTask;
+    private GameModeInventoriesInventory inventoryHandler;
+    private GameModeInventoriesBlock block;
     private GameModeInventoriesMessage m;
     private GameModeInventoriesBlockLogger blockLogger;
-    public BukkitTask recordingTask;
     private GMIDebug db_level;
+
+    @Override
+    public void onDisable() {
+        getServer().getOnlinePlayers().forEach((p) -> {
+            if (p.hasPermission("gamemodeinventories.use")) {
+                if (p.isOnline()) {
+                    inventoryHandler.switchInventories(p, p.getGameMode());
+                }
+            }
+        });
+        new GameModeInventoriesStand(this).saveStands();
+        new GameModeInventoriesQueueDrain(this).forceDrainQueue();
+    }
 
     @Override
     public void onEnable() {
@@ -111,19 +124,6 @@ public class GameModeInventories extends JavaPlugin {
             getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + ChatColor.RED + "This plugin requires CraftBukkit/Spigot 1.9 or higher, disabling...");
             pm.disablePlugin(this);
         }
-    }
-
-    @Override
-    public void onDisable() {
-        getServer().getOnlinePlayers().forEach((p) -> {
-            if (p.hasPermission("gamemodeinventories.use")) {
-                if (p.isOnline()) {
-                    inventoryHandler.switchInventories(p, p.getGameMode());
-                }
-            }
-        });
-        new GameModeInventoriesStand(this).saveStands();
-        new GameModeInventoriesQueueDrain(this).forceDrainQueue();
     }
 
     private Version getServerVersion(String s) {

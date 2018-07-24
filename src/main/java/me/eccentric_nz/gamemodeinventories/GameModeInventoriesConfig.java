@@ -19,8 +19,6 @@ import java.util.Map;
 public class GameModeInventoriesConfig {
 
     private final GameModeInventories plugin;
-    private FileConfiguration config = null;
-    private File configFile = null;
     //    private FileConfiguration messages = null;
 //    private File messagesFile = null;
     HashMap<String, String> strOptions = new HashMap<>();
@@ -30,13 +28,13 @@ public class GameModeInventoriesConfig {
     List<String> com = new ArrayList<>();
     List<String> wor = new ArrayList<>();
     List<String> no = new ArrayList<>();
+    private FileConfiguration config = null;
+    private File configFile = null;
 
     public GameModeInventoriesConfig(GameModeInventories plugin) {
         this.plugin = plugin;
         configFile = new File(plugin.getDataFolder(), "config.yml");
         config = YamlConfiguration.loadConfiguration(configFile);
-//        this.messagesFile = new File(plugin.getDataFolder(), "messages.yml");
-//        this.messages = YamlConfiguration.loadConfiguration(messagesFile);
         // string
         strOptions.put("debug_level", "ERROR");
         strOptions.put("storage.mysql.server", "localhost");

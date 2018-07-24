@@ -16,14 +16,14 @@ import java.util.HashMap;
 public class GameModeInventoriesMessage {
 
     private final GameModeInventories plugin;
+    private final HashMap<String, String> message = new HashMap<>();
     private FileConfiguration messagesConfig = null;
     private File messagesFile = null;
-    private final HashMap<String, String> message = new HashMap<>();
 
     public GameModeInventoriesMessage(GameModeInventories plugin) {
         this.plugin = plugin;
-        this.messagesFile = getMessagesFile();
-        this.messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
+        messagesFile = getMessagesFile();
+        messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
     }
 
     public void getMessages() {

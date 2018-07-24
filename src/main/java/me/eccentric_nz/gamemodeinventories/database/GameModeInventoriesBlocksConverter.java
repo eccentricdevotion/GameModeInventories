@@ -19,6 +19,18 @@ public class GameModeInventoriesBlocksConverter {
         this.plugin = plugin;
     }
 
+    public static void processUpdateCounts(int[] updateCounts) {
+        for (int i = 0; i < updateCounts.length; i++) {
+            if (updateCounts[i] >= 0) {
+                // Successfully executed; the number represents number of affected rows
+            } else if (updateCounts[i] == Statement.SUCCESS_NO_INFO) {
+                // Successfully executed; number of affected rows not available
+            } else if (updateCounts[i] == Statement.EXECUTE_FAILED) {
+                // Failed to execute
+            }
+        }
+    }
+
     public void convertBlocksTable() {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -95,18 +107,6 @@ public class GameModeInventoriesBlocksConverter {
                 }
             } catch (SQLException ex) {
                 plugin.debug("Blocks closing error: " + ex.getMessage(), GMIDebug.ERROR);
-            }
-        }
-    }
-
-    public static void processUpdateCounts(int[] updateCounts) {
-        for (int i = 0; i < updateCounts.length; i++) {
-            if (updateCounts[i] >= 0) {
-                // Successfully executed; the number represents number of affected rows
-            } else if (updateCounts[i] == Statement.SUCCESS_NO_INFO) {
-                // Successfully executed; number of affected rows not available
-            } else if (updateCounts[i] == Statement.EXECUTE_FAILED) {
-                // Failed to execute
             }
         }
     }

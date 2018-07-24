@@ -23,7 +23,7 @@ package me.eccentric_nz.gamemodeinventories;
  */
 public class Version implements Comparable<Version> {
 
-    private String version;
+    private final String version;
 
     public Version(String version) {
         if (version == null) {
@@ -36,7 +36,7 @@ public class Version implements Comparable<Version> {
     }
 
     public String get() {
-        return this.version;
+        return version;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class Version implements Comparable<Version> {
         if (that == null) {
             return 1;
         }
-        String[] thisParts = this.get().split("\\.");
+        String[] thisParts = get().split("\\.");
         String[] thatParts = that.get().split("\\.");
         int length = Math.max(thisParts.length, thatParts.length);
         for (int i = 0; i < length; i++) {
@@ -63,6 +63,12 @@ public class Version implements Comparable<Version> {
     }
 
     @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
     public boolean equals(Object that) {
         if (this == that) {
             return true;
@@ -70,15 +76,9 @@ public class Version implements Comparable<Version> {
         if (that == null) {
             return false;
         }
-        if (this.getClass() != that.getClass()) {
+        if (getClass() != that.getClass()) {
             return false;
         }
-        return this.compareTo((Version) that) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        return hash;
+        return compareTo((Version) that) == 0;
     }
 }

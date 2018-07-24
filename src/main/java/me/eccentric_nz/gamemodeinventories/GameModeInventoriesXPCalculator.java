@@ -24,14 +24,14 @@ public class GameModeInventoriesXPCalculator {
 
     private static int xpTotalToReachLevel[];
 
-    private final WeakReference<Player> player;
-    private final String playerName;
-
     static {
         // 25 is an arbitrary value for the initial table size - the actual
         // value isn't critically important since the table is resized as needed.
         initLookupTables(25);
     }
+
+    private final WeakReference<Player> player;
+    private final String playerName;
 
     /**
      * Create a new GameModeInventoriesXPCalculator for the given player.
@@ -42,7 +42,7 @@ public class GameModeInventoriesXPCalculator {
     public GameModeInventoriesXPCalculator(Player player) {
         Validate.notNull(player, "Player cannot be null");
         this.player = new WeakReference<>(player);
-        this.playerName = player.getName();
+        playerName = player.getName();
     }
 
     /**

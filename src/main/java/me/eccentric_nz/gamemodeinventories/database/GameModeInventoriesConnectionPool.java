@@ -28,21 +28,6 @@ public class GameModeInventoriesConnectionPool {
         }
     }
 
-    public static Connection dbc() {
-        Connection con = null;
-        if (isMySQL) {
-            try {
-                con = hikari.getConnection();
-            } catch (SQLException e) {
-                GameModeInventories.plugin.debug("Could not get database connection: " + e.getMessage());
-            }
-        } else {
-            service = GameModeInventoriesSQLiteConnection.getINSTANCE();
-            con = service.getConnection();
-        }
-        return con;
-    }
-
     public GameModeInventoriesConnectionPool() throws ClassNotFoundException {
         isMySQL = true;
         Class.forName("com.mysql.jdbc.Driver");
@@ -68,6 +53,21 @@ public class GameModeInventoriesConnectionPool {
             config.setConnectionTestQuery("SELECT 1");
         }
         hikari = new HikariDataSource(config);
+    }
+
+    public static Connection dbc() {
+        Connection con = null;
+        if (isMySQL) {
+            try {
+                con = hikari.getConnection();
+            } catch (SQLException e) {
+                GameModeInventories.plugin.debug("Could not get database connection: " + e.getMessage());
+            }
+        } else {
+            service = GameModeInventoriesSQLiteConnection.getINSTANCE();
+            con = service.getConnection();
+        }
+        return con;
     }
 
     public static boolean isIsMySQL() {
