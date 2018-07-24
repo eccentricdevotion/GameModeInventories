@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesSQLiteConnection {
@@ -17,6 +16,7 @@ public class GameModeInventoriesSQLiteConnection {
     public static synchronized GameModeInventoriesSQLiteConnection getINSTANCE() {
         return INSTANCE;
     }
+
     public Connection connection = null;
 
     public void setConnection(String path) throws Exception {
@@ -29,7 +29,6 @@ public class GameModeInventoriesSQLiteConnection {
     }
 
     /**
-     *
      * @return an exception
      * @throws CloneNotSupportedException
      */

@@ -5,12 +5,12 @@ package me.eccentric_nz.gamemodeinventories.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 import me.eccentric_nz.gamemodeinventories.GameModeInventories;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesConnectionPool {

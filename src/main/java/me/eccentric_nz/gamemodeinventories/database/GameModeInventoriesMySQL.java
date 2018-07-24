@@ -3,14 +3,14 @@
  */
 package me.eccentric_nz.gamemodeinventories.database;
 
+import me.eccentric_nz.gamemodeinventories.GameModeInventories;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import me.eccentric_nz.gamemodeinventories.GameModeInventories;
 
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesMySQL {
@@ -63,7 +63,6 @@ public class GameModeInventoriesMySQL {
             // add worlds table
             String queryWorlds = "CREATE TABLE IF NOT EXISTS worlds (id int(11) NOT NULL AUTO_INCREMENT, uuid varchar(48) DEFAULT '', world varchar(24) DEFAULT '', x double, y double, z double, yaw float, pitch float, PRIMARY KEY (id)) DEFAULT CHARSET=utf8 COLLATE utf8_general_ci";
             statement.executeUpdate(queryWorlds);
-
         } catch (SQLException e) {
             plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "MySQL create table error: " + e);
         } finally {

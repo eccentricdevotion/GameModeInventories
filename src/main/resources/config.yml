@@ -35,7 +35,6 @@ commands:
 - i
 - buy
 - sell
-custom_attributes: false
 restrict_spectator: false
 bypass:
     inventories: true

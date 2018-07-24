@@ -3,8 +3,6 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
-import java.util.Arrays;
-import java.util.List;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -15,8 +13,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesEntityListener implements Listener {
@@ -45,7 +45,6 @@ public class GameModeInventoriesEntityListener implements Listener {
                     break;
                 }
             }
-
         }
     }
 

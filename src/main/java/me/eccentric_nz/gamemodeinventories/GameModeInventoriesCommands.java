@@ -1,16 +1,6 @@
 package me.eccentric_nz.gamemodeinventories;
 
 import com.google.common.collect.ImmutableList;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,6 +9,13 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.StringUtil;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 public class GameModeInventoriesCommands implements CommandExecutor, TabCompleter {
 
@@ -39,7 +36,6 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
         firstArgs.put("bypass.survival", "bypass.survival");
         firstArgs.put("command_blacklist", "command_blacklist");
         firstArgs.put("creative_blacklist", "creative_blacklist");
-        firstArgs.put("custom_attributes", "custom_attributes");
         firstArgs.put("debug", "debug");
         firstArgs.put("dont_spam_chat", "dont_spam_chat");
         firstArgs.put("enderchest", "enderchest");

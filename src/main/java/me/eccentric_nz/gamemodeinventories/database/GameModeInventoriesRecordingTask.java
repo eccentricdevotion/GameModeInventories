@@ -1,10 +1,11 @@
 package me.eccentric_nz.gamemodeinventories.database;
 
+import me.eccentric_nz.gamemodeinventories.GMIDebug;
+import me.eccentric_nz.gamemodeinventories.GameModeInventories;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import me.eccentric_nz.gamemodeinventories.GMIDebug;
-import me.eccentric_nz.gamemodeinventories.GameModeInventories;
 
 public class GameModeInventoriesRecordingTask implements Runnable {
 

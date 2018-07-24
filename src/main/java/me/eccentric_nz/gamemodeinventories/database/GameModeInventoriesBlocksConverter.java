@@ -3,17 +3,12 @@
  */
 package me.eccentric_nz.gamemodeinventories.database;
 
-import java.sql.BatchUpdateException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import me.eccentric_nz.gamemodeinventories.GMIDebug;
 import me.eccentric_nz.gamemodeinventories.GameModeInventories;
 
+import java.sql.*;
+
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesBlocksConverter {

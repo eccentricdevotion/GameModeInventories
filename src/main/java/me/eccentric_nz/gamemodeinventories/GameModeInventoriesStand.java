@@ -3,15 +3,15 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
+import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesStand {

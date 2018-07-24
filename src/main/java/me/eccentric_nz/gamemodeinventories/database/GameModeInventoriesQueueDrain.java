@@ -11,7 +11,6 @@ public class GameModeInventoriesQueueDrain {
     private final GameModeInventories plugin;
 
     /**
-     *
      * @param plugin
      */
     public GameModeInventoriesQueueDrain(GameModeInventories plugin) {

@@ -3,15 +3,15 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
-import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+import java.util.List;
+
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesCommandListener implements Listener {

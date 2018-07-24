@@ -9,7 +9,6 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesPrismHandler {

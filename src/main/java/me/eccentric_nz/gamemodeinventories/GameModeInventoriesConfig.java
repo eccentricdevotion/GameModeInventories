@@ -3,17 +3,17 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesConfig {
@@ -21,7 +21,7 @@ public class GameModeInventoriesConfig {
     private final GameModeInventories plugin;
     private FileConfiguration config = null;
     private File configFile = null;
-//    private FileConfiguration messages = null;
+    //    private FileConfiguration messages = null;
 //    private File messagesFile = null;
     HashMap<String, String> strOptions = new HashMap<>();
     HashMap<String, Integer> intOptions = new HashMap<>();
@@ -33,8 +33,8 @@ public class GameModeInventoriesConfig {
 
     public GameModeInventoriesConfig(GameModeInventories plugin) {
         this.plugin = plugin;
-        this.configFile = new File(plugin.getDataFolder(), "config.yml");
-        this.config = YamlConfiguration.loadConfiguration(configFile);
+        configFile = new File(plugin.getDataFolder(), "config.yml");
+        config = YamlConfiguration.loadConfiguration(configFile);
 //        this.messagesFile = new File(plugin.getDataFolder(), "messages.yml");
 //        this.messages = YamlConfiguration.loadConfiguration(messagesFile);
         // string
@@ -59,7 +59,6 @@ public class GameModeInventoriesConfig {
         boolOptions.put("bypass.survival", false);
         boolOptions.put("command_blacklist", false);
         boolOptions.put("creative_blacklist", false);
-        boolOptions.put("custom_attributes", false);
         boolOptions.put("debug", false);
         boolOptions.put("dont_spam_chat", false);
         boolOptions.put("enderchest", true);

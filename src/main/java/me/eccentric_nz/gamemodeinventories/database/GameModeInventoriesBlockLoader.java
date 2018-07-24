@@ -3,18 +3,18 @@
  */
 package me.eccentric_nz.gamemodeinventories.database;
 
+import me.eccentric_nz.gamemodeinventories.GMIDebug;
+import me.eccentric_nz.gamemodeinventories.GameModeInventories;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import me.eccentric_nz.gamemodeinventories.GMIDebug;
-import me.eccentric_nz.gamemodeinventories.GameModeInventories;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesBlockLoader extends BukkitRunnable {

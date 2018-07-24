@@ -11,7 +11,6 @@ import net.coreprotect.CoreProtectAPI;
 import org.bukkit.plugin.PluginManager;
 
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesBlockLogger {
@@ -29,7 +28,9 @@ public class GameModeInventoriesBlockLogger {
 
     public enum GMIBlockLogger {
 
-        CORE_PROTECT, LOG_BLOCK, PRISM
+        CORE_PROTECT,
+        LOG_BLOCK,
+        PRISM
     }
 
     public CoreProtectAPI getCoreProtectAPI() {

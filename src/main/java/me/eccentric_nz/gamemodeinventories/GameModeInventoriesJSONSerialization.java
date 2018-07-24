@@ -16,12 +16,6 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import me.eccentric_nz.gamemodeinventories.JSON.JSONArray;
 import me.eccentric_nz.gamemodeinventories.JSON.JSONException;
 import me.eccentric_nz.gamemodeinventories.JSON.JSONObject;
@@ -29,11 +23,12 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.*;
+
 /**
  * Fancy JSON serialization mostly by evilmidget38.
  *
  * @author eccentric_nz
- *
  */
 public class GameModeInventoriesJSONSerialization {
 

@@ -1,18 +1,6 @@
 package me.eccentric_nz.gamemodeinventories;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesBlocksConverter;
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesMySQL;
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesQueueDrain;
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesRecordingTask;
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesSQLite;
+import me.eccentric_nz.gamemodeinventories.database.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,6 +8,14 @@ import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GameModeInventories extends JavaPlugin {
 
@@ -42,7 +38,7 @@ public class GameModeInventories extends JavaPlugin {
         plugin = this;
         PluginManager pm = Bukkit.getServer().getPluginManager();
         Version bukkitversion = getServerVersion(getServer().getVersion());
-        Version minversion = new Version("1.9");
+        Version minversion = new Version("1.13");
         // check CraftBukkit version
         if (bukkitversion.compareTo(minversion) >= 0) {
             saveDefaultConfig();
@@ -88,7 +84,7 @@ public class GameModeInventories extends JavaPlugin {
             } catch (IllegalArgumentException e) {
                 db_level = GMIDebug.ERROR;
             }
-            inventoryHandler = new GameModeInventoriesInventory();
+            inventoryHandler = new GameModeInventoriesInventory(this);
             pm.registerEvents(new GameModeInventoriesListener(this), this);
             pm.registerEvents(new GameModeInventoriesChunkLoadListener(this), this);
             pm.registerEvents(new GameModeInventoriesDeath(this), this);
@@ -119,15 +115,10 @@ public class GameModeInventories extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        boolean savexp = getConfig().getBoolean("xp");
-        boolean savearmour = getConfig().getBoolean("armor");
-        boolean saveenderchest = getConfig().getBoolean("enderchest");
-        boolean potions = getConfig().getBoolean("remove_potions");
-        boolean attributes = getConfig().getBoolean("custom_attributes");
         getServer().getOnlinePlayers().forEach((p) -> {
             if (p.hasPermission("gamemodeinventories.use")) {
                 if (p.isOnline()) {
-                    inventoryHandler.switchInventories(p, p.getInventory(), savexp, savearmour, saveenderchest, potions, attributes, p.getGameMode());
+                    inventoryHandler.switchInventories(p, p.getGameMode());
                 }
             }
         });
@@ -178,7 +169,7 @@ public class GameModeInventories extends JavaPlugin {
      * Loads block logger support if available
      */
     public void setUpBlockLogger() {
-        this.blockLogger = new GameModeInventoriesBlockLogger(this);
+        blockLogger = new GameModeInventoriesBlockLogger(this);
         blockLogger.enableLogger();
     }
 

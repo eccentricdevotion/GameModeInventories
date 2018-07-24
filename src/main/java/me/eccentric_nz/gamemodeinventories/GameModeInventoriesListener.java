@@ -1,11 +1,5 @@
 package me.eccentric_nz.gamemodeinventories;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -22,13 +16,16 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameModeInventoriesListener implements Listener {
 
@@ -77,13 +74,8 @@ public class GameModeInventoriesListener implements Listener {
             return;
         }
         if (p.hasPermission("gamemodeinventories.use")) {
-            boolean savexp = plugin.getConfig().getBoolean("xp");
-            boolean savearmour = plugin.getConfig().getBoolean("armor");
-            boolean saveenderchest = plugin.getConfig().getBoolean("enderchest");
-            boolean potions = plugin.getConfig().getBoolean("remove_potions");
-            boolean attributes = plugin.getConfig().getBoolean("custom_attributes");
             if (p.isOnline()) {
-                plugin.getInventoryHandler().switchInventories(p, p.getInventory(), savexp, savearmour, saveenderchest, potions, attributes, newGM);
+                plugin.getInventoryHandler().switchInventories(p, newGM);
                 if (newGM.equals(GameMode.CREATIVE) && plugin.getConfig().getBoolean("creative_world.switch_to")) {
                     // get spawn location
                     Location loc = plugin.getServer().getWorld(plugin.getConfig().getString("creative_world.world")).getSpawnLocation();
@@ -203,7 +195,7 @@ public class GameModeInventoriesListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
         //treat it the same as interacting with an entity in general
-        this.onEntityClick((PlayerInteractEntityEvent) event);
+        onEntityClick((PlayerInteractEntityEvent) event);
     }
 
     @EventHandler(ignoreCancelled = true)

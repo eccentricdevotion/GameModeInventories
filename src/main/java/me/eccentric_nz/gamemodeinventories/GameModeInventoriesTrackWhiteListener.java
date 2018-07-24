@@ -15,7 +15,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesTrackWhiteListener implements Listener {
@@ -57,11 +56,11 @@ public class GameModeInventoriesTrackWhiteListener implements Listener {
                             Location loc = block.getLocation();
                             String pname = p.getName();
                             switch (plugin.getBlockLogger().getWhichLogger()) {
-                                case CORE_PROTECT: // log the block removal
-                                    int type = block.getTypeId();
-                                    byte data = block.getData();
-                                    plugin.getBlockLogger().getCoreProtectAPI().logRemoval(pname, loc, type, data);
-                                    break;
+//                                case CORE_PROTECT: // log the block removal
+//                                    int type = block.getTypeId();
+//                                    byte data = block.getData();
+//                                    plugin.getBlockLogger().getCoreProtectAPI().logRemoval(pname, loc, type, data);
+//                                    break;
                                 case LOG_BLOCK:
                                     plugin.getBlockLogger().getLogBlockConsumer().queueBlockBreak(pname, block.getState());
                                     break;

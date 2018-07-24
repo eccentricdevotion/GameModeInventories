@@ -3,17 +3,17 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
+import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
+import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesQueueData;
+import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesRecordingQueue;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesQueueData;
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesRecordingQueue;
 
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesBlock {

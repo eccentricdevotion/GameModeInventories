@@ -3,14 +3,14 @@
  */
 package me.eccentric_nz.gamemodeinventories.database;
 
+import me.eccentric_nz.gamemodeinventories.GameModeInventories;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import me.eccentric_nz.gamemodeinventories.GameModeInventories;
 
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesSQLite {

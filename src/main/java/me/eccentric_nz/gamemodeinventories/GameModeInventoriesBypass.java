@@ -6,7 +6,6 @@ package me.eccentric_nz.gamemodeinventories;
 import org.bukkit.entity.Player;
 
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesBypass {

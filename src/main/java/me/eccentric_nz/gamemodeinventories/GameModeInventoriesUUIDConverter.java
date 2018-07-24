@@ -16,6 +16,10 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
+import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
+import org.bukkit.ChatColor;
+import org.bukkit.util.FileUtil;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,17 +28,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.UUID;
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
-import org.bukkit.ChatColor;
-import org.bukkit.util.FileUtil;
+import java.util.*;
 
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesUUIDConverter {
@@ -119,9 +115,8 @@ public class GameModeInventoriesUUIDConverter {
     }
 
     /**
-     * Gets the server default resource pack. Will use the Minecraft default
-     * pack if none is specified. Until Minecraft/Bukkit lets us set the RP back
-     * to Default, we'll have to host it on DropBox
+     * Gets the server default resource pack. Will use the Minecraft default pack if none is specified. Until
+     * Minecraft/Bukkit lets us set the RP back to Default, we'll have to host it on DropBox
      *
      * @return The server specified texture pack.
      */

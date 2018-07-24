@@ -6,28 +6,9 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import me.eccentric_nz.gamemodeinventories.attributes.GMIAttribute;
-import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributeData;
-import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributeSerialization;
-import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributeType;
-import me.eccentric_nz.gamemodeinventories.attributes.GMIAttributes;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.entity.AbstractHorse;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.entity.minecart.PoweredMinecart;
 import org.bukkit.entity.minecart.StorageMinecart;
@@ -35,23 +16,38 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class GameModeInventoriesInventory {
 
+    private final GameModeInventories plugin;
     GameModeInventoriesXPCalculator xpc;
+    private final boolean saveXP;
+    private final boolean saveArmour;
+    private final boolean saveEnderChest;
+    private final boolean potions;
 
-    @SuppressWarnings("deprecation")
-    public void switchInventories(Player p, Inventory inventory, boolean savexp, boolean savearmour, boolean saveender, boolean potions, boolean retain, GameMode newGM) {
+    public GameModeInventoriesInventory(GameModeInventories plugin) {
+        this.plugin = plugin;
+        saveXP = this.plugin.getConfig().getBoolean("xp");
+        saveArmour = this.plugin.getConfig().getBoolean("armor");
+        saveEnderChest = this.plugin.getConfig().getBoolean("enderchest");
+        potions = this.plugin.getConfig().getBoolean("remove_potions");
+    }
+
+    public void switchInventories(Player p, GameMode newGM) {
         String uuid = p.getUniqueId().toString();
         String name = p.getName();
         String currentGM = p.getGameMode().name();
-        if (savexp) {
+        if (saveXP) {
             xpc = new GameModeInventoriesXPCalculator(p);
         }
         String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
         String attr = "";
-        if (retain) {
-            attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getContents()));
-        }
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet rsInv = null;
@@ -94,7 +90,7 @@ public class GameModeInventoriesInventory {
                         id = idRS.getInt(1);
                     }
                 }
-                if (savexp) {
+                if (saveXP) {
                     // get players XP
                     int a = xpc.getCurrentExp();
                     String xpQuery = "UPDATE inventories SET xp = ? WHERE id = ?";
@@ -103,13 +99,10 @@ public class GameModeInventoriesInventory {
                     psx.setInt(2, id);
                     psx.executeUpdate();
                 }
-                if (savearmour) {
+                if (saveArmour) {
                     // get players armour
                     String arm = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getArmorContents());
                     String arm_attr = "";
-                    if (retain) {
-                        arm_attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getArmorContents()));
-                    }
                     String armourQuery = "UPDATE inventories SET armour = ?, armour_attributes = ? WHERE id = ?";
                     psa = connection.prepareStatement(armourQuery);
                     psa.setString(1, arm);
@@ -117,7 +110,7 @@ public class GameModeInventoriesInventory {
                     psa.setInt(3, id);
                     psa.executeUpdate();
                 }
-                if (saveender) {
+                if (saveEnderChest) {
                     // get players enderchest
                     Inventory ec = p.getEnderChest();
                     if (ec != null) {
@@ -151,12 +144,8 @@ public class GameModeInventoriesInventory {
                             i = GameModeInventoriesBukkitSerialization.fromDatabase(savedinventory);
                         }
                         p.getInventory().setContents(i);
-                        if (retain) {
-                            // reapply custom attributes
-                            reapplyCustomAttributes(p, rsNewInv.getString("attributes"));
-                        }
                         amount = rsNewInv.getInt("xp");
-                        if (savearmour) {
+                        if (saveArmour) {
                             String savedarmour = rsNewInv.getString("armour");
                             if (savedarmour != null) {
                                 ItemStack[] a;
@@ -166,13 +155,9 @@ public class GameModeInventoriesInventory {
                                     a = GameModeInventoriesBukkitSerialization.fromDatabase(savedarmour);
                                 }
                                 p.getInventory().setArmorContents(a);
-                                if (retain) {
-                                    // reapply custom attributes
-                                    reapplyCustomAttributes(p, rsNewInv.getString("armour_attributes"));
-                                }
                             }
                         }
-                        if (saveender) {
+                        if (saveEnderChest) {
                             String savedender = rsNewInv.getString("enderchest");
                             if (savedender == null || savedender.equals("[Null]") || savedender.equals("") || savedender.isEmpty()) {
                                 // empty inventory
@@ -190,24 +175,23 @@ public class GameModeInventoriesInventory {
                     } else {
                         // start with an empty inventory
                         p.getInventory().clear();
-                        if (savearmour) {
+                        if (saveArmour) {
                             p.getInventory().setBoots(null);
                             p.getInventory().setChestplate(null);
                             p.getInventory().setLeggings(null);
                             p.getInventory().setHelmet(null);
                         }
-                        if (saveender) {
+                        if (saveEnderChest) {
                             Inventory echest = p.getEnderChest();
                             echest.clear();
                         }
                         amount = 0;
                     }
 
-                    if (savexp) {
+                    if (saveXP) {
                         xpc.setExp(amount);
                     }
                     p.updateInventory();
-
                 } catch (IOException ex) {
                     GameModeInventories.plugin.debug("Could not restore inventory on gamemode change, " + ex);
                 }
@@ -257,8 +241,6 @@ public class GameModeInventoriesInventory {
         String gm = p.getGameMode().name();
         String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
         String arm = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getArmorContents());
-        String attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getContents()));
-        String arm_attr = GMIAttributeSerialization.toDatabase(getAttributeMap(p.getInventory().getArmorContents()));
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet rsInv = null;
@@ -277,11 +259,8 @@ public class GameModeInventoriesInventory {
                 ps = connection.prepareStatement(updateQuery);
                 ps.setString(1, inv);
                 ps.setString(2, arm);
-                ps.setString(3, attr);
-                ps.setString(4, arm_attr);
                 ps.setInt(5, id);
                 ps.executeUpdate();
-
             } else {
                 // they haven't got an inventory saved yet so make one with their current inventory
                 String invQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory, armour, attributes, armour_attributes) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -291,11 +270,8 @@ public class GameModeInventoriesInventory {
                 ps.setString(3, gm);
                 ps.setString(4, inv);
                 ps.setString(5, arm);
-                ps.setString(6, attr);
-                ps.setString(7, arm_attr);
                 ps.executeUpdate();
             }
-
         } catch (SQLException e) {
             GameModeInventories.plugin.debug("Could not save inventories on player death, " + e);
         } finally {
@@ -343,7 +319,6 @@ public class GameModeInventoriesInventory {
                         i = GameModeInventoriesBukkitSerialization.fromDatabase(savedinventory);
                     }
                     p.getInventory().setContents(i);
-                    reapplyCustomAttributes(p, rsInv.getString("attributes"));
                     String savedarmour = rsInv.getString("armour");
                     ItemStack[] a;
                     if (savedarmour.startsWith("[")) {
@@ -352,7 +327,6 @@ public class GameModeInventoriesInventory {
                         a = GameModeInventoriesBukkitSerialization.fromDatabase(savedarmour);
                     }
                     p.getInventory().setArmorContents(a);
-                    reapplyCustomAttributes(p, rsInv.getString("armour_attributes"));
                 } catch (IOException e) {
                     GameModeInventories.plugin.debug("Could not restore inventories on respawn, " + e);
                 }
@@ -382,46 +356,5 @@ public class GameModeInventoriesInventory {
 
     public boolean isInstanceOf(InventoryHolder h) {
         return (h instanceof AbstractHorse);
-    }
-
-    private HashMap<Integer, List<GMIAttributeData>> getAttributeMap(ItemStack[] stacks) {
-        HashMap<Integer, List<GMIAttributeData>> map = new HashMap<>();
-        int add = (stacks.length == 4) ? 36 : 0;
-        for (int s = 0; s < stacks.length; s++) {
-            ItemStack i = stacks[s];
-            if (i != null && !i.getType().equals(Material.AIR)) {
-                GMIAttributes attributes = new GMIAttributes(i);
-                if (attributes.size() > 0) {
-                    List<GMIAttributeData> ist = new ArrayList<>();
-                    for (GMIAttribute a : attributes.values()) {
-                        GMIAttributeData data = new GMIAttributeData(a.getName(), a.getAttributeType().getMinecraftId(), a.getAmount(), a.getOperation());
-                        ist.add(data);
-                    }
-                    map.put(s + add, ist);
-                }
-            }
-        }
-        return map;
-    }
-
-    private void reapplyCustomAttributes(Player p, String data) {
-        if (!data.isEmpty()) {
-            try {
-                HashMap<Integer, List<GMIAttributeData>> cus = GMIAttributeSerialization.fromDatabase(data);
-                cus.entrySet().forEach((Map.Entry<Integer, List<GMIAttributeData>> m) -> {
-                    int slot = m.getKey();
-                    if (slot != -1) {
-                        ItemStack is = p.getInventory().getItem(slot);
-                        GMIAttributes attributes = new GMIAttributes(is);
-                        m.getValue().forEach((ad) -> {
-                            attributes.add(GMIAttribute.newBuilder().name(ad.getAttribute()).type(GMIAttributeType.fromId(ad.getAttributeID())).operation(ad.getOperation()).amount(ad.getValue()).build());
-                            p.getInventory().setItem(m.getKey(), attributes.getStack());
-                        });
-                    }
-                });
-            } catch (IOException e) {
-                GameModeInventories.plugin.debug("Could not reapply custom attributes, " + e);
-            }
-        }
     }
 }

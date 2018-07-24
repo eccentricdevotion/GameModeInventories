@@ -3,8 +3,6 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -12,8 +10,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author eccentric_nz
  */
 public class GameModeInventoriesPistonListener implements Listener {
@@ -68,7 +68,7 @@ public class GameModeInventoriesPistonListener implements Listener {
         wouldDrop.add(Material.LILY_PAD);
         wouldDrop.add(Material.LIME_BED);
         wouldDrop.add(Material.MAGENTA_BED);
-        wouldDrop.add(Material.MELON_BLOCK);
+        wouldDrop.add(Material.MELON);
         wouldDrop.add(Material.OAK_DOOR); // Still Breaks
         wouldDrop.add(Material.OAK_PRESSURE_PLATE);
         wouldDrop.add(Material.OAK_SAPLING);
