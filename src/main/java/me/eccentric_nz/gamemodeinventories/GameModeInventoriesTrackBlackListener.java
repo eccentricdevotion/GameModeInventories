@@ -7,6 +7,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,7 +26,6 @@ public class GameModeInventoriesTrackBlackListener implements Listener {
         this.plugin = plugin;
     }
 
-    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         if (!plugin.getConfig().getBoolean("track_creative_place.enabled")) {
@@ -58,11 +58,11 @@ public class GameModeInventoriesTrackBlackListener implements Listener {
                         Location loc = block.getLocation();
                         String pname = p.getName();
                         switch (plugin.getBlockLogger().getWhichLogger()) {
-//                            case CORE_PROTECT: // log the block removal
-//                                int type = block.getTypeId();
-//                                byte data = block.getData();
-//                                plugin.getBlockLogger().getCoreProtectAPI().logRemoval(pname, loc, type, data);
-//                                break;
+                            case CORE_PROTECT: // log the block removal
+                                Material type = block.getType();
+                                BlockData data = block.getBlockData();
+                                plugin.getBlockLogger().getCoreProtectAPI().logRemoval(pname, loc, type, data);
+                                break;
                             case LOG_BLOCK:
                                 plugin.getBlockLogger().getLogBlockConsumer().queueBlockBreak(pname, block.getState());
                                 break;
