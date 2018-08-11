@@ -35,12 +35,12 @@ import java.io.*;
  */
 public class JSONTokener {
 
+    private final Reader reader;
     private long character;
     private boolean eof;
     private long index;
     private long line;
     private char previous;
-    private final Reader reader;
     private boolean usePrevious;
 
     /**

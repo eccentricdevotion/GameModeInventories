@@ -1314,6 +1314,14 @@ public class JSONObject {
     }
 
     /**
+     * Remove a name and its value, if present.
+     *
+     * @param key The name to be removed.
+     * @return The value that was associated with the name, or null if there was no value.
+     */
+    public Object remove(String key) {
+        return map.remove(key);
+    }    /**
      * Make a JSON text of this JSONObject. For compactness, no whitespace is added. If this would not result in a
      * syntactically correct JSON text, then null will be returned instead.
      * <p>
@@ -1330,16 +1338,6 @@ public class JSONObject {
         } catch (JSONException e) {
             return null;
         }
-    }
-
-    /**
-     * Remove a name and its value, if present.
-     *
-     * @param key The name to be removed.
-     * @return The value that was associated with the name, or null if there was no value.
-     */
-    public Object remove(String key) {
-        return map.remove(key);
     }
 
     /**
@@ -1484,4 +1482,6 @@ public class JSONObject {
             return "null";
         }
     }
+
+
 }
