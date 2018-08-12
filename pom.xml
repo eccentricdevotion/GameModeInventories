@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.eccentric_nz.gamemodeinventories</groupId>
     <artifactId>GameModeInventories</artifactId>
-    <version>3.0</version>
+    <version>3.0.1</version>
     <name>GameModeInventories</name>
     <!-- use a profile here so that the Jenkins build can fetch the
     CoreProtect dependency locally - there is no repo available! -->
@@ -34,7 +34,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -51,6 +51,20 @@
                                     <include>org.javassist:javassist</include>
                                 </includes>
                             </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.zaxxer</pattern>
+                                    <shadedPattern>me.eccentric_nz.com.zaxxer</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.slf4j</pattern>
+                                    <shadedPattern>me.eccentric_nz.org.slf4j</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.javassist</pattern>
+                                    <shadedPattern>me.eccentric_nz.org.javassist</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
