@@ -58,20 +58,6 @@ public class GameModeInventories extends JavaPlugin {
             GameModeInventoriesConfig tc = new GameModeInventoriesConfig(this);
             tc.checkConfig();
             loadDatabase();
-            // update database add and populate uuid fields
-            if (!getConfig().getBoolean("uuid_conversion_done") && getConfig().getString("storage.database").equals("sqlite")) {
-                GameModeInventoriesUUIDConverter uc = new GameModeInventoriesUUIDConverter(this);
-                if (!uc.convert()) {
-                    // conversion failed
-                    System.out.println("[GameModeInventories]" + ChatColor.RED + "UUID conversion failed, disabling...");
-                    pm.disablePlugin(this);
-                    return;
-                } else {
-                    getConfig().set("uuid_conversion_done", true);
-                    saveConfig();
-                    System.out.println("[GameModeInventories] UUID conversion successful :)");
-                }
-            }
             // update database add and populate block fields
             if (!getConfig().getBoolean("blocks_conversion_done")) {
                 new GameModeInventoriesBlocksConverter(this).convertBlocksTable();

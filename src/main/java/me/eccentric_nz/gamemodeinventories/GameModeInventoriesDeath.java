@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Properties;
 
 public class GameModeInventoriesDeath implements Listener {
@@ -21,9 +22,9 @@ public class GameModeInventoriesDeath implements Listener {
 
     public GameModeInventoriesDeath(GameModeInventories plugin) {
         this.plugin = plugin;
-        ServerValues sv = this.getServerForceGamemode();
-        this.force = sv.getForce();
-        this.mode = sv.getMode();
+        ServerValues sv = getServerForceGamemode();
+        force = sv.getForce();
+        mode = sv.getMode();
     }
 
     @EventHandler
@@ -49,8 +50,8 @@ public class GameModeInventoriesDeath implements Listener {
     }
 
     @EventHandler
-    public void onRespawn(final PlayerRespawnEvent event) {
-        final Player p = event.getPlayer();
+    public void onRespawn(PlayerRespawnEvent event) {
+        Player p = event.getPlayer();
         if (p.hasPermission("gamemodeinventories.death") && plugin.getConfig().getBoolean("save_on_death")) {
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                 plugin.getInventoryHandler().restoreOnSpawn(p);
@@ -72,18 +73,8 @@ public class GameModeInventoriesDeath implements Listener {
             in = new FileInputStream(path);
             properties.load(in);
             sv.setForce(properties.getProperty("force-gamemode").equalsIgnoreCase("true"));
-            int gmode = Integer.parseInt(properties.getProperty("gamemode"));
-            switch (gmode) {
-                case 1:
-                    sv.setMode(GameMode.CREATIVE);
-                    break;
-                case 2:
-                    sv.setMode(GameMode.ADVENTURE);
-                    break;
-                default:
-                    sv.setMode(GameMode.SURVIVAL);
-                    break;
-            }
+            GameMode gmode = GameMode.valueOf(properties.getProperty("gamemode").toUpperCase(Locale.ENGLISH));
+            sv.setMode(gmode);
         } catch (FileNotFoundException ex) {
             plugin.debug("Could not find server.properties!");
         } catch (IOException ex) {
