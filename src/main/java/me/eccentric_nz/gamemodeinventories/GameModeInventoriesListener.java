@@ -35,6 +35,7 @@ public class GameModeInventoriesListener implements Listener {
     public GameModeInventoriesListener(GameModeInventories plugin) {
         this.plugin = plugin;
         containers.add(Material.ANVIL);
+        containers.add(Material.BARREL);
         containers.add(Material.BEACON);
         containers.add(Material.BLACK_SHULKER_BOX);
         containers.add(Material.BLAST_FURNACE);
@@ -44,6 +45,7 @@ public class GameModeInventoriesListener implements Listener {
         containers.add(Material.CARTOGRAPHY_TABLE);
         containers.add(Material.CHEST);
         containers.add(Material.CHIPPED_ANVIL);
+        containers.add(Material.COMPOSTER);
         containers.add(Material.CYAN_SHULKER_BOX);
         containers.add(Material.DAMAGED_ANVIL);
         containers.add(Material.DISPENSER);
@@ -57,6 +59,7 @@ public class GameModeInventoriesListener implements Listener {
         containers.add(Material.GRINDSTONE);
         containers.add(Material.HOPPER);
         containers.add(Material.JUKEBOX);
+        containers.add(Material.LECTERN);
         containers.add(Material.LIGHT_BLUE_SHULKER_BOX);
         containers.add(Material.LIGHT_GRAY_SHULKER_BOX);
         containers.add(Material.LIME_SHULKER_BOX);
@@ -66,6 +69,7 @@ public class GameModeInventoriesListener implements Listener {
         containers.add(Material.PINK_SHULKER_BOX);
         containers.add(Material.PURPLE_SHULKER_BOX);
         containers.add(Material.RED_SHULKER_BOX);
+        containers.add(Material.SHULKER_BOX);
         containers.add(Material.SMITHING_TABLE);
         containers.add(Material.SMOKER);
         containers.add(Material.STONECUTTER);
