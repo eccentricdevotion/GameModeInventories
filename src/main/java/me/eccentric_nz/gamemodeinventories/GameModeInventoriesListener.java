@@ -42,6 +42,7 @@ public class GameModeInventoriesListener implements Listener {
         containers.add(Material.BLUE_SHULKER_BOX);
         containers.add(Material.BREWING_STAND);
         containers.add(Material.BROWN_SHULKER_BOX);
+        containers.add(Material.CAMPFIRE);
         containers.add(Material.CARTOGRAPHY_TABLE);
         containers.add(Material.CHEST);
         containers.add(Material.CHIPPED_ANVIL);
