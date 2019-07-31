@@ -6,51 +6,52 @@ no_creative_pvp: false
 no_drops: false
 no_falling_drops: false
 no_pickups: false
+no_villager_trade: false
 remove_potions: true
 restrict_creative: false
 save_on_death: true
 survival_on_world_change: false
 xp: true
 track_creative_place:
-    enabled: false
-    break_no_drop: false
-    no_piston_move: false
-    attached_block: false
-    worlds:
+  enabled: false
+  break_no_drop: false
+  no_piston_move: false
+  attached_block: false
+  worlds:
     - world
-    dont_track:
+  dont_track:
     - STONE
     - DIRT
-    dont_track_is_whitelist: false
+  dont_track_is_whitelist: false
 creative_blacklist: false
 blacklist:
-- TNT
-- BEDROCK
-- LAVA_BUCKET
-- ARMOR_STAND
+  - TNT
+  - BEDROCK
+  - LAVA_BUCKET
+  - ARMOR_STAND
 break_bedrock: false
 command_blacklist: false
 commands:
-- give
-- i
-- buy
-- sell
+  - give
+  - i
+  - buy
+  - sell
 restrict_spectator: false
 bypass:
-    inventories: true
-    items: true
-    blacklist: false
-    survival: false
-    commands: false
+  inventories: true
+  items: true
+  blacklist: false
+  survival: false
+  commands: false
 uuid_conversion_done: true
 blocks_conversion_done: true
 storage:
-    mysql:
-        server: localhost
-        port: 3306
-        database: GMI
-        user: bukkit
-        password: mysecurepassword
-        pool_size: 10
-        test_connection: false
-    database: sqlite
+  mysql:
+    server: localhost
+    port: 3306
+    database: GMI
+    user: bukkit
+    password: mysecurepassword
+    pool_size: 10
+    test_connection: false
+  database: sqlite
