@@ -23,9 +23,11 @@ public class GameModeInventoriesVillagerListener implements Listener {
         if (!player.getGameMode().equals(GameMode.CREATIVE)) {
             return;
         }
-        event.setCancelled(true);
-        if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-            player.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_TRADE"));
+        if (!GameModeInventoriesBypass.canBypass(player, "trades", plugin)) {
+            event.setCancelled(true);
+            if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
+                player.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_TRADE"));
+            }
         }
     }
 }

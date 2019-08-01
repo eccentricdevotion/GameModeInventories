@@ -43,6 +43,7 @@ bypass:
   blacklist: false
   survival: false
   commands: false
+  trades: false
 uuid_conversion_done: true
 blocks_conversion_done: true
 storage:

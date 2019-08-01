@@ -58,6 +58,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("bypass.blacklist", false);
         boolOptions.put("bypass.commands", false);
         boolOptions.put("bypass.survival", false);
+        boolOptions.put("bypass.trades", false);
         boolOptions.put("command_blacklist", false);
         boolOptions.put("creative_blacklist", false);
         boolOptions.put("debug", false);
