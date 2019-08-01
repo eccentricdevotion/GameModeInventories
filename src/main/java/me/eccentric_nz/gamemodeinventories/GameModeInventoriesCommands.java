@@ -34,6 +34,7 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
         firstArgs.put("bypass.inventories", "bypass.inventories");
         firstArgs.put("bypass.items", "bypass.items");
         firstArgs.put("bypass.survival", "bypass.survival");
+        firstArgs.put("bypass.trades", "bypass.trades");
         firstArgs.put("command_blacklist", "command_blacklist");
         firstArgs.put("creative_blacklist", "creative_blacklist");
         firstArgs.put("debug", "debug");
