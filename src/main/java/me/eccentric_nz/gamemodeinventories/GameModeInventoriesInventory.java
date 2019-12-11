@@ -47,7 +47,6 @@ public class GameModeInventoriesInventory {
             xpc = new GameModeInventoriesXPCalculator(p);
         }
         String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
-        String attr = "";
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet rsInv = null;
@@ -69,21 +68,19 @@ public class GameModeInventoriesInventory {
                 if (rsInv.next()) {
                     // update it with their current inventory
                     id = rsInv.getInt("id");
-                    String updateQuery = "UPDATE inventories SET inventory = ?, attributes = ? WHERE id = ?";
+                    String updateQuery = "UPDATE inventories SET inventory = ? WHERE id = ?";
                     ps = connection.prepareStatement(updateQuery);
                     ps.setString(1, inv);
-                    ps.setString(2, attr);
-                    ps.setInt(3, id);
+                    ps.setInt(2, id);
                     ps.executeUpdate();
                 } else {
                     // they haven't got an inventory saved yet so make one with their current inventory
-                    String insertQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory, attributes) VALUES (?, ?, ?, ?, ?)";
+                    String insertQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory) VALUES (?, ?, ?, ?)";
                     ps = connection.prepareStatement(insertQuery, PreparedStatement.RETURN_GENERATED_KEYS);
                     ps.setString(1, uuid);
                     ps.setString(2, name);
                     ps.setString(3, currentGM);
                     ps.setString(4, inv);
-                    ps.setString(5, attr);
                     ps.executeUpdate();
                     idRS = ps.getGeneratedKeys();
                     if (idRS.next()) {
@@ -102,12 +99,10 @@ public class GameModeInventoriesInventory {
                 if (saveArmour) {
                     // get players armour
                     String arm = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getArmorContents());
-                    String arm_attr = "";
-                    String armourQuery = "UPDATE inventories SET armour = ?, armour_attributes = ? WHERE id = ?";
+                    String armourQuery = "UPDATE inventories SET armour = ? WHERE id = ?";
                     psa = connection.prepareStatement(armourQuery);
                     psa.setString(1, arm);
-                    psa.setString(2, arm_attr);
-                    psa.setInt(3, id);
+                    psa.setInt(2, id);
                     psa.executeUpdate();
                 }
                 if (saveEnderChest) {
@@ -252,26 +247,25 @@ public class GameModeInventoriesInventory {
             statement.setString(1, uuid);
             statement.setString(2, gm);
             rsInv = statement.executeQuery();
-            if (rsInv.next()) {
+            if (rsInv.isBeforeFirst() && rsInv.next()) {
                 // update it with their current inventory
                 int id = rsInv.getInt("id");
-                String updateQuery = "UPDATE inventories SET inventory = ?, armour = ?, attributes = ?, armour_attributes = ?  WHERE id = ?";
+                String updateQuery = "UPDATE inventories SET inventory = ?, armour = ? WHERE id = ?";
                 ps = connection.prepareStatement(updateQuery);
                 ps.setString(1, inv);
                 ps.setString(2, arm);
-                ps.setInt(5, id);
-                ps.executeUpdate();
+                ps.setInt(3, id);
             } else {
                 // they haven't got an inventory saved yet so make one with their current inventory
-                String invQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory, armour, attributes, armour_attributes) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                String invQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory, armour) VALUES (?, ?, ?, ?, ?,)";
                 ps = connection.prepareStatement(invQuery);
                 ps.setString(1, uuid);
                 ps.setString(2, name);
                 ps.setString(3, gm);
                 ps.setString(4, inv);
                 ps.setString(5, arm);
-                ps.executeUpdate();
             }
+            ps.executeUpdate();
         } catch (SQLException e) {
             GameModeInventories.plugin.debug("Could not save inventories on player death, " + e);
         } finally {
