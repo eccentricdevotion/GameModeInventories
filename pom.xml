@@ -85,7 +85,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.15-R0.1-SNAPSHOT</version>
+            <version>1.15.1-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
@@ -132,14 +132,6 @@
             <type>jar</type>
             <scope>system</scope>
             <systemPath>${basedir}/lib/Prism.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.mysql.jdbc</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.42</version>
-            <type>jar</type>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/mysql-connector-java.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
