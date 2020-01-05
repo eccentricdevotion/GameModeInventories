@@ -76,8 +76,8 @@ public class GameModeInventories extends JavaPlugin {
             }
             block = new GameModeInventoriesBlock(this);
             m = new GameModeInventoriesMessage(this);
-            m.updateMessages();
             m.getMessages();
+            m.updateMessages();
             try {
                 db_level = GMIDebug.valueOf(getConfig().getString("debug_level"));
             } catch (IllegalArgumentException e) {

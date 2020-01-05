@@ -8,7 +8,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +19,6 @@ import java.util.Map;
 public class GameModeInventoriesConfig {
 
     private final GameModeInventories plugin;
-    private FileConfiguration messages = null;
-    private File messagesFile = null;
     HashMap<String, String> strOptions = new HashMap<>();
     HashMap<String, Integer> intOptions = new HashMap<>();
     HashMap<String, Boolean> boolOptions = new HashMap<>();
@@ -29,15 +26,13 @@ public class GameModeInventoriesConfig {
     List<String> com = new ArrayList<>();
     List<String> wor = new ArrayList<>();
     List<String> no = new ArrayList<>();
-    private FileConfiguration config = null;
-    private File configFile = null;
+    private final FileConfiguration config;
+    private final File configFile;
 
     public GameModeInventoriesConfig(GameModeInventories plugin) {
         this.plugin = plugin;
         configFile = new File(plugin.getDataFolder(), "config.yml");
         config = YamlConfiguration.loadConfiguration(configFile);
-        messagesFile = new File(plugin.getDataFolder(), "messages.yml");
-        messages = YamlConfiguration.loadConfiguration(messagesFile);
         // string
         strOptions.put("debug_level", "ERROR");
         strOptions.put("storage.mysql.server", "localhost");
@@ -156,14 +151,5 @@ public class GameModeInventoriesConfig {
             plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + i + ChatColor.RESET + " new items to config");
         }
         plugin.saveConfig();
-        if (!messages.contains("NO_TRADE")) {
-            messages.set("NO_TRADE", "You are not allowed to trade with villagers in CREATIVE!");
-            try {
-                messages.save(messagesFile);
-                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + "1" + ChatColor.RESET + " new item to messages");
-            } catch (IOException ex) {
-                plugin.debug("Could not save messages.yml, " + ex.getMessage());
-            }
-        }
     }
 }

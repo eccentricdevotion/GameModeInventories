@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author eccentric_nz
@@ -17,13 +18,30 @@ public class GameModeInventoriesMessage {
 
     private final GameModeInventories plugin;
     private final HashMap<String, String> message = new HashMap<>();
-    private FileConfiguration messagesConfig = null;
-    private File messagesFile = null;
+    private final FileConfiguration messagesConfig;
+    private final File messagesFile;
+    HashMap<String, String> messageOptions = new HashMap<>();
 
     public GameModeInventoriesMessage(GameModeInventories plugin) {
         this.plugin = plugin;
         messagesFile = getMessagesFile();
         messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
+        messageOptions.put("CONFIG_SET", "%s was set to: %s");
+        messageOptions.put("HELP", "There is no help! Just switch game modes, and your inventory/armor/xp will change.");
+        messageOptions.put("INVALID_MATERIAL", "Invalid material in blacklist");
+        messageOptions.put("INVALID_MATERIAL_TRACK", "Invalid material in dont_track list");
+        messageOptions.put("NO_CREATIVE_BREAK", "You cannot break blocks that were placed in CREATIVE gamemode!");
+        messageOptions.put("NO_CREATIVE_COMMAND", "You are not allowed to use %s in CREATIVE!");
+        messageOptions.put("NO_CREATIVE_DROPS", "Blocks that were placed in CREATIVE gamemode, do not give drops!");
+        messageOptions.put("NO_CREATIVE_HORSE", "You are not allowed to access horse inventories in CREATIVE!");
+        messageOptions.put("NO_CREATIVE_INVENTORY", "You are not allowed to access inventories in CREATIVE!");
+        messageOptions.put("NO_CREATIVE_PICKUP", "You are not allowed to pick up items in CREATIVE!");
+        messageOptions.put("NO_CREATIVE_PLACE", "%s placement is disabled in CREATIVE gamemode!");
+        messageOptions.put("NO_PERMISSION", "You do not have permission to run that command!");
+        messageOptions.put("NO_PLAYER_DROPS", "You are not allowed to drop items in CREATIVE!");
+        messageOptions.put("NO_WORKBENCH_DROPS", "Workbenches do not drop items in CREATIVE!");
+        messageOptions.put("NO_SPECTATOR", "You are not allowed to be a SPECTATOR!");
+        messageOptions.put("NO_TRADE", "You are not allowed to trade with villagers in CREATIVE!");
     }
 
     public void getMessages() {
@@ -72,21 +90,20 @@ public class GameModeInventoriesMessage {
     }
 
     public void updateMessages() {
-        int i = 0;
-        if (!messagesConfig.contains("NO_SPECTATOR")) {
-            messagesConfig.set("NO_SPECTATOR", "You are not allowed to be a SPECTATOR!");
-            i++;
+        // message values
+        int m = 0;
+        for (Map.Entry<String, String> entry : messageOptions.entrySet()) {
+            if (!messagesConfig.contains(entry.getKey())) {
+                plugin.getConfig().set(entry.getKey(), entry.getValue());
+                m++;
+            }
         }
-        if (!messagesConfig.contains("INVALID_MATERIAL_TRACK")) {
-            messagesConfig.set("INVALID_MATERIAL_TRACK", "Invalid material in dont_track list");
-            i++;
-        }
-        if (i > 0) {
+        if (m > 0) {
             try {
-                messagesConfig.save(new File(plugin.getDataFolder(), "messages.yml"));
-                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + i + ChatColor.RESET + " new items to messages.yml");
-            } catch (IOException io) {
-                plugin.debug("Could not save messages.yml, " + io);
+                messagesConfig.save(messagesFile);
+                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + m + ChatColor.RESET + " new items to messages.yml");
+            } catch (IOException ex) {
+                plugin.debug("Could not save messages.yml, " + ex.getMessage());
             }
         }
     }
