@@ -37,6 +37,8 @@ public class GameModeInventoriesListener implements Listener {
         containers.add(Material.ANVIL);
         containers.add(Material.BARREL);
         containers.add(Material.BEACON);
+        containers.add(Material.BEE_NEST);
+        containers.add(Material.BEEHIVE);
         containers.add(Material.BLACK_SHULKER_BOX);
         containers.add(Material.BLAST_FURNACE);
         containers.add(Material.BLUE_SHULKER_BOX);
