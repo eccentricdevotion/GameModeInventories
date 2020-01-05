@@ -46,7 +46,7 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <artifactSet>
                                 <includes>
-                                    <include>org.slf4j:*</include>
+                                    <include>org.slf4j:slf4j-simple</include>
                                     <include>com.zaxxer:*</include>
                                     <include>org.javassist:javassist</include>
                                 </includes>
@@ -93,7 +93,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>2.6.2</version>
+            <version>3.4.1</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -101,13 +101,13 @@
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.21.0-GA</version>
+            <version>3.26.0-GA</version>
         </dependency>
         <!-- SLF4J -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.25</version>
+            <version>1.7.29</version>
         </dependency>
         <dependency>
             <groupId>net.coreprotect</groupId>
@@ -120,18 +120,10 @@
         <dependency>
             <groupId>de.diddiz</groupId>
             <artifactId>LogBlock</artifactId>
-            <version>1.10.1-SNAPSHOT</version>
+            <version>1.15.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>system</scope>
             <systemPath>${basedir}/lib/LogBlock.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>me.botsko.prism</groupId>
-            <artifactId>Prism</artifactId>
-            <version>2.0.6</version>
-            <type>jar</type>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/Prism.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

@@ -5,7 +5,6 @@ package me.eccentric_nz.gamemodeinventories;
 
 import de.diddiz.LogBlock.Consumer;
 import de.diddiz.LogBlock.LogBlock;
-import me.botsko.prism.Prism;
 import net.coreprotect.CoreProtect;
 import net.coreprotect.CoreProtectAPI;
 import org.bukkit.plugin.PluginManager;
@@ -18,7 +17,6 @@ public class GameModeInventoriesBlockLogger {
     private final GameModeInventories plugin;
     private CoreProtectAPI coreProtectAPI = null;
     private Consumer logBlockConsumer = null;
-    private Prism prism = null;
     private GMIBlockLogger whichLogger;
     private boolean logging = false;
 
@@ -32,10 +30,6 @@ public class GameModeInventoriesBlockLogger {
 
     public Consumer getLogBlockConsumer() {
         return logBlockConsumer;
-    }
-
-    public Prism getPrism() {
-        return prism;
     }
 
     public GMIBlockLogger getWhichLogger() {
@@ -77,21 +71,11 @@ public class GameModeInventoriesBlockLogger {
                 logging = true;
             }
         }
-        if (pm.isPluginEnabled("Prism")) {
-            Prism tmp_prism = (Prism) pm.getPlugin("Prism");
-            if (tmp_prism != null) {
-                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Connecting to Prism");
-                prism = tmp_prism;
-                whichLogger = GMIBlockLogger.PRISM;
-                logging = true;
-            }
-        }
     }
 
     public enum GMIBlockLogger {
 
         CORE_PROTECT,
-        LOG_BLOCK,
-        PRISM
+        LOG_BLOCK
     }
 }

@@ -3,6 +3,7 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
+import de.diddiz.LogBlock.Actor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -64,12 +65,7 @@ public class GameModeInventoriesTrackBlackListener implements Listener {
                                 plugin.getBlockLogger().getCoreProtectAPI().logRemoval(pname, loc, type, data);
                                 break;
                             case LOG_BLOCK:
-                                plugin.getBlockLogger().getLogBlockConsumer().queueBlockBreak(pname, block.getState());
-                                break;
-                            case PRISM:
-                                if (plugin.getBlockLogger().getPrism() != null) {
-                                    GameModeInventoriesPrismHandler.log(loc, block, pname);
-                                }
+                                plugin.getBlockLogger().getLogBlockConsumer().queueBlockBreak(Actor.actorFromEntity(p), block.getState());
                                 break;
                             default:
                                 break;
