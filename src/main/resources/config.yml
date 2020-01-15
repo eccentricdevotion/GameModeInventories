@@ -1,5 +1,6 @@
 armor: true
 debug: false
+debug_level: ERROR
 dont_spam_chat: false
 enderchest: true
 no_creative_pvp: false
@@ -56,3 +57,7 @@ storage:
     pool_size: 10
     test_connection: false
   database: sqlite
+creative_world:
+  location: last_known
+  world: creative
+  switch_to: false
