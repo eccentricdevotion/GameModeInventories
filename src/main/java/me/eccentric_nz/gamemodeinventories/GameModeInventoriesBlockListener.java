@@ -45,26 +45,66 @@ public class GameModeInventoriesBlockListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        Player p = event.getPlayer();
-        if (!p.getGameMode().equals(GameMode.CREATIVE)) {
-            return;
-        }
         if (event.hasItem()) {
-            if (plugin.getConfig().getBoolean("track_creative_place.enabled") && event.getItem().getType().equals(Material.ARMOR_STAND)) {
-                Block b = event.getClickedBlock();
-                if (b != null) {
-                    if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(b.getWorld().getName())) {
+            Material mat = event.getItem().getType();
+            Player p = event.getPlayer();
+            if (p.getGameMode().equals(GameMode.SURVIVAL)) {
+                if (!plugin.getConfig().getBoolean("track_creative_place.enabled") || !plugin.getConfig().getBoolean("track_creative_place.no_seeds_from_pumpkin")) {
+                    return;
+                }
+                if (mat.equals(Material.SHEARS)) {
+                    Block pumpkin = event.getClickedBlock();
+                    if (pumpkin == null) {
                         return;
                     }
-                    Location l = b.getLocation();
-                    if (l != null) {
-                        final String gmip = l.getBlockX() + "," + l.getBlockZ();
-                        plugin.getPoints().add(gmip);
-                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                            if (plugin.getPoints().contains(gmip)) {
-                                plugin.getPoints().remove(gmip);
-                            }
-                        }, 600L);
+                    if (!pumpkin.getType().equals(Material.PUMPKIN)) {
+                        return;
+                    }
+                    if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(pumpkin.getWorld().getName())) {
+                        return;
+                    }
+                    String gmiwc = pumpkin.getWorld().getName() + "," + pumpkin.getChunk().getX() + "," + pumpkin.getChunk().getZ();
+                    if (!plugin.getCreativeBlocks().containsKey(gmiwc)) {
+                        return;
+                    }
+                    if (plugin.getCreativeBlocks().get(gmiwc).contains(pumpkin.getLocation().toString())) {
+                        event.setCancelled(true);
+                    }
+                }
+            }
+            if (!p.getGameMode().equals(GameMode.CREATIVE)) {
+                return;
+            }
+            if (plugin.getConfig().getBoolean("no_golem_spawn")) {
+                Block pumpkin = event.getClickedBlock();
+                if (pumpkin == null) {
+                    return;
+                }
+                if (!pumpkin.getType().equals(Material.PUMPKIN)) {
+                    return;
+                }
+                // check blocks around pumpkin
+                if (mat.equals(Material.SHEARS) && GameModeInventoriesConstructedMob.checkBlocks(Material.PUMPKIN, pumpkin)) {
+                    event.setCancelled(true);
+                }
+            }
+            if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
+                if (mat.equals(Material.ARMOR_STAND)) {
+                    Block b = event.getClickedBlock();
+                    if (b != null) {
+                        if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(b.getWorld().getName())) {
+                            return;
+                        }
+                        Location l = b.getLocation();
+                        if (l != null) {
+                            String gmip = l.getBlockX() + "," + l.getBlockZ();
+                            plugin.getPoints().add(gmip);
+                            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                                if (plugin.getPoints().contains(gmip)) {
+                                    plugin.getPoints().remove(gmip);
+                                }
+                            }, 600L);
+                        }
                     }
                 }
             }
@@ -72,7 +112,6 @@ public class GameModeInventoriesBlockListener implements Listener {
                 return;
             }
             if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-                Material mat = event.getItem().getType();
                 if (plugin.getBlackList().contains(mat) && !GameModeInventoriesBypass.canBypass(p, "blacklist", plugin)) {
                     event.setCancelled(true);
                     event.setUseItemInHand(Result.DENY);
