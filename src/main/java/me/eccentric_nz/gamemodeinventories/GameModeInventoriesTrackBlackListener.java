@@ -92,6 +92,11 @@ public class GameModeInventoriesTrackBlackListener implements Listener {
             return;
         }
         Material mat = event.getBlock().getType();
+        if ((mat.equals(Material.WITHER_SKELETON_SKULL) || mat.equals(Material.WITHER_SKELETON_WALL_SKULL)) && plugin.getConfig().getBoolean("no_wither_spawn") && GameModeInventoriesConstructedMob.checkBlocks(mat, event.getBlock())) {
+            event.setCancelled(true);
+        } else if ((mat.equals(Material.CARVED_PUMPKIN) || mat.equals(Material.JACK_O_LANTERN)) && plugin.getConfig().getBoolean("no_golem_spawn") && GameModeInventoriesConstructedMob.checkBlocks(mat, event.getBlock())) {
+            event.setCancelled(true);
+        }
         if (plugin.getConfig().getBoolean("creative_blacklist") && plugin.getBlackList().contains(mat) && !GameModeInventoriesBypass.canBypass(p, "blacklist", plugin)) {
             event.setCancelled(true);
             if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
