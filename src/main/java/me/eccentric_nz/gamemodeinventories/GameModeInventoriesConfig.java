@@ -64,6 +64,8 @@ public class GameModeInventoriesConfig {
         boolOptions.put("no_falling_drops", false);
         boolOptions.put("no_pickups", false);
         boolOptions.put("no_villager_trade", false);
+        boolOptions.put("no_wither_spawn", false);
+        boolOptions.put("no_golem_spawn", false);
         boolOptions.put("remove_potions", true);
         boolOptions.put("restrict_creative", false);
         boolOptions.put("restrict_spectator", false);
@@ -73,6 +75,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("track_creative_place.enabled", true);
         boolOptions.put("track_creative_place.no_piston_move", false);
         boolOptions.put("track_creative_place.attached_block", false);
+        boolOptions.put("track_creative_place.no_seeds_from_pumpkin", false);
         boolOptions.put("track_creative_place.dont_track_is_whitelist", false);
         boolOptions.put("xp", true);
         boolOptions.put("uuid_conversion_done", false);

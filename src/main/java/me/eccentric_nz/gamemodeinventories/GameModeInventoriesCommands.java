@@ -45,6 +45,9 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
         firstArgs.put("no_falling_drops", "no_falling_drops");
         firstArgs.put("no_pickups", "no_pickups");
         firstArgs.put("no_villager_trade", "no_villager_trade");
+        firstArgs.put("no_golem_spawn", "no_golem_spawn");
+        firstArgs.put("no_wither_spawn", "no_wither_spawn");
+        firstArgs.put("no_seeds_from_pumpkin", "track_creative_place.no_seeds_from_pumpkin");
         firstArgs.put("no_piston_move", "track_creative_place.no_piston_move");
         firstArgs.put("remove_potions", "remove_potions");
         firstArgs.put("restrict_creative", "restrict_creative");

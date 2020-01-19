@@ -8,6 +8,8 @@ no_drops: false
 no_falling_drops: false
 no_pickups: false
 no_villager_trade: false
+no_wither_spawn: false
+no_golem_spawn: false
 remove_potions: true
 restrict_creative: false
 save_on_death: true
@@ -18,6 +20,7 @@ track_creative_place:
   break_no_drop: false
   no_piston_move: false
   attached_block: false
+  no_seeds_from_pumpkin: false
   worlds:
     - world
   dont_track:
