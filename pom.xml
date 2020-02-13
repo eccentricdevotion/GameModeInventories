@@ -120,7 +120,7 @@
         <dependency>
             <groupId>de.diddiz</groupId>
             <artifactId>LogBlock</artifactId>
-            <version>1.15.1-SNAPSHOT</version>
+            <version>1.15.2</version>
             <type>jar</type>
             <scope>system</scope>
             <systemPath>${basedir}/lib/LogBlock.jar</systemPath>
