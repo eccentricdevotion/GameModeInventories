@@ -22,7 +22,7 @@
     <orderEntry type="library" name="Maven: org.javassist:javassist:3.26.0-GA" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.29" level="project" />
     <orderEntry type="module-library">
-      <library name="Maven: net.coreprotect:CoreProtect:2.18.0">
+      <library name="Maven: net.coreprotect:CoreProtect:2.18.2">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/CoreProtect.jar!/" />
         </CLASSES>
@@ -31,7 +31,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="Maven: de.diddiz:LogBlock:1.15.1-SNAPSHOT">
+      <library name="Maven: de.diddiz:LogBlock:1.15.2">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/LogBlock.jar!/" />
         </CLASSES>

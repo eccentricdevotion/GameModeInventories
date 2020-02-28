@@ -198,7 +198,7 @@ public class GameModeInventories extends JavaPlugin {
             try {
                 blackList.add(Material.valueOf(s));
             } catch (IllegalArgumentException iae) {
-                getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + String.format(m.getMessage().get("INVALID_MATERIAL"), s));
+                getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + m.getMessage().get("INVALID_MATERIAL") + " " + s);
             }
         });
     }
@@ -213,7 +213,7 @@ public class GameModeInventories extends JavaPlugin {
             try {
                 noTrackList.add(Material.valueOf(s));
             } catch (IllegalArgumentException iae) {
-                getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + String.format(m.getMessage().get("INVALID_MATERIAL_TRACK"), s));
+                getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + m.getMessage().get("INVALID_MATERIAL_TRACK") + " " + s);
             }
         });
     }
