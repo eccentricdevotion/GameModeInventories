@@ -60,6 +60,7 @@ storage:
     pool_size: 10
     test_connection: false
   database: sqlite
+  prefix: ''
 creative_world:
   location: last_known
   world: creative

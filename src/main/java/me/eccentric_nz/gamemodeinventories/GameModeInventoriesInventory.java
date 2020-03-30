@@ -59,7 +59,7 @@ public class GameModeInventoriesInventory {
         try {
             connection = GameModeInventoriesConnectionPool.dbc();
             if (connection != null && !connection.isClosed()) {
-                statement = connection.prepareStatement("SELECT * FROM inventories WHERE uuid = ? AND gamemode = ?");
+                statement = connection.prepareStatement("SELECT * FROM " + plugin.getPrefix() + "inventories WHERE uuid = ? AND gamemode = ?");
                 // get their current gamemode inventory from database
                 statement.setString(1, uuid);
                 statement.setString(2, currentGM);
@@ -68,14 +68,14 @@ public class GameModeInventoriesInventory {
                 if (rsInv.next()) {
                     // update it with their current inventory
                     id = rsInv.getInt("id");
-                    String updateQuery = "UPDATE inventories SET inventory = ? WHERE id = ?";
+                    String updateQuery = "UPDATE " + plugin.getPrefix() + "inventories SET inventory = ? WHERE id = ?";
                     ps = connection.prepareStatement(updateQuery);
                     ps.setString(1, inv);
                     ps.setInt(2, id);
                     ps.executeUpdate();
                 } else {
                     // they haven't got an inventory saved yet so make one with their current inventory
-                    String insertQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory) VALUES (?, ?, ?, ?)";
+                    String insertQuery = "INSERT INTO " + plugin.getPrefix() + "inventories (uuid, player, gamemode, inventory) VALUES (?, ?, ?, ?)";
                     ps = connection.prepareStatement(insertQuery, PreparedStatement.RETURN_GENERATED_KEYS);
                     ps.setString(1, uuid);
                     ps.setString(2, name);
@@ -90,7 +90,7 @@ public class GameModeInventoriesInventory {
                 if (saveXP) {
                     // get players XP
                     int a = xpc.getCurrentExp();
-                    String xpQuery = "UPDATE inventories SET xp = ? WHERE id = ?";
+                    String xpQuery = "UPDATE " + plugin.getPrefix() + "inventories SET xp = ? WHERE id = ?";
                     psx = connection.prepareStatement(xpQuery);
                     psx.setInt(1, a);
                     psx.setInt(2, id);
@@ -99,7 +99,7 @@ public class GameModeInventoriesInventory {
                 if (saveArmour) {
                     // get players armour
                     String arm = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getArmorContents());
-                    String armourQuery = "UPDATE inventories SET armour = ? WHERE id = ?";
+                    String armourQuery = "UPDATE " + plugin.getPrefix() + "inventories SET armour = ? WHERE id = ?";
                     psa = connection.prepareStatement(armourQuery);
                     psa.setString(1, arm);
                     psa.setInt(2, id);
@@ -110,7 +110,7 @@ public class GameModeInventoriesInventory {
                     Inventory ec = p.getEnderChest();
                     if (ec != null) {
                         String ender = GameModeInventoriesBukkitSerialization.toDatabase(ec.getContents());
-                        String enderQuery = "UPDATE inventories SET enderchest = ? WHERE id = ?";
+                        String enderQuery = "UPDATE " + plugin.getPrefix() + "inventories SET enderchest = ? WHERE id = ?";
                         pse = connection.prepareStatement(enderQuery);
                         pse.setString(1, ender);
                         pse.setInt(2, id);
@@ -242,7 +242,7 @@ public class GameModeInventoriesInventory {
         PreparedStatement ps = null;
         try {
             connection = GameModeInventoriesConnectionPool.dbc();
-            statement = connection.prepareStatement("SELECT id FROM inventories WHERE uuid = ? AND gamemode = ?");
+            statement = connection.prepareStatement("SELECT id FROM " + plugin.getPrefix() + "inventories WHERE uuid = ? AND gamemode = ?");
             // get their current gamemode inventory from database
             statement.setString(1, uuid);
             statement.setString(2, gm);
@@ -250,14 +250,14 @@ public class GameModeInventoriesInventory {
             if (rsInv.isBeforeFirst() && rsInv.next()) {
                 // update it with their current inventory
                 int id = rsInv.getInt("id");
-                String updateQuery = "UPDATE inventories SET inventory = ?, armour = ? WHERE id = ?";
+                String updateQuery = "UPDATE " + plugin.getPrefix() + "inventories SET inventory = ?, armour = ? WHERE id = ?";
                 ps = connection.prepareStatement(updateQuery);
                 ps.setString(1, inv);
                 ps.setString(2, arm);
                 ps.setInt(3, id);
             } else {
                 // they haven't got an inventory saved yet so make one with their current inventory
-                String invQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory, armour) VALUES (?, ?, ?, ?, ?,)";
+                String invQuery = "INSERT INTO " + plugin.getPrefix() + "inventories (uuid, player, gamemode, inventory, armour) VALUES (?, ?, ?, ?, ?,)";
                 ps = connection.prepareStatement(invQuery);
                 ps.setString(1, uuid);
                 ps.setString(2, name);
@@ -297,7 +297,7 @@ public class GameModeInventoriesInventory {
         ResultSet rsInv = null;
         try {
             connection = GameModeInventoriesConnectionPool.dbc();
-            statement = connection.prepareStatement("SELECT * FROM inventories WHERE uuid = ? AND gamemode = ?");
+            statement = connection.prepareStatement("SELECT * FROM " + plugin.getPrefix() + "inventories WHERE uuid = ? AND gamemode = ?");
             // get their current gamemode inventory from database
             statement.setString(1, uuid);
             statement.setString(2, gm);

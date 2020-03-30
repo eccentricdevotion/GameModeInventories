@@ -32,6 +32,7 @@ public class GameModeInventories extends JavaPlugin {
     private GameModeInventoriesMessage m;
     private GameModeInventoriesBlockLogger blockLogger;
     private GMIDebug db_level;
+    private String prefix;
 
     @Override
     public void onDisable() {
@@ -136,6 +137,7 @@ public class GameModeInventories extends JavaPlugin {
      */
     private void loadDatabase() {
         String dbtype = getConfig().getString("storage.database");
+        prefix = getConfig().getString("storage.prefix");
         try {
             if (dbtype.equals("sqlite")) {
                 String path = getDataFolder() + File.separator + "GMI.db";
@@ -228,6 +230,10 @@ public class GameModeInventories extends JavaPlugin {
 
     public GameModeInventoriesMessage getM() {
         return m;
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 
     public void actionRecorderTask() {

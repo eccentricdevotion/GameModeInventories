@@ -107,7 +107,7 @@ public class GameModeInventoriesListener implements Listener {
                             connection = GameModeInventoriesConnectionPool.dbc();
                             if (connection != null && !connection.isClosed()) {
                                 // check if the player has a record for this world
-                                statement = connection.prepareStatement("SELECT * FROM worlds WHERE uuid = ? AND world = ?");
+                                statement = connection.prepareStatement("SELECT * FROM " + plugin.getPrefix() + "worlds WHERE uuid = ? AND world = ?");
                                 statement.setString(1, uuid);
                                 statement.setString(2, plugin.getConfig().getString("creative_world.world"));
                                 rs = statement.executeQuery();

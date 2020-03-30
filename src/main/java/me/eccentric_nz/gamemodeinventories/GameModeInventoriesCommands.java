@@ -86,7 +86,7 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                     try {
                         connection = GameModeInventoriesConnectionPool.dbc();
                         if (connection != null && !connection.isClosed()) {
-                            statement = connection.prepareStatement("SELECT id FROM inventories WHERE uuid = ? AND gamemode = 'SURVIVAL'");
+                            statement = connection.prepareStatement("SELECT id FROM " + plugin.getPrefix() + "inventories WHERE uuid = ? AND gamemode = 'SURVIVAL'");
                             if (args[1].toLowerCase().equals("save")) {
                                 String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
                                 PreparedStatement ps;
@@ -97,7 +97,7 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                                 if (rsInv.next()) {
                                     // update it with their current inventory
                                     id = rsInv.getInt("id");
-                                    String updateQuery = "UPDATE inventories SET inventory = ? WHERE id = ?";
+                                    String updateQuery = "UPDATE " + plugin.getPrefix() + "inventories SET inventory = ? WHERE id = ?";
                                     ps = connection.prepareStatement(updateQuery);
                                     ps.setString(1, inv);
                                     ps.setInt(2, id);
@@ -105,7 +105,7 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                                     ps.close();
                                 } else {
                                     // there is no 'kit' inventory saved yet so make one with the player's current inventory
-                                    String insertQuery = "INSERT INTO inventories (uuid, player, gamemode, inventory) VALUES (?, 'kit', 'SURVIVAL', ?)";
+                                    String insertQuery = "INSERT INTO " + plugin.getPrefix() + "inventories (uuid, player, gamemode, inventory) VALUES (?, 'kit', 'SURVIVAL', ?)";
                                     ps = connection.prepareStatement(insertQuery);
                                     ps.setString(1, uuid);
                                     ps.setString(2, inv);
@@ -115,7 +115,7 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                                 p.sendMessage(plugin.MY_PLUGIN_NAME + "Kit inventory saved.");
                             } else {
                                 // load
-                                statement = connection.prepareStatement("SELECT inventory FROM inventories WHERE uuid = ? AND gamemode = 'SURVIVAL'");
+                                statement = connection.prepareStatement("SELECT " + plugin.getPrefix() + "inventory FROM inventories WHERE uuid = ? AND gamemode = 'SURVIVAL'");
                                 statement.setString(1, uuid);
                                 rsNewInv = statement.executeQuery();
                                 if (rsNewInv.next()) {

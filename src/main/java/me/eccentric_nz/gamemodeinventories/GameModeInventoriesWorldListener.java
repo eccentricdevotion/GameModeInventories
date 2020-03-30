@@ -108,14 +108,14 @@ public class GameModeInventoriesWorldListener implements Listener {
                     connection = GameModeInventoriesConnectionPool.dbc();
                     if (connection != null && !connection.isClosed()) {
                         // check if the player has a record for this world
-                        statement = connection.prepareStatement("SELECT world FROM worlds WHERE uuid = ? AND world = ?");
+                        statement = connection.prepareStatement("SELECT world FROM " + plugin.getPrefix() + "worlds WHERE uuid = ? AND world = ?");
                         statement.setString(1, uuid);
                         statement.setString(2, from.getWorld().getName());
                         rs = statement.executeQuery();
                         if (rs.isBeforeFirst()) {
                             rs.next();
                             // update the record
-                            update = connection.prepareStatement("UPDATE worlds set x = ?, y = ?, z = ?, pitch = ?, yaw = ? WHERE uuid = ? AND world = ?");
+                            update = connection.prepareStatement("UPDATE " + plugin.getPrefix() + "worlds set x = ?, y = ?, z = ?, pitch = ?, yaw = ? WHERE uuid = ? AND world = ?");
                             update.setDouble(1, from.getX());
                             update.setDouble(2, from.getY());
                             update.setDouble(3, from.getZ());
@@ -126,7 +126,7 @@ public class GameModeInventoriesWorldListener implements Listener {
                             update.executeUpdate();
                         } else {
                             // add a new record
-                            insert = connection.prepareStatement("INSERT INTO worlds (uuid, world, x, y, z, pitch, yaw) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                            insert = connection.prepareStatement("INSERT INTO " + plugin.getPrefix() + "worlds (uuid, world, x, y, z, pitch, yaw) VALUES (?, ?, ?, ?, ?, ?, ?)");
                             insert.setString(1, uuid);
                             insert.setString(2, from.getWorld().getName());
                             insert.setDouble(3, from.getX());

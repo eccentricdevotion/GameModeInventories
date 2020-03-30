@@ -29,7 +29,7 @@ public class GameModeInventoriesStand {
         if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
             try {
                 connection = GameModeInventoriesConnectionPool.dbc();
-                statement = connection.prepareStatement("SELECT uuid FROM stands");
+                statement = connection.prepareStatement("SELECT uuid FROM " + plugin.getPrefix() + "stands");
                 rs = statement.executeQuery();
                 if (rs.isBeforeFirst()) {
                     while (rs.next()) {
@@ -37,7 +37,7 @@ public class GameModeInventoriesStand {
                     }
                 }
                 // clear stands
-                statement = connection.prepareStatement("DELETE FROM stands");
+                statement = connection.prepareStatement("DELETE FROM " + plugin.getPrefix() + "stands");
                 statement.executeUpdate();
             } catch (SQLException e) {
                 System.err.println("Could not load stands, " + e);
@@ -63,7 +63,7 @@ public class GameModeInventoriesStand {
         PreparedStatement ps = null;
         try {
             connection = GameModeInventoriesConnectionPool.dbc();
-            ps = connection.prepareStatement("INSERT INTO stands (uuid) VALUES (?)");
+            ps = connection.prepareStatement("INSERT INTO " + plugin.getPrefix() + "stands (uuid) VALUES (?)");
             for (UUID uuid : plugin.getStands()) {
                 ps.setString(1, uuid.toString());
                 ps.executeUpdate();

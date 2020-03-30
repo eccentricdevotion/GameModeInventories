@@ -34,11 +34,11 @@ public class GameModeInventoriesBlockLoader extends BukkitRunnable {
         ResultSet rb = null;
         try {
             connection = GameModeInventoriesConnectionPool.dbc();
-            String blocksQuery = "SELECT location FROM blocks WHERE worldchunk = ?";
+            String blocksQuery = "SELECT location FROM " + plugin.getPrefix() + "blocks WHERE worldchunk = ?";
             psb = connection.prepareStatement(blocksQuery);
             psb.setString(1, gmiwc);
             rb = psb.executeQuery();
-            List<String> l = new ArrayList<String>();
+            List<String> l = new ArrayList<>();
             if (rb.isBeforeFirst()) {
                 while (rb.next()) {
                     l.add(rb.getString("location"));

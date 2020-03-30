@@ -41,6 +41,7 @@ public class GameModeInventoriesConfig {
         strOptions.put("storage.mysql.user", "bukkit");
         strOptions.put("storage.mysql.password", "mysecurepassword");
         strOptions.put("storage.database", "sqlite");
+        strOptions.put("storage.prefix", "");
         strOptions.put("creative_world.world", "creative");
         strOptions.put("creative_world.location", "last_known");
         // int

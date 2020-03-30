@@ -39,10 +39,10 @@ public class GameModeInventoriesBlocksConverter {
         try {
             try {
                 connection = GameModeInventoriesConnectionPool.dbc();
-                statement = connection.prepareStatement("SELECT id, location FROM blocks");
+                statement = connection.prepareStatement("SELECT id, location FROM " + plugin.getPrefix() + "blocks");
                 rs = statement.executeQuery();
                 if (rs.isBeforeFirst()) {
-                    ps = connection.prepareStatement("UPDATE blocks SET worldchunk = ? WHERE id = ?");
+                    ps = connection.prepareStatement("UPDATE " + plugin.getPrefix() + "blocks SET worldchunk = ? WHERE id = ?");
                     connection.setAutoCommit(false);
                     long count = 0;
                     while (rs.next()) {

@@ -46,14 +46,14 @@ public class GameModeInventoriesRecordingTask implements Runnable {
                 }
                 // Connection valid, proceed
                 conn.setAutoCommit(false);
-                s = conn.prepareStatement("INSERT INTO blocks (worldchunk,location) VALUES (?,?)");
+                s = conn.prepareStatement("INSERT INTO " + plugin.getPrefix() + "blocks (worldchunk,location) VALUES (?,?)");
                 int i = 0;
                 while (!GameModeInventoriesRecordingQueue.getQUEUE().isEmpty()) {
                     if (conn.isClosed()) {
                         plugin.debug("GMI database error. We have to bail in the middle of building primary bulk insert query.", GMIDebug.ERROR);
                         break;
                     }
-                    final GameModeInventoriesQueueData a = GameModeInventoriesRecordingQueue.getQUEUE().poll();
+                    GameModeInventoriesQueueData a = GameModeInventoriesRecordingQueue.getQUEUE().poll();
                     // poll() returns null if queue is empty
                     if (a == null) {
                         break;
@@ -77,7 +77,7 @@ public class GameModeInventoriesRecordingTask implements Runnable {
                     plugin.debug("Batch insert was committed: " + System.currentTimeMillis(), GMIDebug.INFO);
                 }
             }
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             plugin.debug("SQL error: " + e.getMessage(), GMIDebug.ERROR);
         } finally {
             try {
@@ -87,7 +87,7 @@ public class GameModeInventoriesRecordingTask implements Runnable {
                 if (conn != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
                     conn.close();
                 }
-            } catch (final SQLException ignored) {
+            } catch (SQLException ignored) {
             }
         }
     }
