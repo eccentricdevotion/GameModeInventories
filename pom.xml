@@ -46,7 +46,7 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <artifactSet>
                                 <includes>
-                                    <include>org.slf4j:slf4j-simple</include>
+                                    <include>org.slf4j:slf4j-api</include>
                                     <include>com.zaxxer:*</include>
                                     <include>org.javassist:javassist</include>
                                 </includes>
@@ -106,7 +106,7 @@
         <!-- SLF4J -->
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
+            <artifactId>slf4j-api</artifactId>
             <version>1.7.29</version>
         </dependency>
         <dependency>
