@@ -47,6 +47,7 @@
                             <artifactSet>
                                 <includes>
                                     <include>org.slf4j:slf4j-api</include>
+                                    <include>org.slf4j:slf4j-simple</include>
                                     <include>com.zaxxer:*</include>
                                     <include>org.javassist:javassist</include>
                                 </includes>
@@ -107,7 +108,14 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.29</version>
+            <version>1.7.30</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.30</version>
+            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>net.coreprotect</groupId>
