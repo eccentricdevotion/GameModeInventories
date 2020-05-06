@@ -59,6 +59,7 @@ storage:
     password: mysecurepassword
     pool_size: 10
     test_connection: false
+    useSSL: true
   database: sqlite
   prefix: ''
 creative_world:

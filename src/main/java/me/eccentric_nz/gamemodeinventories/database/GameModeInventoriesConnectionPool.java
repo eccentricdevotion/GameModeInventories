@@ -38,6 +38,9 @@ public class GameModeInventoriesConnectionPool {
         String password = GameModeInventories.plugin.getConfig().getString("storage.mysql.password");
         int pool_size = GameModeInventories.plugin.getConfig().getInt("storage.mysql.pool_size");
         String url = String.format("jdbc:mysql://%s:%s/%s", host, port, databaseName);
+        if (!GameModeInventories.plugin.getConfig().getBoolean("storage.mysql.useSSL")) {
+            url += "?useSSL=false";
+        }
         HikariConfig config = new HikariConfig();
         config.setMinimumIdle(1);
         config.setMaximumPoolSize(pool_size);

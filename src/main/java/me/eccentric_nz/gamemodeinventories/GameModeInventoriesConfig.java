@@ -82,6 +82,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("uuid_conversion_done", false);
         boolOptions.put("blocks_conversion_done", false);
         boolOptions.put("storage.mysql.test_connection", false);
+        boolOptions.put("storage.mysql.useSSL", true);
         bl.add("TNT");
         bl.add("BEDROCK");
         bl.add("LAVA_BUCKET");
