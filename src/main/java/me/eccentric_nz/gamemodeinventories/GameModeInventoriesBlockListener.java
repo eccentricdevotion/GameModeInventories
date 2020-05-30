@@ -77,33 +77,28 @@ public class GameModeInventoriesBlockListener implements Listener {
             }
             if (plugin.getConfig().getBoolean("no_golem_spawn")) {
                 Block pumpkin = event.getClickedBlock();
-                if (pumpkin == null) {
-                    return;
-                }
-                if (!pumpkin.getType().equals(Material.PUMPKIN)) {
-                    return;
-                }
-                // check blocks around pumpkin
-                if (mat.equals(Material.SHEARS) && GameModeInventoriesConstructedMob.checkBlocks(Material.PUMPKIN, pumpkin)) {
-                    event.setCancelled(true);
+                if (pumpkin != null && pumpkin.getType().equals(Material.PUMPKIN)) {
+                    // check blocks around pumpkin
+                    if (mat.equals(Material.SHEARS) && GameModeInventoriesConstructedMob.checkBlocks(Material.PUMPKIN, pumpkin)) {
+                        event.setCancelled(true);
+                    }
                 }
             }
             if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
                 if (mat.equals(Material.ARMOR_STAND)) {
                     Block b = event.getClickedBlock();
                     if (b != null) {
-                        if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(b.getWorld().getName())) {
-                            return;
-                        }
-                        Location l = b.getLocation();
-                        if (l != null) {
-                            String gmip = l.getBlockX() + "," + l.getBlockZ();
-                            plugin.getPoints().add(gmip);
-                            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                                if (plugin.getPoints().contains(gmip)) {
-                                    plugin.getPoints().remove(gmip);
-                                }
-                            }, 600L);
+                        if (plugin.getConfig().getStringList("track_creative_place.worlds").contains(b.getWorld().getName())) {
+                            Location l = b.getLocation();
+                            if (l != null) {
+                                String gmip = l.getBlockX() + "," + l.getBlockZ();
+                                plugin.getPoints().add(gmip);
+                                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                                    if (plugin.getPoints().contains(gmip)) {
+                                        plugin.getPoints().remove(gmip);
+                                    }
+                                }, 600L);
+                            }
                         }
                     }
                 }
