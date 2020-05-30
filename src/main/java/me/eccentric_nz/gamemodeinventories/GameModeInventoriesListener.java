@@ -151,7 +151,7 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryOpen(PlayerInteractEvent event) {
+    public void onInteract(PlayerInteractEvent event) {
         if (plugin.getConfig().getBoolean("restrict_creative")) {
             Block b = event.getClickedBlock();
             if (b != null) {
@@ -180,7 +180,7 @@ public class GameModeInventoriesListener implements Listener {
                 if (p.getGameMode().equals(GameMode.CREATIVE) && !GameModeInventoriesBypass.canBypass(p, "inventories", plugin)) {
                     boolean empty = true;
                     for (ItemStack is : inv.getContents()) {
-                        if (!is.getType().equals(Material.AIR)) {
+                        if (!is.getType().isAir()) {
                             empty = false;
                         }
                     }
@@ -261,6 +261,6 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     private boolean isBlock(Material m) {
-        return !m.equals(Material.AIR) && m.isBlock();
+        return !m.isAir() && m.isBlock();
     }
 }

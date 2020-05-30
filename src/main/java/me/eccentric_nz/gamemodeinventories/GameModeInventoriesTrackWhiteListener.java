@@ -34,7 +34,7 @@ public class GameModeInventoriesTrackWhiteListener implements Listener {
         }
         Player p = event.getPlayer();
         Block block = event.getBlock();
-        if (block.getType().equals(Material.AIR)) {
+        if (block.getType().isAir()) {
             return;
         }
         if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(block.getWorld().getName())) {
