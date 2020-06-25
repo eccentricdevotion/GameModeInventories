@@ -129,6 +129,12 @@ public class GameModeInventoriesConfig {
         if (!config.contains("blacklist")) {
             plugin.getConfig().set("blacklist", bl);
             i++;
+        } else if (plugin.getConfig().getStringList("blacklist").contains("ZOMBIE_PIGMAN_SPAWN_EGG")) {
+            List<String> black = plugin.getConfig().getStringList("blacklist");
+            black.remove("ZOMBIE_PIGMAN_SPAWN_EGG");
+            black.add("ZOMBIFIED_PIGLIN_SPAWN_EGG");
+            plugin.getConfig().set("blacklist", black);
+            i++;
         }
         if (!config.contains("commands")) {
             plugin.getConfig().set("commands", com);
