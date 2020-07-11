@@ -34,51 +34,13 @@ public class GameModeInventoriesListener implements Listener {
 
     public GameModeInventoriesListener(GameModeInventories plugin) {
         this.plugin = plugin;
-        containers.add(Material.ANVIL);
-        containers.add(Material.BARREL);
-        containers.add(Material.BEACON);
-        containers.add(Material.BEE_NEST);
-        containers.add(Material.BEEHIVE);
-        containers.add(Material.BLACK_SHULKER_BOX);
-        containers.add(Material.BLAST_FURNACE);
-        containers.add(Material.BLUE_SHULKER_BOX);
-        containers.add(Material.BREWING_STAND);
-        containers.add(Material.BROWN_SHULKER_BOX);
-        containers.add(Material.CAMPFIRE);
-        containers.add(Material.CARTOGRAPHY_TABLE);
-        containers.add(Material.CHEST);
-        containers.add(Material.CHIPPED_ANVIL);
-        containers.add(Material.COMPOSTER);
-        containers.add(Material.CYAN_SHULKER_BOX);
-        containers.add(Material.DAMAGED_ANVIL);
-        containers.add(Material.DISPENSER);
-        containers.add(Material.DROPPER);
-        containers.add(Material.ENCHANTING_TABLE);
-        containers.add(Material.ENDER_CHEST);
-        containers.add(Material.FLETCHING_TABLE);
-        containers.add(Material.FURNACE);
-        containers.add(Material.GRAY_SHULKER_BOX);
-        containers.add(Material.GREEN_SHULKER_BOX);
-        containers.add(Material.GRINDSTONE);
-        containers.add(Material.HOPPER);
-        containers.add(Material.JUKEBOX);
-        containers.add(Material.LECTERN);
-        containers.add(Material.LIGHT_BLUE_SHULKER_BOX);
-        containers.add(Material.LIGHT_GRAY_SHULKER_BOX);
-        containers.add(Material.LIME_SHULKER_BOX);
-        containers.add(Material.LOOM);
-        containers.add(Material.MAGENTA_SHULKER_BOX);
-        containers.add(Material.ORANGE_SHULKER_BOX);
-        containers.add(Material.PINK_SHULKER_BOX);
-        containers.add(Material.PURPLE_SHULKER_BOX);
-        containers.add(Material.RED_SHULKER_BOX);
-        containers.add(Material.SHULKER_BOX);
-        containers.add(Material.SMITHING_TABLE);
-        containers.add(Material.SMOKER);
-        containers.add(Material.STONECUTTER);
-        containers.add(Material.TRAPPED_CHEST);
-        containers.add(Material.WHITE_SHULKER_BOX);
-        containers.add(Material.YELLOW_SHULKER_BOX);
+        for (String m : this.plugin.getConfig().getStringList("containers")) {
+            try {
+                containers.add(Material.valueOf(m));
+            } catch (IllegalArgumentException e) {
+                System.out.println(plugin.MY_PLUGIN_NAME + "Illegal material name " + m + " in containers list!");
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)

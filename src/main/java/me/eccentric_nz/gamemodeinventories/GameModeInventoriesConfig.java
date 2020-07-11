@@ -22,6 +22,7 @@ public class GameModeInventoriesConfig {
     HashMap<String, String> strOptions = new HashMap<>();
     HashMap<String, Integer> intOptions = new HashMap<>();
     HashMap<String, Boolean> boolOptions = new HashMap<>();
+    List<String> containers = new ArrayList<>();
     List<String> bl = new ArrayList<>();
     List<String> com = new ArrayList<>();
     List<String> wor = new ArrayList<>();
@@ -83,6 +84,51 @@ public class GameModeInventoriesConfig {
         boolOptions.put("blocks_conversion_done", false);
         boolOptions.put("storage.mysql.test_connection", false);
         boolOptions.put("storage.mysql.useSSL", true);
+        containers.add("ANVIL");
+        containers.add("BARREL");
+        containers.add("BEACON");
+        containers.add("BEE_NEST");
+        containers.add("BEEHIVE");
+        containers.add("BLACK_SHULKER_BOX");
+        containers.add("BLAST_FURNACE");
+        containers.add("BLUE_SHULKER_BOX");
+        containers.add("BREWING_STAND");
+        containers.add("BROWN_SHULKER_BOX");
+        containers.add("CAMPFIRE");
+        containers.add("CARTOGRAPHY_TABLE");
+        containers.add("CHEST");
+        containers.add("CHIPPED_ANVIL");
+        containers.add("COMPOSTER");
+        containers.add("CYAN_SHULKER_BOX");
+        containers.add("DAMAGED_ANVIL");
+        containers.add("DISPENSER");
+        containers.add("DROPPER");
+        containers.add("ENCHANTING_TABLE");
+        containers.add("ENDER_CHEST");
+        containers.add("FLETCHING_TABLE");
+        containers.add("FURNACE");
+        containers.add("GRAY_SHULKER_BOX");
+        containers.add("GREEN_SHULKER_BOX");
+        containers.add("GRINDSTONE");
+        containers.add("HOPPER");
+        containers.add("JUKEBOX");
+        containers.add("LECTERN");
+        containers.add("LIGHT_BLUE_SHULKER_BOX");
+        containers.add("LIGHT_GRAY_SHULKER_BOX");
+        containers.add("LIME_SHULKER_BOX");
+        containers.add("LOOM");
+        containers.add("MAGENTA_SHULKER_BOX");
+        containers.add("ORANGE_SHULKER_BOX");
+        containers.add("PINK_SHULKER_BOX");
+        containers.add("PURPLE_SHULKER_BOX");
+        containers.add("RED_SHULKER_BOX");
+        containers.add("SHULKER_BOX");
+        containers.add("SMITHING_TABLE");
+        containers.add("SMOKER");
+        containers.add("STONECUTTER");
+        containers.add("TRAPPED_CHEST");
+        containers.add("WHITE_SHULKER_BOX");
+        containers.add("YELLOW_SHULKER_BOX");
         bl.add("TNT");
         bl.add("BEDROCK");
         bl.add("LAVA_BUCKET");
@@ -125,6 +171,10 @@ public class GameModeInventoriesConfig {
                 plugin.getConfig().set(entry.getKey(), entry.getValue());
                 i++;
             }
+        }
+        if (!config.contains("containers")) {
+            plugin.getConfig().set("containers", containers);
+            i++;
         }
         if (!config.contains("blacklist")) {
             plugin.getConfig().set("blacklist", bl);
