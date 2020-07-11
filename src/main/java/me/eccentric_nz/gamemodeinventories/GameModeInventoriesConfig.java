@@ -125,6 +125,7 @@ public class GameModeInventoriesConfig {
         containers.add("SHULKER_BOX");
         containers.add("SMITHING_TABLE");
         containers.add("SMOKER");
+        containers.add("SOUL_CAMPFIRE");
         containers.add("STONECUTTER");
         containers.add("TRAPPED_CHEST");
         containers.add("WHITE_SHULKER_BOX");
