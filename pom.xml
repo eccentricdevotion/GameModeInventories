@@ -120,7 +120,7 @@
         <dependency>
             <groupId>net.coreprotect</groupId>
             <artifactId>CoreProtect</artifactId>
-            <version>19.0</version>
+            <version>19.1</version>
             <type>jar</type>
             <scope>system</scope>
             <systemPath>${basedir}/lib/CoreProtect.jar</systemPath>

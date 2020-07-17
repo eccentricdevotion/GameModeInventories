@@ -26,14 +26,14 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.guava:guava:21.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.gson:gson:2.8.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.16-R0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.16-R0.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.26" level="project" />
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:3.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.javassist:javassist:3.26.0-GA" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.30" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.30" level="project" />
     <orderEntry type="module-library">
-      <library name="Maven: net.coreprotect:CoreProtect:19.0">
+      <library name="Maven: net.coreprotect:CoreProtect:19.1">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/CoreProtect.jar!/" />
         </CLASSES>
@@ -42,7 +42,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="Maven: de.diddiz:LogBlock:1.16.1">
+      <library name="Maven: de.diddiz:LogBlock:1.16.1.1">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/LogBlock.jar!/" />
         </CLASSES>
