@@ -117,7 +117,7 @@ public class GameModeInventoriesInventory {
                         pse.executeUpdate();
                     }
                 }
-                if (potions && currentGM.equals("CREATIVE") && newGM.equals(GameMode.SURVIVAL)) {
+                if (potions && currentGM.equals("CREATIVE") && !newGM.equals(GameMode.CREATIVE)) {
                     // remove all potion effects
                     p.getActivePotionEffects().forEach((effect) -> {
                         p.removePotionEffect(effect.getType());
