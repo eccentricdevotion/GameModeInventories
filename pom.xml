@@ -86,7 +86,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.2-R0.1-SNAPSHOT</version>
+            <version>1.16.4-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
@@ -94,7 +94,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>3.4.1</version>
+            <version>3.4.5</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -120,7 +120,7 @@
         <dependency>
             <groupId>net.coreprotect</groupId>
             <artifactId>CoreProtect</artifactId>
-            <version>19.2</version>
+            <version>19.3</version>
             <type>jar</type>
             <scope>system</scope>
             <systemPath>${basedir}/lib/CoreProtect.jar</systemPath>
