@@ -54,7 +54,7 @@ public class GameModeInventoriesBlockLogger {
                 return;
             }
             // Check that a compatible version of the API is loaded
-            if (CoreProtect.APIVersion() < 2) {
+            if (CoreProtect.APIVersion() < 6) {
                 return;
             }
             plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Connecting to CoreProtect");
