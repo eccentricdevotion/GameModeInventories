@@ -39,14 +39,14 @@ public class GameModeInventoriesInventory {
         potions = this.plugin.getConfig().getBoolean("remove_potions");
     }
 
-    public void switchInventories(Player p, GameMode newGM) {
-        String uuid = p.getUniqueId().toString();
-        String name = p.getName();
-        String currentGM = p.getGameMode().name();
+    public void switchInventories(Player player, GameMode newGM) {
+        String uuid = player.getUniqueId().toString();
+        String name = player.getName();
+        String currentGM = player.getGameMode().name();
         if (saveXP) {
-            xpc = new GameModeInventoriesXPCalculator(p);
+            xpc = new GameModeInventoriesXPCalculator(player);
         }
-        String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
+        String inv = GameModeInventoriesBukkitSerialization.toDatabase(player.getInventory().getContents());
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet rsInv = null;
@@ -98,7 +98,7 @@ public class GameModeInventoriesInventory {
                 }
                 if (saveArmour) {
                     // get players armour
-                    String arm = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getArmorContents());
+                    String arm = GameModeInventoriesBukkitSerialization.toDatabase(player.getInventory().getArmorContents());
                     String armourQuery = "UPDATE " + plugin.getPrefix() + "inventories SET armour = ? WHERE id = ?";
                     psa = connection.prepareStatement(armourQuery);
                     psa.setString(1, arm);
@@ -107,7 +107,7 @@ public class GameModeInventoriesInventory {
                 }
                 if (saveEnderChest) {
                     // get players enderchest
-                    Inventory ec = p.getEnderChest();
+                    Inventory ec = player.getEnderChest();
                     if (ec != null) {
                         String ender = GameModeInventoriesBukkitSerialization.toDatabase(ec.getContents());
                         String enderQuery = "UPDATE " + plugin.getPrefix() + "inventories SET enderchest = ? WHERE id = ?";
@@ -119,8 +119,8 @@ public class GameModeInventoriesInventory {
                 }
                 if (potions && currentGM.equals("CREATIVE") && !newGM.equals(GameMode.CREATIVE)) {
                     // remove all potion effects
-                    p.getActivePotionEffects().forEach((effect) -> {
-                        p.removePotionEffect(effect.getType());
+                    player.getActivePotionEffects().forEach((effect) -> {
+                        player.removePotionEffect(effect.getType());
                     });
                 }
                 // check if they have an inventory for the new gamemode
@@ -132,13 +132,13 @@ public class GameModeInventoriesInventory {
                     if (rsNewInv.next()) {
                         // set their inventory to the saved one
                         String savedinventory = rsNewInv.getString("inventory");
-                        ItemStack[] i;
+                        ItemStack[] stacks;
                         if (savedinventory.startsWith("[")) {
-                            i = GameModeInventoriesJSONSerialization.toItemStacks(savedinventory);
+                            stacks = GameModeInventoriesJSONSerialization.toItemStacks(savedinventory);
                         } else {
-                            i = GameModeInventoriesBukkitSerialization.fromDatabase(savedinventory);
+                            stacks = GameModeInventoriesBukkitSerialization.fromDatabase(savedinventory);
                         }
-                        p.getInventory().setContents(i);
+                        player.getInventory().setContents(stacks);
                         amount = rsNewInv.getInt("xp");
                         if (saveArmour) {
                             String savedarmour = rsNewInv.getString("armour");
@@ -149,7 +149,7 @@ public class GameModeInventoriesInventory {
                                 } else {
                                     a = GameModeInventoriesBukkitSerialization.fromDatabase(savedarmour);
                                 }
-                                p.getInventory().setArmorContents(a);
+                                player.getInventory().setArmorContents(a);
                             }
                         }
                         if (saveEnderChest) {
@@ -164,20 +164,20 @@ public class GameModeInventoriesInventory {
                             } else {
                                 e = GameModeInventoriesBukkitSerialization.fromDatabase(savedender);
                             }
-                            Inventory echest = p.getEnderChest();
+                            Inventory echest = player.getEnderChest();
                             echest.setContents(e);
                         }
                     } else {
                         // start with an empty inventory
-                        p.getInventory().clear();
+                        player.getInventory().clear();
                         if (saveArmour) {
-                            p.getInventory().setBoots(null);
-                            p.getInventory().setChestplate(null);
-                            p.getInventory().setLeggings(null);
-                            p.getInventory().setHelmet(null);
+                            player.getInventory().setBoots(null);
+                            player.getInventory().setChestplate(null);
+                            player.getInventory().setLeggings(null);
+                            player.getInventory().setHelmet(null);
                         }
                         if (saveEnderChest) {
-                            Inventory echest = p.getEnderChest();
+                            Inventory echest = player.getEnderChest();
                             echest.clear();
                         }
                         amount = 0;
@@ -186,7 +186,7 @@ public class GameModeInventoriesInventory {
                     if (saveXP) {
                         xpc.setExp(amount);
                     }
-                    p.updateInventory();
+                    player.updateInventory();
                 } catch (IOException ex) {
                     GameModeInventories.plugin.debug("Could not restore inventory on gamemode change, " + ex);
                 }

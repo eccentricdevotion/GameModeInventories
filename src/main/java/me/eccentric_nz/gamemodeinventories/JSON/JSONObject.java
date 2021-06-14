@@ -572,8 +572,7 @@ public class JSONObject {
         if (value instanceof Number) {
             return numberToString((Number) value);
         }
-        if (value instanceof Boolean || value instanceof JSONObject
-                || value instanceof JSONArray) {
+        if (value instanceof Boolean || value instanceof JSONObject || value instanceof JSONArray) {
             return value.toString();
         }
         if (value instanceof Map) {
@@ -1321,7 +1320,9 @@ public class JSONObject {
      */
     public Object remove(String key) {
         return map.remove(key);
-    }    /**
+    }
+
+    /**
      * Make a JSON text of this JSONObject. For compactness, no whitespace is added. If this would not result in a
      * syntactically correct JSON text, then null will be returned instead.
      * <p>

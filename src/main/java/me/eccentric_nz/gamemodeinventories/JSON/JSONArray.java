@@ -194,13 +194,9 @@ public class JSONArray {
      */
     public boolean getBoolean(int index) throws JSONException {
         Object object = this.get(index);
-        if (object.equals(Boolean.FALSE)
-                || (object instanceof String && ((String) object)
-                .equalsIgnoreCase("false"))) {
+        if (object.equals(Boolean.FALSE) || (object instanceof String string && string.equalsIgnoreCase("false"))) {
             return false;
-        } else if (object.equals(Boolean.TRUE)
-                || (object instanceof String && ((String) object)
-                .equalsIgnoreCase("true"))) {
+        } else if (object.equals(Boolean.TRUE) || (object instanceof String string && string.equalsIgnoreCase("true"))) {
             return true;
         }
         throw new JSONException("JSONArray[" + index + "] is not a boolean.");
@@ -216,8 +212,7 @@ public class JSONArray {
     public double getDouble(int index) throws JSONException {
         Object object = this.get(index);
         try {
-            return object instanceof Number ? ((Number) object).doubleValue()
-                    : Double.parseDouble((String) object);
+            return object instanceof Number ? ((Number) object).doubleValue() : Double.parseDouble((String) object);
         } catch (NumberFormatException e) {
             throw new JSONException("JSONArray[" + index + "] is not a number.");
         }
@@ -233,8 +228,7 @@ public class JSONArray {
     public int getInt(int index) throws JSONException {
         Object object = this.get(index);
         try {
-            return object instanceof Number ? ((Number) object).intValue()
-                    : Integer.parseInt((String) object);
+            return object instanceof Number ? ((Number) object).intValue() : Integer.parseInt((String) object);
         } catch (NumberFormatException e) {
             throw new JSONException("JSONArray[" + index + "] is not a number.");
         }
@@ -280,8 +274,7 @@ public class JSONArray {
     public long getLong(int index) throws JSONException {
         Object object = this.get(index);
         try {
-            return object instanceof Number ? ((Number) object).longValue()
-                    : Long.parseLong((String) object);
+            return object instanceof Number ? ((Number) object).longValue() : Long.parseLong((String) object);
         } catch (NumberFormatException e) {
             throw new JSONException("JSONArray[" + index + "] is not a number.");
         }
@@ -297,8 +290,7 @@ public class JSONArray {
     public byte getByte(int index) throws JSONException {
         Object object = this.get(index);
         try {
-            return object instanceof Number ? ((Number) object).byteValue()
-                    : Byte.parseByte((String) object);
+            return object instanceof Number ? ((Number) object).byteValue() : Byte.parseByte((String) object);
         } catch (NumberFormatException e) {
             throw new JSONException("JSONArray[" + index + "] is not a number.");
         }
@@ -814,7 +806,7 @@ public class JSONArray {
                 JSONObject.writeValue(writer, this.myArrayList.get(0),
                         indentFactor, indent);
             } else if (length != 0) {
-                final int newindent = indent + indentFactor;
+                int newindent = indent + indentFactor;
 
                 for (int i = 0; i < length; i += 1) {
                     if (commanate) {

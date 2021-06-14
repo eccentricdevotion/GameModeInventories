@@ -32,7 +32,6 @@ import java.util.*;
  */
 public class GameModeInventoriesJSONSerialization {
 
-    @SuppressWarnings("unchecked")
     public static Map<String, Object> toMap(JSONObject object) throws JSONException {
         Map<String, Object> map = new HashMap<>();
         Iterator<String> keys = object.keys();
@@ -104,8 +103,8 @@ public class GameModeInventoriesJSONSerialization {
     public static Map<String, Object> serialize(ConfigurationSerializable cs) {
         Map<String, Object> serialized = recreateMap(cs.serialize());
         serialized.entrySet().forEach((entry) -> {
-            if (entry.getValue() instanceof ConfigurationSerializable) {
-                entry.setValue(serialize((ConfigurationSerializable) entry.getValue()));
+            if (entry.getValue() instanceof ConfigurationSerializable configurationSerializable) {
+                entry.setValue(serialize(configurationSerializable));
             }
         });
         serialized.put(ConfigurationSerialization.SERIALIZED_TYPE_KEY, ConfigurationSerialization.getAlias(cs.getClass()));
@@ -120,10 +119,9 @@ public class GameModeInventoriesJSONSerialization {
         return map;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public static ConfigurationSerializable deserialize(Map<String, Object> map) {
         map.entrySet().forEach((entry) -> {
-            if (entry.getValue() instanceof Map && ((Map) entry.getValue()).containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
+            if (entry.getValue() instanceof Map map1 && map1.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
                 entry.setValue(deserialize((Map) entry.getValue()));
             }
         });

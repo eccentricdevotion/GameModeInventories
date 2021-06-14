@@ -52,8 +52,8 @@ public class GameModeInventoriesEntityListener implements Listener {
     public void onArmorStandBreakOrCreativePVP(EntityDamageByEntityEvent event) {
         if (plugin.getConfig().getBoolean("no_creative_pvp") && event.getEntityType().equals(EntityType.PLAYER)) {
             Entity attacker = event.getDamager();
-            if (attacker instanceof Player) {
-                if (((Player) attacker).getGameMode().equals(GameMode.CREATIVE)) {
+            if (attacker instanceof Player player) {
+                if (player.getGameMode().equals(GameMode.CREATIVE)) {
                     event.setCancelled(true);
                     return;
                 }
@@ -69,9 +69,8 @@ public class GameModeInventoriesEntityListener implements Listener {
                 }
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
                     Entity damager = event.getDamager();
-                    if (damager instanceof Player) {
-                        Player p = (Player) damager;
-                        p.sendMessage(plugin.MY_PLUGIN_NAME + message);
+                    if (damager instanceof Player player) {
+                        player.sendMessage(plugin.MY_PLUGIN_NAME + message);
                     }
                 }
             }

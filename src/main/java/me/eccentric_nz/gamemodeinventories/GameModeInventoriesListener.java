@@ -193,16 +193,12 @@ public class GameModeInventoriesListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void noPickup(EntityPickupItemEvent event) {
-        if (!(event.getEntity() instanceof Player)) {
-            return;
-        }
-        if (plugin.getConfig().getBoolean("no_pickups")) {
-            Player p = (Player) event.getEntity();
-            GameMode gm = p.getGameMode();
-            if (gm.equals(GameMode.CREATIVE) && !GameModeInventoriesBypass.canBypass(p, "items", plugin)) {
+        if (event.getEntity() instanceof Player player && plugin.getConfig().getBoolean("no_pickups")) {
+            GameMode gm = player.getGameMode();
+            if (gm.equals(GameMode.CREATIVE) && !GameModeInventoriesBypass.canBypass(player, "items", plugin)) {
                 event.setCancelled(true);
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
-                    p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_PICKUP"));
+                    player.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_PICKUP"));
                 }
             }
         }

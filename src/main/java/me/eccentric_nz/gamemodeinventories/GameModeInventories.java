@@ -169,7 +169,7 @@ public class GameModeInventories extends JavaPlugin {
     public void debug(Object o, GMIDebug b) {
         if (getConfig().getBoolean("debug") == true) {
             if (b.equals(db_level) || b.equals(GMIDebug.ALL)) {
-                System.out.println("[GameModeInventories Debug] " + o);
+                getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + "Debug: " + o);
             }
         }
     }
