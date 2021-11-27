@@ -5,7 +5,7 @@ name: GameModeInventories
 load: POSTWORLD
 softdepend: [ Multiverse-Core,MultiWorld,CoreProtect,LogBlock ]
 version: 3.4.0
-api-version: 1.17
+api-version: 1.18
 permissions:
   gamemodeinventories.use:
     default: true
