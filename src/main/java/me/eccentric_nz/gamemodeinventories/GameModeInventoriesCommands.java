@@ -79,84 +79,62 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                 } else if (args.length == 2 && option.equals("kit")) {
                     String uuid = "00000000-0000-0000-0000-000000000000";
                     Player p = (Player) sender;
-                    Connection connection = null;
-                    PreparedStatement statement = null;
-                    ResultSet rsInv = null;
-                    ResultSet rsNewInv = null;
-                    try {
-                        connection = GameModeInventoriesConnectionPool.dbc();
-                        if (connection != null && !connection.isClosed()) {
-                            statement = connection.prepareStatement("SELECT id FROM " + plugin.getPrefix() + "inventories WHERE uuid = ? AND gamemode = 'SURVIVAL'");
-                            if (args[1].toLowerCase().equals("save")) {
-                                String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
-                                PreparedStatement ps;
-                                // get their current gamemode inventory from database
-                                statement.setString(1, uuid);
-                                rsInv = statement.executeQuery();
+                    try (
+                            Connection connection = GameModeInventoriesConnectionPool.dbc();
+                            PreparedStatement statement = connection.prepareStatement("SELECT id FROM " + plugin.getPrefix() + "inventories WHERE uuid = ? AND gamemode = 'SURVIVAL'");
+                    ) {
+                        if (args[1].toLowerCase().equals("save")) {
+                            String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
+                            // get their current gamemode inventory from database
+                            statement.setString(1, uuid);
+                            try (ResultSet rsInv = statement.executeQuery();) {
                                 int id;
                                 if (rsInv.next()) {
+                                    String updateQuery = "UPDATE " + plugin.getPrefix() + "inventories SET inventory = ? WHERE id = ?";
                                     // update it with their current inventory
                                     id = rsInv.getInt("id");
-                                    String updateQuery = "UPDATE " + plugin.getPrefix() + "inventories SET inventory = ? WHERE id = ?";
-                                    ps = connection.prepareStatement(updateQuery);
-                                    ps.setString(1, inv);
-                                    ps.setInt(2, id);
-                                    ps.executeUpdate();
-                                    ps.close();
+                                    try (PreparedStatement ps = connection.prepareStatement(updateQuery);) {
+                                        ps.setString(1, inv);
+                                        ps.setInt(2, id);
+                                        ps.executeUpdate();
+                                    }
                                 } else {
                                     // there is no 'kit' inventory saved yet so make one with the player's current inventory
                                     String insertQuery = "INSERT INTO " + plugin.getPrefix() + "inventories (uuid, player, gamemode, inventory) VALUES (?, 'kit', 'SURVIVAL', ?)";
-                                    ps = connection.prepareStatement(insertQuery);
-                                    ps.setString(1, uuid);
-                                    ps.setString(2, inv);
-                                    ps.executeUpdate();
-                                    ps.close();
-                                }
-                                p.sendMessage(plugin.MY_PLUGIN_NAME + "Kit inventory saved.");
-                            } else {
-                                // load
-                                statement = connection.prepareStatement("SELECT " + plugin.getPrefix() + "inventory FROM inventories WHERE uuid = ? AND gamemode = 'SURVIVAL'");
-                                statement.setString(1, uuid);
-                                rsNewInv = statement.executeQuery();
-                                if (rsNewInv.next()) {
-                                    try {
-                                        // set the inventory to the kit
-                                        String savedinventory = rsNewInv.getString("inventory");
-                                        ItemStack[] i;
-                                        if (savedinventory.startsWith("[")) {
-                                            i = GameModeInventoriesJSONSerialization.toItemStacks(savedinventory);
-                                        } else {
-                                            i = GameModeInventoriesBukkitSerialization.fromDatabase(savedinventory);
-                                        }
-                                        p.getInventory().setContents(i);
-                                    } catch (IOException e) {
-                                        plugin.debug("Could not set inventory for kit, " + e);
+                                    try (PreparedStatement ps = connection.prepareStatement(insertQuery);) {
+                                        ps.setString(1, uuid);
+                                        ps.setString(2, inv);
+                                        ps.executeUpdate();
                                     }
                                 }
-                                p.sendMessage(plugin.MY_PLUGIN_NAME + "Kit inventory loaded.");
+                                p.sendMessage(plugin.MY_PLUGIN_NAME + "Kit inventory saved.");
                             }
                         } else {
-                            plugin.debug("Connection was " + ((connection == null) ? "NULL" : "closed"));
+                            // load
+                            try (PreparedStatement loadStatement = connection.prepareStatement("SELECT " + plugin.getPrefix() + "inventory FROM inventories WHERE uuid = ? AND gamemode = 'SURVIVAL'");) {
+                                loadStatement.setString(1, uuid);
+                                try (ResultSet rsNewInv = loadStatement.executeQuery();) {
+                                    if (rsNewInv.next()) {
+                                        try {
+                                            // set the inventory to the kit
+                                            String savedinventory = rsNewInv.getString("inventory");
+                                            ItemStack[] i;
+                                            if (savedinventory.startsWith("[")) {
+                                                i = GameModeInventoriesJSONSerialization.toItemStacks(savedinventory);
+                                            } else {
+                                                i = GameModeInventoriesBukkitSerialization.fromDatabase(savedinventory);
+                                            }
+                                            p.getInventory().setContents(i);
+                                        } catch (IOException e) {
+                                            plugin.debug("Could not set inventory for kit, " + e);
+                                        }
+                                    }
+                                    p.sendMessage(plugin.MY_PLUGIN_NAME + "Kit inventory loaded.");
+                                }
+                            }
                         }
                     } catch (SQLException e) {
                         plugin.debug("Could not " + args[1].toLowerCase() + " inventory for kit, " + e);
-                    } finally {
-                        try {
-                            if (rsInv != null) {
-                                rsInv.close();
-                            }
-                            if (rsNewInv != null) {
-                                rsNewInv.close();
-                            }
-                            if (statement != null) {
-                                statement.close();
-                            }
-                            if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
-                                connection.close();
-                            }
-                        } catch (SQLException e) {
-                            System.err.println("Could not remove block, " + e);
-                        }
                     }
                     return true;
                 }

@@ -22,71 +22,70 @@ public class GameModeInventoriesSQLite {
     }
 
     public void createTables() {
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet rsUUID = null;
-        ResultSet rsXP = null;
-        ResultSet rsArmour = null;
-        ResultSet rsEnder = null;
-        ResultSet rsAttr = null;
-        ResultSet rsWorld = null;
-        try {
-            connection = GameModeInventoriesConnectionPool.dbc();
-            statement = connection.createStatement();
+        try (
+                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                Statement statement = connection.createStatement();
+        ) {
             String queryInventories = "CREATE TABLE IF NOT EXISTS " + plugin.getPrefix() + "inventories (id INTEGER PRIMARY KEY NOT NULL, uuid TEXT, player TEXT, gamemode TEXT, inventory TEXT, xp REAL, armour TEXT, enderchest TEXT, attributes TEXT, armour_attributes TEXT)";
             statement.executeUpdate(queryInventories);
             // update inventories if there is no uuid column
             String queryUUID = "SELECT sql FROM sqlite_master WHERE tbl_name = '" + plugin.getPrefix() + "inventories' AND sql LIKE '%uuid TEXT%'";
-            rsUUID = statement.executeQuery(queryUUID);
-            if (!rsUUID.next()) {
-                String queryAlterU = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD uuid TEXT";
-                statement.executeUpdate(queryAlterU);
-                System.out.println("[GameModeInventories] Adding UUID to database!");
+            try (ResultSet rsUUID = statement.executeQuery(queryUUID);) {
+                if (!rsUUID.next()) {
+                    String queryAlterU = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD uuid TEXT";
+                    statement.executeUpdate(queryAlterU);
+                    System.out.println("[GameModeInventories] Adding UUID to database!");
+                }
             }
             // update inventories if there is no xp column
             String queryXP = "SELECT sql FROM sqlite_master WHERE tbl_name = '" + plugin.getPrefix() + "inventories' AND sql LIKE '%xp REAL%'";
-            rsXP = statement.executeQuery(queryXP);
-            if (!rsXP.next()) {
-                String queryAlter = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD xp REAL";
-                statement.executeUpdate(queryAlter);
-                System.out.println("[GameModeInventories] Adding xp to database!");
+            try (ResultSet rsXP = statement.executeQuery(queryXP);) {
+                if (!rsXP.next()) {
+                    String queryAlter = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD xp REAL";
+                    statement.executeUpdate(queryAlter);
+                    System.out.println("[GameModeInventories] Adding xp to database!");
+                }
             }
             // update inventories if there is no armour column
             String queryArmour = "SELECT sql FROM sqlite_master WHERE tbl_name = '" + plugin.getPrefix() + "inventories' AND sql LIKE '%armour TEXT%'";
-            rsArmour = statement.executeQuery(queryArmour);
-            if (!rsArmour.next()) {
-                String queryAlter2 = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD armour TEXT";
-                statement.executeUpdate(queryAlter2);
-                System.out.println("[GameModeInventories] Adding armour to database!");
+            try (ResultSet rsArmour = statement.executeQuery(queryArmour);) {
+                if (!rsArmour.next()) {
+                    String queryAlter2 = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD armour TEXT";
+                    statement.executeUpdate(queryAlter2);
+                    System.out.println("[GameModeInventories] Adding armour to database!");
+                }
             }
             // update inventories if there is no enderchest column
             String queryEnder = "SELECT sql FROM sqlite_master WHERE tbl_name = '" + plugin.getPrefix() + "inventories' AND sql LIKE '%enderchest TEXT%'";
-            rsEnder = statement.executeQuery(queryEnder);
-            if (!rsEnder.next()) {
-                String queryAlter3 = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD enderchest TEXT";
-                statement.executeUpdate(queryAlter3);
-                System.out.println("[GameModeInventories] Adding enderchest to database!");
+            try (ResultSet rsEnder = statement.executeQuery(queryEnder);) {
+                if (!rsEnder.next()) {
+                    String queryAlter3 = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD enderchest TEXT";
+                    statement.executeUpdate(queryAlter3);
+                    System.out.println("[GameModeInventories] Adding enderchest to database!");
+                }
             }
             // update inventories if there is no attributes column
             String queryAttr = "SELECT sql FROM sqlite_master WHERE tbl_name = '" + plugin.getPrefix() + "inventories' AND sql LIKE '%attributes TEXT%'";
-            rsAttr = statement.executeQuery(queryAttr);
-            if (!rsAttr.next()) {
-                String queryAlter4 = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD attributes TEXT";
-                statement.executeUpdate(queryAlter4);
-                String queryAlter5 = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD armour_attributes TEXT";
-                statement.executeUpdate(queryAlter5);
-                System.out.println("[GameModeInventories] Adding attributes to database!");
+            try (ResultSet rsAttr = statement.executeQuery(queryAttr);) {
+                if (!rsAttr.next()) {
+                    String queryAlter4 = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD attributes TEXT";
+                    statement.executeUpdate(queryAlter4);
+                    String queryAlter5 = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD armour_attributes TEXT";
+                    statement.executeUpdate(queryAlter5);
+                    System.out.println("[GameModeInventories] Adding attributes to database!");
+                }
             }
             // add blocks table
             String queryBlocks = "CREATE TABLE IF NOT EXISTS " + plugin.getPrefix() + "blocks (id INTEGER PRIMARY KEY NOT NULL, worldchunk TEXT, location TEXT)";
             statement.executeUpdate(queryBlocks);
             // update inventories if there is no attributes column
             String queryWorld = "SELECT sql FROM sqlite_master WHERE tbl_name = '" + plugin.getPrefix() + "blocks' AND sql LIKE '%worldchunk TEXT%'";
-            rsWorld = statement.executeQuery(queryWorld);
-            if (!rsWorld.next()) {
-                String queryAlter6 = "ALTER TABLE " + plugin.getPrefix() + "blocks ADD worldchunk TEXT";
-                statement.executeUpdate(queryAlter6);
-                System.out.println("[GameModeInventories] Adding new fields to database!");
+            try (ResultSet rsWorld = statement.executeQuery(queryWorld);) {
+                if (!rsWorld.next()) {
+                    String queryAlter6 = "ALTER TABLE " + plugin.getPrefix() + "blocks ADD worldchunk TEXT";
+                    statement.executeUpdate(queryAlter6);
+                    System.out.println("[GameModeInventories] Adding new fields to database!");
+                }
             }
             // add stands table
             String queryStands = "CREATE TABLE IF NOT EXISTS " + plugin.getPrefix() + "stands (uuid TEXT PRIMARY KEY NOT NULL)";
@@ -98,35 +97,6 @@ public class GameModeInventoriesSQLite {
             statement.close();
         } catch (SQLException e) {
             plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "SQLite create table error: " + e);
-        } finally {
-            try {
-                if (rsUUID != null) {
-                    rsUUID.close();
-                }
-                if (rsXP != null) {
-                    rsXP.close();
-                }
-                if (rsArmour != null) {
-                    rsArmour.close();
-                }
-                if (rsEnder != null) {
-                    rsEnder.close();
-                }
-                if (rsAttr != null) {
-                    rsAttr.close();
-                }
-                if (rsWorld != null) {
-                    rsWorld.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "SQLite close statement error: " + e);
-            }
         }
     }
 }

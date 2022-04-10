@@ -39,32 +39,16 @@ public class GameModeInventoriesBlock {
     }
 
     public void removeBlock(String gmiwc, String l) {
-        Connection connection = null;
-        PreparedStatement ps = null;
-        try {
-            connection = GameModeInventoriesConnectionPool.dbc();
-            String deleteQuery = "DELETE FROM " + plugin.getPrefix() + "blocks WHERE worldchunk = ? AND location = ?";
-            ps = connection.prepareStatement(deleteQuery);
+        String deleteQuery = "DELETE FROM " + plugin.getPrefix() + "blocks WHERE worldchunk = ? AND location = ?";
+        try (
+                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                PreparedStatement ps = connection.prepareStatement(deleteQuery);
+        ) {
             ps.setString(1, gmiwc);
             ps.setString(2, l);
             ps.executeUpdate();
-
-            if (GameModeInventoriesConnectionPool.isIsMySQL()) {
-                connection.close();
-            }
         } catch (SQLException e) {
             System.err.println("Could not remove block, " + e);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                System.err.println("Could not remove block, " + e);
-            }
         }
         if (plugin.getCreativeBlocks().containsKey(gmiwc)) {
             plugin.getCreativeBlocks().get(gmiwc).remove(l);
@@ -72,28 +56,16 @@ public class GameModeInventoriesBlock {
     }
 
     private void saveBlockNow(GameModeInventoriesQueueData data) {
-        Connection connection = null;
-        PreparedStatement ps = null;
-        try {
-            connection = GameModeInventoriesConnectionPool.dbc();
-            String insertQuery = "INSERT INTO " + plugin.getPrefix() + "blocks (worldchunk, location) VALUES (?,?)";
-            ps = connection.prepareStatement(insertQuery);
+        String insertQuery = "INSERT INTO " + plugin.getPrefix() + "blocks (worldchunk, location) VALUES (?,?)";
+        try (
+                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                PreparedStatement ps = connection.prepareStatement(insertQuery);
+        ) {
             ps.setString(1, data.getWorldChunk());
             ps.setString(2, data.getLocation());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Could not save block, " + e);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                System.err.println("Could not remove block, " + e);
-            }
         }
     }
 }

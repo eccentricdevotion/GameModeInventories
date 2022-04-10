@@ -62,17 +62,14 @@ public class GameModeInventoriesListener implements Listener {
                         //get last known position in world
                         String uuid = p.getUniqueId().toString();
                         // player changed worlds, record last location
-                        Connection connection = null;
-                        PreparedStatement statement = null;
-                        ResultSet rs = null;
-                        try {
-                            connection = GameModeInventoriesConnectionPool.dbc();
-                            if (connection != null && !connection.isClosed()) {
-                                // check if the player has a record for this world
-                                statement = connection.prepareStatement("SELECT * FROM " + plugin.getPrefix() + "worlds WHERE uuid = ? AND world = ?");
-                                statement.setString(1, uuid);
-                                statement.setString(2, plugin.getConfig().getString("creative_world.world"));
-                                rs = statement.executeQuery();
+                        // check if the player has a record for this world
+                        try (
+                                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                                PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + plugin.getPrefix() + "worlds WHERE uuid = ? AND world = ?");
+                        ) {
+                            statement.setString(1, uuid);
+                            statement.setString(2, plugin.getConfig().getString("creative_world.world"));
+                            try (ResultSet rs = statement.executeQuery();) {
                                 if (rs.next()) {
                                     World w = plugin.getServer().getWorld(rs.getString("world"));
                                     if (w != null) {
@@ -88,20 +85,6 @@ public class GameModeInventoriesListener implements Listener {
                             }
                         } catch (SQLException e) {
                             plugin.debug("Could not get creative world location, " + e);
-                        } finally {
-                            try {
-                                if (rs != null) {
-                                    rs.close();
-                                }
-                                if (statement != null) {
-                                    statement.close();
-                                }
-                                if (connection != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
-                                    connection.close();
-                                }
-                            } catch (SQLException e) {
-                                System.err.println("Could not close resultsets, statements or connection [worlds], " + e);
-                            }
                         }
                     }
                     if (loc != null) {
