@@ -26,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class GameModeInventoriesListener implements Listener {
 
@@ -38,7 +39,7 @@ public class GameModeInventoriesListener implements Listener {
             try {
                 containers.add(Material.valueOf(m));
             } catch (IllegalArgumentException e) {
-                System.out.println(plugin.MY_PLUGIN_NAME + "Illegal material name " + m + " in containers list!");
+                plugin.getLogger().log(Level.INFO, plugin.MY_PLUGIN_NAME + "Illegal material name " + m + " in containers list!");
             }
         }
     }

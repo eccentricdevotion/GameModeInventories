@@ -3,13 +3,13 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * @author eccentric_nz
@@ -68,7 +68,7 @@ public class GameModeInventoriesMessage {
                         out.write(buf, 0, len);
                     }
                 } catch (IOException io) {
-                    System.err.println("[GameModeInventories] Could not save the file (" + file.toString() + ").");
+                    plugin.getLogger().log(Level.WARNING, "[GameModeInventories] Could not save the file (" + file.toString() + ").");
                 } finally {
                     try {
                         out.close();
@@ -76,7 +76,7 @@ public class GameModeInventoriesMessage {
                     }
                 }
             } catch (FileNotFoundException e) {
-                System.err.println("[GameModeInventories] File not found.");
+                plugin.getLogger().log(Level.WARNING, "[GameModeInventories] File not found.");
             } finally {
                 if (in != null) {
                     try {
@@ -101,7 +101,7 @@ public class GameModeInventoriesMessage {
         if (m > 0) {
             try {
                 messagesConfig.save(messagesFile);
-                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + m + ChatColor.RESET + " new items to messages.yml");
+                plugin.getLogger().log(Level.INFO, "Added " + m + " new items to messages.yml");
             } catch (IOException ex) {
                 plugin.debug("Could not save messages.yml, " + ex.getMessage());
             }

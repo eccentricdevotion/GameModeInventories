@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
 
 /**
  * @author eccentric_nz
@@ -37,7 +38,7 @@ public class GameModeInventoriesMySQL {
                     statement.executeUpdate(queryAlter4);
                     String queryAlter5 = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD armour_attributes text";
                     statement.executeUpdate(queryAlter5);
-                    System.out.println("[GameModeInventories] Adding attributes to database!");
+                    plugin.getLogger().log(Level.INFO, "[GameModeInventories] Adding attributes to database!");
                 }
             }
             // add blocks table
@@ -49,7 +50,7 @@ public class GameModeInventoriesMySQL {
                 if (!rsWorld.next()) {
                     String queryAlter6 = "ALTER TABLE " + plugin.getPrefix() + "blocks ADD worldchunk varchar(128)";
                     statement.executeUpdate(queryAlter6);
-                    System.out.println("[GameModeInventories] Adding new fields to database!");
+                    plugin.getLogger().log(Level.INFO, "[GameModeInventories] Adding new fields to database!");
                 }
             }
             // add stands table
@@ -59,7 +60,7 @@ public class GameModeInventoriesMySQL {
             String queryWorlds = "CREATE TABLE IF NOT EXISTS " + plugin.getPrefix() + "worlds (id int(11) NOT NULL AUTO_INCREMENT, uuid varchar(48) DEFAULT '', world varchar(24) DEFAULT '', x double, y double, z double, yaw float, pitch float, PRIMARY KEY (id)) DEFAULT CHARSET=utf8 COLLATE utf8_general_ci";
             statement.executeUpdate(queryWorlds);
         } catch (SQLException e) {
-            plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "MySQL create table error: " + e);
+            plugin.getLogger().log(Level.WARNING, "MySQL create table error: " + e);
         }
     }
 }

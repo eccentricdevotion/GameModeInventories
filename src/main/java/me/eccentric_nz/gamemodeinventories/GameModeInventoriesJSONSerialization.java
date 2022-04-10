@@ -19,11 +19,13 @@ package me.eccentric_nz.gamemodeinventories;
 import me.eccentric_nz.gamemodeinventories.JSON.JSONArray;
 import me.eccentric_nz.gamemodeinventories.JSON.JSONException;
 import me.eccentric_nz.gamemodeinventories.JSON.JSONObject;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Fancy JSON serialization mostly by evilmidget38.
@@ -89,7 +91,7 @@ public class GameModeInventoriesJSONSerialization {
                     ItemStack item = (ItemStack) deserialize(toMap(new JSONObject(piece)));
                     contents.add(item);
                 } catch (JSONException e) {
-                    System.err.println("There was a JSON error: " + e.getMessage());
+                    Bukkit.getLogger().log(Level.WARNING, "There was a JSON error: " + e.getMessage());
                 }
             }
         }

@@ -9,6 +9,8 @@ import net.coreprotect.CoreProtect;
 import net.coreprotect.CoreProtectAPI;
 import org.bukkit.plugin.PluginManager;
 
+import java.util.logging.Level;
+
 /**
  * @author eccentric_nz
  */
@@ -57,7 +59,7 @@ public class GameModeInventoriesBlockLogger {
             if (CoreProtect.APIVersion() < 6) {
                 return;
             }
-            plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Connecting to CoreProtect");
+            plugin.getLogger().log(Level.INFO, "Connecting to CoreProtect");
             coreProtectAPI = CoreProtect;
             whichLogger = GMIBlockLogger.CORE_PROTECT;
             logging = true;
@@ -65,7 +67,7 @@ public class GameModeInventoriesBlockLogger {
         if (pm.isPluginEnabled("LogBlock")) {
             LogBlock lb = (LogBlock) pm.getPlugin("LogBlock");
             if (lb != null) {
-                plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Connecting to LogBlock");
+                plugin.getLogger().log(Level.INFO, "Connecting to LogBlock");
                 logBlockConsumer = lb.getConsumer();
                 whichLogger = GMIBlockLogger.LOG_BLOCK;
                 logging = true;

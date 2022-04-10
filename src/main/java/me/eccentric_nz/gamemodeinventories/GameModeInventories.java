@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,7 +65,7 @@ public class GameModeInventories extends JavaPlugin {
                 new GameModeInventoriesBlocksConverter(this).convertBlocksTable();
                 getConfig().set("blocks_conversion_done", true);
                 saveConfig();
-                System.out.println("[GameModeInventories] Blocks conversion successful :)");
+                plugin.getLogger().log(Level.INFO, "[GameModeInventories] Blocks conversion successful :)");
             }
             // check if creative world exists
             if (getConfig().getBoolean("creative_world.switch_to")) {
@@ -72,7 +73,7 @@ public class GameModeInventories extends JavaPlugin {
                 if (creative == null) {
                     getConfig().set("creative_world.switch_to", false);
                     saveConfig();
-                    System.out.println("[GameModeInventories] Creative world specified in the config was not found, disabling world switching!");
+                    plugin.getLogger().log(Level.INFO, "[GameModeInventories] Creative world specified in the config was not found, disabling world switching!");
                 }
             }
             block = new GameModeInventoriesBlock(this);

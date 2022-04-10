@@ -3,7 +3,6 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -12,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * @author eccentric_nz
@@ -19,6 +19,8 @@ import java.util.Map;
 public class GameModeInventoriesConfig {
 
     private final GameModeInventories plugin;
+    private final FileConfiguration config;
+    private final File configFile;
     HashMap<String, String> strOptions = new HashMap<>();
     HashMap<String, Integer> intOptions = new HashMap<>();
     HashMap<String, Boolean> boolOptions = new HashMap<>();
@@ -27,8 +29,6 @@ public class GameModeInventoriesConfig {
     List<String> com = new ArrayList<>();
     List<String> wor = new ArrayList<>();
     List<String> no = new ArrayList<>();
-    private final FileConfiguration config;
-    private final File configFile;
 
     public GameModeInventoriesConfig(GameModeInventories plugin) {
         this.plugin = plugin;
@@ -210,7 +210,7 @@ public class GameModeInventoriesConfig {
             plugin.getConfig().set("storage.mysql.url", null);
         }
         if (i > 0) {
-            plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "Added " + ChatColor.AQUA + i + ChatColor.RESET + " new items to config");
+            plugin.getLogger().log(Level.INFO, "Added " + i + " new items to config");
         }
         plugin.saveConfig();
     }

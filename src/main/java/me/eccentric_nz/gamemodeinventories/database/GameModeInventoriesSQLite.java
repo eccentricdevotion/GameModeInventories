@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
 
 /**
  * @author eccentric_nz
@@ -34,7 +35,7 @@ public class GameModeInventoriesSQLite {
                 if (!rsUUID.next()) {
                     String queryAlterU = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD uuid TEXT";
                     statement.executeUpdate(queryAlterU);
-                    System.out.println("[GameModeInventories] Adding UUID to database!");
+                    plugin.getLogger().log(Level.INFO, "[GameModeInventories] Adding UUID to database!");
                 }
             }
             // update inventories if there is no xp column
@@ -43,7 +44,7 @@ public class GameModeInventoriesSQLite {
                 if (!rsXP.next()) {
                     String queryAlter = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD xp REAL";
                     statement.executeUpdate(queryAlter);
-                    System.out.println("[GameModeInventories] Adding xp to database!");
+                    plugin.getLogger().log(Level.INFO, "[GameModeInventories] Adding xp to database!");
                 }
             }
             // update inventories if there is no armour column
@@ -52,7 +53,7 @@ public class GameModeInventoriesSQLite {
                 if (!rsArmour.next()) {
                     String queryAlter2 = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD armour TEXT";
                     statement.executeUpdate(queryAlter2);
-                    System.out.println("[GameModeInventories] Adding armour to database!");
+                    plugin.getLogger().log(Level.INFO, "[GameModeInventories] Adding armour to database!");
                 }
             }
             // update inventories if there is no enderchest column
@@ -61,7 +62,7 @@ public class GameModeInventoriesSQLite {
                 if (!rsEnder.next()) {
                     String queryAlter3 = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD enderchest TEXT";
                     statement.executeUpdate(queryAlter3);
-                    System.out.println("[GameModeInventories] Adding enderchest to database!");
+                    plugin.getLogger().log(Level.INFO, "[GameModeInventories] Adding enderchest to database!");
                 }
             }
             // update inventories if there is no attributes column
@@ -72,7 +73,7 @@ public class GameModeInventoriesSQLite {
                     statement.executeUpdate(queryAlter4);
                     String queryAlter5 = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD armour_attributes TEXT";
                     statement.executeUpdate(queryAlter5);
-                    System.out.println("[GameModeInventories] Adding attributes to database!");
+                    plugin.getLogger().log(Level.INFO, "[GameModeInventories] Adding attributes to database!");
                 }
             }
             // add blocks table
@@ -84,7 +85,7 @@ public class GameModeInventoriesSQLite {
                 if (!rsWorld.next()) {
                     String queryAlter6 = "ALTER TABLE " + plugin.getPrefix() + "blocks ADD worldchunk TEXT";
                     statement.executeUpdate(queryAlter6);
-                    System.out.println("[GameModeInventories] Adding new fields to database!");
+                    plugin.getLogger().log(Level.INFO, "[GameModeInventories] Adding new fields to database!");
                 }
             }
             // add stands table
@@ -96,7 +97,7 @@ public class GameModeInventoriesSQLite {
             // close
             statement.close();
         } catch (SQLException e) {
-            plugin.getServer().getConsoleSender().sendMessage(plugin.MY_PLUGIN_NAME + "SQLite create table error: " + e);
+            plugin.getLogger().log(Level.WARNING, "SQLite create table error: " + e);
         }
     }
 }

@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * @author eccentric_nz
@@ -39,7 +40,7 @@ public class GameModeInventoriesStand {
                     ps.executeUpdate();
                 }
             } catch (SQLException e) {
-                System.err.println("Could not load stands, " + e);
+                plugin.getLogger().log(Level.WARNING, "Could not load stands, " + e);
             }
         }
     }
@@ -54,7 +55,7 @@ public class GameModeInventoriesStand {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            System.err.println("Could not save stands, " + e);
+            plugin.getLogger().log(Level.WARNING, "Could not save stands, " + e);
         }
     }
 }

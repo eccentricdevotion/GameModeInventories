@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 /**
  * @author eccentric_nz
@@ -48,7 +49,7 @@ public class GameModeInventoriesBlock {
             ps.setString(2, l);
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Could not remove block, " + e);
+            plugin.getLogger().log(Level.WARNING, "Could not remove block, " + e);
         }
         if (plugin.getCreativeBlocks().containsKey(gmiwc)) {
             plugin.getCreativeBlocks().get(gmiwc).remove(l);
@@ -65,7 +66,7 @@ public class GameModeInventoriesBlock {
             ps.setString(2, data.getLocation());
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Could not save block, " + e);
+            plugin.getLogger().log(Level.WARNING, "Could not save block, " + e);
         }
     }
 }

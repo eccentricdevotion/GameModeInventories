@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * @author eccentric_nz
@@ -46,7 +47,7 @@ public class GameModeInventoriesBlockLoader extends BukkitRunnable {
                 plugin.debug("Protecting blocks for chunk: " + gmiwc, GMIDebug.ALL);
             }
         } catch (SQLException e) {
-            System.err.println("Could not load blocks, " + e);
+            plugin.getLogger().log(Level.WARNING, "Could not load blocks, " + e);
         }
     }
 }
