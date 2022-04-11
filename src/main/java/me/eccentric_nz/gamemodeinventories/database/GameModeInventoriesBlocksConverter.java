@@ -34,7 +34,7 @@ public class GameModeInventoriesBlocksConverter {
     public void convertBlocksTable() {
         try {
             try (
-                    Connection connection = GameModeInventoriesConnectionPool.dbc();
+                    Connection connection = plugin.getDatabaseConnection();
                     PreparedStatement statement = connection.prepareStatement("SELECT id, location FROM " + plugin.getPrefix() + "blocks");
                     ResultSet rs = statement.executeQuery();
             ) {

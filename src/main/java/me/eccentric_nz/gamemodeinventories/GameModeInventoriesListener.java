@@ -1,6 +1,5 @@
 package me.eccentric_nz.gamemodeinventories;
 
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -65,7 +64,7 @@ public class GameModeInventoriesListener implements Listener {
                         // player changed worlds, record last location
                         // check if the player has a record for this world
                         try (
-                                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                                Connection connection = plugin.getDatabaseConnection();
                                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + plugin.getPrefix() + "worlds WHERE uuid = ? AND world = ?");
                         ) {
                             statement.setString(1, uuid);

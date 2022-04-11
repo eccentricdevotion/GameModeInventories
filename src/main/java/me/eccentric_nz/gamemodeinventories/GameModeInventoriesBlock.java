@@ -3,7 +3,7 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
+import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesMySQLConnectionPool;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesQueueData;
 import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesRecordingQueue;
 
@@ -27,7 +27,7 @@ public class GameModeInventoriesBlock {
 
     public void addBlock(String gmiwc, String l) {
         GameModeInventoriesQueueData data = new GameModeInventoriesQueueData(gmiwc, l);
-        if (GameModeInventoriesConnectionPool.isIsMySQL()) {
+        if (GameModeInventoriesMySQLConnectionPool.isIsMySQL()) {
             GameModeInventoriesRecordingQueue.addToQueue(data);
         } else {
             saveBlockNow(data);
@@ -42,7 +42,7 @@ public class GameModeInventoriesBlock {
     public void removeBlock(String gmiwc, String l) {
         String deleteQuery = "DELETE FROM " + plugin.getPrefix() + "blocks WHERE worldchunk = ? AND location = ?";
         try (
-                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                Connection connection = plugin.getDatabaseConnection();
                 PreparedStatement ps = connection.prepareStatement(deleteQuery);
         ) {
             ps.setString(1, gmiwc);
@@ -59,7 +59,7 @@ public class GameModeInventoriesBlock {
     private void saveBlockNow(GameModeInventoriesQueueData data) {
         String insertQuery = "INSERT INTO " + plugin.getPrefix() + "blocks (worldchunk, location) VALUES (?,?)";
         try (
-                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                Connection connection = plugin.getDatabaseConnection();
                 PreparedStatement ps = connection.prepareStatement(insertQuery);
         ) {
             ps.setString(1, data.getWorldChunk());

@@ -32,7 +32,7 @@ public class GameModeInventoriesBlockLoader extends BukkitRunnable {
     public void run() {
         String blocksQuery = "SELECT location FROM " + plugin.getPrefix() + "blocks WHERE worldchunk = ?";
         try (
-                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                Connection connection = plugin.getDatabaseConnection();
                 PreparedStatement psb = connection.prepareStatement(blocksQuery);
         ) {
             psb.setString(1, gmiwc);

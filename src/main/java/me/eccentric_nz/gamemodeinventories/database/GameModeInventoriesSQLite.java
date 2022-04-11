@@ -24,7 +24,7 @@ public class GameModeInventoriesSQLite {
 
     public void createTables() {
         try (
-                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                Connection connection = plugin.getDatabaseConnection();
                 Statement statement = connection.createStatement();
         ) {
             String queryInventories = "CREATE TABLE IF NOT EXISTS " + plugin.getPrefix() + "inventories (id INTEGER PRIMARY KEY NOT NULL, uuid TEXT, player TEXT, gamemode TEXT, inventory TEXT, xp REAL, armour TEXT, enderchest TEXT, attributes TEXT, armour_attributes TEXT)";

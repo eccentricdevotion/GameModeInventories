@@ -24,7 +24,7 @@ public class GameModeInventoriesMySQL {
 
     public void createTables() {
         try (
-                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                Connection connection = plugin.getDatabaseConnection();
                 Statement statement = connection.createStatement();
         ) {
             // add inventories table

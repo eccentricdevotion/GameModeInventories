@@ -3,7 +3,6 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -83,7 +82,7 @@ public class GameModeInventoriesWorldListener implements Listener {
             if (!from.getWorld().equals(to.getWorld())) {
                 String uuid = event.getPlayer().getUniqueId().toString();
                 // player changed worlds, record last location
-                try (Connection connection = GameModeInventoriesConnectionPool.dbc();
+                try (Connection connection = plugin.getDatabaseConnection();
                      // check if the player has a record for this world
                      PreparedStatement statement = connection.prepareStatement("SELECT world FROM " + plugin.getPrefix() + "worlds WHERE uuid = ? AND world = ?");) {
                     statement.setString(1, uuid);

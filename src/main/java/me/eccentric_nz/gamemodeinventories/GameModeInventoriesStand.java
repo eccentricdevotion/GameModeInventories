@@ -3,8 +3,6 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,7 +24,7 @@ public class GameModeInventoriesStand {
     public void loadStands() {
         if (plugin.getConfig().getBoolean("track_creative_place.enabled")) {
             try (
-                    Connection connection = GameModeInventoriesConnectionPool.dbc();
+                    Connection connection = plugin.getDatabaseConnection();
                     PreparedStatement statement = connection.prepareStatement("SELECT uuid FROM " + plugin.getPrefix() + "stands");
                     ResultSet rs = statement.executeQuery();
             ) {
@@ -47,7 +45,7 @@ public class GameModeInventoriesStand {
 
     public void saveStands() {
         try (
-                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                Connection connection = plugin.getDatabaseConnection();
                 PreparedStatement ps = connection.prepareStatement("INSERT INTO " + plugin.getPrefix() + "stands (uuid) VALUES (?)");
         ) {
             for (UUID uuid : plugin.getStands()) {

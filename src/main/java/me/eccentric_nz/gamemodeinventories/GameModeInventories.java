@@ -1,5 +1,6 @@
 package me.eccentric_nz.gamemodeinventories;
 
+import com.zaxxer.hikari.HikariDataSource;
 import me.eccentric_nz.gamemodeinventories.database.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -9,7 +10,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.io.File;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +36,7 @@ public class GameModeInventories extends JavaPlugin {
     private GameModeInventoriesBlockLogger blockLogger;
     private GMIDebug db_level;
     private String prefix;
+    private HikariDataSource dataSource;
 
     @Override
     public void onDisable() {
@@ -141,18 +144,29 @@ public class GameModeInventories extends JavaPlugin {
         prefix = getConfig().getString("storage.prefix");
         try {
             if (dbtype.equals("sqlite")) {
-                String path = getDataFolder() + File.separator + "GMI.db";
-                GameModeInventoriesConnectionPool pool = new GameModeInventoriesConnectionPool(path);
+                GameModeInventoriesSQLiteConnectionPool pool = new GameModeInventoriesSQLiteConnectionPool(this);
+                dataSource = pool.getHikari();
                 GameModeInventoriesSQLite sqlite = new GameModeInventoriesSQLite(this);
                 sqlite.createTables();
             } else {
-                GameModeInventoriesConnectionPool pool = new GameModeInventoriesConnectionPool();
+                GameModeInventoriesMySQLConnectionPool pool = new GameModeInventoriesMySQLConnectionPool(this);
+                dataSource = pool.getHikari();
                 GameModeInventoriesMySQL mysql = new GameModeInventoriesMySQL(this);
                 mysql.createTables();
             }
         } catch (ClassNotFoundException e) {
             getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + "Connection and Tables Error: " + e);
         }
+    }
+
+    public Connection getDatabaseConnection() {
+        Connection con = null;
+        try {
+            con = dataSource.getConnection();
+        } catch (SQLException e) {
+            debug("Could not get database connection: " + e.getMessage());
+        }
+        return con;
     }
 
     /**

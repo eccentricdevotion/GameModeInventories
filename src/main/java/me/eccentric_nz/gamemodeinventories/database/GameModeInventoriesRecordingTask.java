@@ -28,7 +28,7 @@ public class GameModeInventoriesRecordingTask implements Runnable {
             int perBatch = 1000;
             if (!GameModeInventoriesRecordingQueue.getQUEUE().isEmpty()) {
                 plugin.debug("Beginning batch insert from queue. " + System.currentTimeMillis(), GMIDebug.INFO);
-                conn = GameModeInventoriesConnectionPool.dbc();
+                conn = plugin.getDatabaseConnection();
                 // Handle dead connections
                 if (conn == null || conn.isClosed()) {
                     if (GameModeInventoriesRecordingManager.failedDbConnectionCount == 0) {
@@ -84,7 +84,7 @@ public class GameModeInventoriesRecordingTask implements Runnable {
                 if (s != null) {
                     s.close();
                 }
-                if (conn != null && GameModeInventoriesConnectionPool.isIsMySQL()) {
+                if (conn != null && GameModeInventoriesMySQLConnectionPool.isIsMySQL()) {
                     conn.close();
                 }
             } catch (SQLException ignored) {

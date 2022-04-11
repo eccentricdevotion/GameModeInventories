@@ -6,7 +6,6 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 import org.bukkit.GameMode;
 import org.bukkit.entity.*;
 import org.bukkit.entity.minecart.HopperMinecart;
@@ -48,7 +47,7 @@ public class GameModeInventoriesInventory {
         }
         String inv = GameModeInventoriesBukkitSerialization.toDatabase(player.getInventory().getContents());
         try (
-                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                Connection connection = plugin.getDatabaseConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + plugin.getPrefix() + "inventories WHERE uuid = ? AND gamemode = ?");
         ) {
             // get their current gamemode inventory from database
@@ -202,7 +201,7 @@ public class GameModeInventoriesInventory {
         String inv = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getContents());
         String arm = GameModeInventoriesBukkitSerialization.toDatabase(p.getInventory().getArmorContents());
         try (
-                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                Connection connection = plugin.getDatabaseConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT id FROM " + plugin.getPrefix() + "inventories WHERE uuid = ? AND gamemode = ?");
         ) {
             // get their current gamemode inventory from database
@@ -242,7 +241,7 @@ public class GameModeInventoriesInventory {
         String gm = p.getGameMode().name();
         // restore their inventory
         try (
-                Connection connection = GameModeInventoriesConnectionPool.dbc();
+                Connection connection = plugin.getDatabaseConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + plugin.getPrefix() + "inventories WHERE uuid = ? AND gamemode = ?");
         ) {
             // get their current gamemode inventory from database

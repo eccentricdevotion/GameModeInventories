@@ -1,7 +1,6 @@
 package me.eccentric_nz.gamemodeinventories;
 
 import com.google.common.collect.ImmutableList;
-import me.eccentric_nz.gamemodeinventories.database.GameModeInventoriesConnectionPool;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -80,7 +79,7 @@ public class GameModeInventoriesCommands implements CommandExecutor, TabComplete
                     String uuid = "00000000-0000-0000-0000-000000000000";
                     Player p = (Player) sender;
                     try (
-                            Connection connection = GameModeInventoriesConnectionPool.dbc();
+                            Connection connection = plugin.getDatabaseConnection();
                             PreparedStatement statement = connection.prepareStatement("SELECT id FROM " + plugin.getPrefix() + "inventories WHERE uuid = ? AND gamemode = 'SURVIVAL'");
                     ) {
                         if (args[1].toLowerCase().equals("save")) {
