@@ -28,6 +28,10 @@ public class GameModeInventoriesChunkLoadListener implements Listener {
             return;
         }
         Chunk chunk = event.getChunk();
+        String world = chunk.getWorld().getName();
+        if (!plugin.getConfig().getStringList("track_creative_place.worlds").contains(world)) {
+            return;
+        }
         String gmiwc = chunk.getWorld().getName() + "," + chunk.getX() + "," + chunk.getZ();
         if (!plugin.getCreativeBlocks().containsKey(gmiwc)) {
             new GameModeInventoriesBlockLoader(plugin, gmiwc).runTaskAsynchronously(plugin);
