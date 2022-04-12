@@ -37,13 +37,13 @@ public class GameModeInventoriesBlockLoader extends BukkitRunnable {
         ) {
             psb.setString(1, gmiwc);
             try (ResultSet rb = psb.executeQuery();) {
-                List<String> l = new ArrayList<>();
                 if (rb.isBeforeFirst()) {
+                    List<String> l = new ArrayList<>();
                     while (rb.next()) {
                         l.add(rb.getString("location"));
                     }
+                    plugin.getCreativeBlocks().put(gmiwc, l);
                 }
-                plugin.getCreativeBlocks().put(gmiwc, l);
                 plugin.debug("Protecting blocks for chunk: " + gmiwc, GMIDebug.ALL);
             }
         } catch (SQLException e) {
