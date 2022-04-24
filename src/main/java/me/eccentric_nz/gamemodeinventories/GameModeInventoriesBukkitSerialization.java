@@ -16,7 +16,9 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
@@ -39,6 +41,16 @@ public class GameModeInventoriesBukkitSerialization {
                 dataOutput.writeInt(inventory.length);
                 // Save every element in the list
                 for (ItemStack is : inventory) {
+                    // check for player heads with no data...
+                    if (is != null && is.getType().equals(Material.PLAYER_HEAD)) {
+                        if (is.hasItemMeta()) {
+                            SkullMeta skullMeta = (SkullMeta) is.getItemMeta();
+                            if (skullMeta.getOwnerProfile() == null) {
+                                // remove item meta
+                                is.setItemMeta(null);
+                            }
+                        }
+                    }
                     dataOutput.writeObject(is);
                 }
                 // Serialize that array
