@@ -4,8 +4,8 @@ main: me.eccentric_nz.gamemodeinventories.GameModeInventories
 name: GameModeInventories
 load: POSTWORLD
 softdepend: [ Multiverse-Core,MultiWorld,CoreProtect,LogBlock ]
-version: 3.4.2
-api-version: 1.18
+version: 3.4.3
+api-version: 1.19
 libraries:
   - com.zaxxer:HikariCP:5.0.1
 permissions:
