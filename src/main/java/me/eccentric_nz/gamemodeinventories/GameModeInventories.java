@@ -1,15 +1,6 @@
 package me.eccentric_nz.gamemodeinventories;
 
 import com.zaxxer.hikari.HikariDataSource;
-import me.eccentric_nz.gamemodeinventories.database.*;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,6 +10,14 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import me.eccentric_nz.gamemodeinventories.database.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 public class GameModeInventories extends JavaPlugin {
 
@@ -113,7 +112,7 @@ public class GameModeInventories extends JavaPlugin {
             setUpBlockLogger();
             actionRecorderTask();
         } else {
-            getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + ChatColor.RED + "This plugin requires CraftBukkit/Spigot 1.9 or higher, disabling...");
+            getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + ChatColor.RED + "This plugin requires CraftBukkit/Spigot 1.13 or higher, disabling...");
             pm.disablePlugin(this);
         }
     }
