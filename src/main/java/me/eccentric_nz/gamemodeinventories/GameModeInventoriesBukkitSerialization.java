@@ -16,6 +16,7 @@
  */
 package me.eccentric_nz.gamemodeinventories;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -26,6 +27,7 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * @author eccentric_nz
@@ -45,7 +47,9 @@ public class GameModeInventoriesBukkitSerialization {
                     if (is != null && is.getType().equals(Material.PLAYER_HEAD)) {
                         if (is.hasItemMeta()) {
                             SkullMeta skullMeta = (SkullMeta) is.getItemMeta();
-                            if (skullMeta.getOwnerProfile() == null) {
+                            boolean isHeadDatabase = Bukkit.getPluginManager().isPluginEnabled("HeadDatabase");
+                            boolean isCMI = Bukkit.getPluginManager().isPluginEnabled("CMI");
+                            if (!skullMeta.hasOwner() && !isHeadDatabase && !isCMI) {
                                 // remove item meta
                                 is.setItemMeta(null);
                             }
