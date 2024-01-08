@@ -69,7 +69,7 @@ public class GameModeInventoriesPhysicsListener implements Listener {
         willDrop.add(Material.DETECTOR_RAIL);
         willDrop.add(Material.FERN);
         willDrop.add(Material.FLOWER_POT);
-        willDrop.add(Material.GRASS);
+        willDrop.add(Material.SHORT_GRASS);
         willDrop.add(Material.GRAY_BANNER);
         willDrop.add(Material.GRAY_CARPET);
         willDrop.add(Material.GRAY_WALL_BANNER);

@@ -47,7 +47,7 @@ public class GameModeInventoriesPistonListener implements Listener {
         wouldDrop.add(Material.DARK_OAK_TRAPDOOR);
         wouldDrop.add(Material.DEAD_BUSH);
         wouldDrop.add(Material.FERN);
-        wouldDrop.add(Material.GRASS);
+        wouldDrop.add(Material.SHORT_GRASS);
         wouldDrop.add(Material.GRAY_BED);
         wouldDrop.add(Material.GREEN_BED);
         wouldDrop.add(Material.HEAVY_WEIGHTED_PRESSURE_PLATE);
