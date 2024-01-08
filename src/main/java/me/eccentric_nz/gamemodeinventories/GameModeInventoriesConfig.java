@@ -101,6 +101,7 @@ public class GameModeInventoriesConfig {
         containers.add("COMPOSTER");
         containers.add("CYAN_SHULKER_BOX");
         containers.add("DAMAGED_ANVIL");
+        containers.add("DECORATED_POT");
         containers.add("DISPENSER");
         containers.add("DROPPER");
         containers.add("ENCHANTING_TABLE");
