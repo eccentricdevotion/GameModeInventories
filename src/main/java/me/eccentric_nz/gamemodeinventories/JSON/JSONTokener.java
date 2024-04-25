@@ -49,9 +49,7 @@ public class JSONTokener {
      * @param reader A reader.
      */
     public JSONTokener(Reader reader) {
-        this.reader = reader.markSupported()
-                ? reader
-                : new BufferedReader(reader);
+        this.reader = reader.markSupported() ? reader : new BufferedReader(reader);
         eof = false;
         usePrevious = false;
         previous = 0;
@@ -175,8 +173,7 @@ public class JSONTokener {
     public char next(char c) throws JSONException {
         char n = next();
         if (n != c) {
-            throw syntaxError("Expected '" + c + "' and instead saw '"
-                    + n + "'");
+            throw syntaxError("Expected '" + c + "' and instead saw '" + n + "'");
         }
         return n;
     }
@@ -313,8 +310,7 @@ public class JSONTokener {
         StringBuilder sb = new StringBuilder();
         for (; ; ) {
             c = next();
-            if (delimiters.indexOf(c) >= 0 || c == 0
-                    || c == '\n' || c == '\r') {
+            if (delimiters.indexOf(c) >= 0 || c == 0 || c == '\n' || c == '\r') {
                 if (c != 0) {
                     back();
                 }
@@ -407,7 +403,6 @@ public class JSONTokener {
      */
     @Override
     public String toString() {
-        return " at " + index + " [character " + character + " line "
-                + line + "]";
+        return " at " + index + " [character " + character + " line " + line + "]";
     }
 }

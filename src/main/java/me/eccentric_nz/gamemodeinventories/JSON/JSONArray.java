@@ -359,8 +359,7 @@ public class JSONArray {
      * @return An object value, or null if there is no object at that index.
      */
     public Object opt(int index) {
-        return (index < 0 || index >= this.length()) ? null : this.myArrayList
-                .get(index);
+        return (index < 0 || index >= this.length()) ? null : this.myArrayList.get(index);
     }
 
     /**
@@ -514,8 +513,7 @@ public class JSONArray {
      */
     public String optString(int index, String defaultValue) {
         Object object = this.opt(index);
-        return JSONObject.NULL.equals(object) ? defaultValue : object
-                .toString();
+        return JSONObject.NULL.equals(object) ? defaultValue : object.toString();
     }
 
     /**
@@ -795,16 +793,14 @@ public class JSONArray {
      * @return The writer.
      * @throws JSONException
      */
-    Writer write(Writer writer, int indentFactor, int indent)
-            throws JSONException {
+    Writer write(Writer writer, int indentFactor, int indent) throws JSONException {
         try {
             boolean commanate = false;
             int length = this.length();
             writer.write('[');
 
             if (length == 1) {
-                JSONObject.writeValue(writer, this.myArrayList.get(0),
-                        indentFactor, indent);
+                JSONObject.writeValue(writer, this.myArrayList.get(0), indentFactor, indent);
             } else if (length != 0) {
                 int newindent = indent + indentFactor;
 
@@ -816,8 +812,7 @@ public class JSONArray {
                         writer.write('\n');
                     }
                     JSONObject.indent(writer, newindent);
-                    JSONObject.writeValue(writer, this.myArrayList.get(i),
-                            indentFactor, newindent);
+                    JSONObject.writeValue(writer, this.myArrayList.get(i), indentFactor, newindent);
                     commanate = true;
                 }
                 if (indentFactor > 0) {
