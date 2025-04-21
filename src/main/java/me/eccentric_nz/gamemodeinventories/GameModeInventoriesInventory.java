@@ -43,7 +43,7 @@ public class GameModeInventoriesInventory {
         String name = player.getName();
         String currentGM = player.getGameMode().name();
         if (saveXP) {
-            xpc = new GameModeInventoriesXPCalculator(player);
+            xpc = new GameModeInventoriesXPCalculator(player, plugin);
         }
         String inv = GameModeInventoriesBukkitSerialization.toDatabase(player.getInventory().getContents());
         try (

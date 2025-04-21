@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 /**
  * @author desht
@@ -18,6 +19,8 @@ import java.util.Arrays;
  * Credit to comphenix for further contributions: See http://forums.bukkit.org/threads/experiencemanager-was-experienceutils-make-giving-taking-exp-a-bit-more-intuitive.54450/page-3#post-1273622
  */
 public class GameModeInventoriesXPCalculator {
+
+    private final GameModeInventories plugin;
 
     // this is to stop the lookup table growing without control
     private static int hardMaxLevel = 100000;
@@ -39,10 +42,11 @@ public class GameModeInventoriesXPCalculator {
      * @param player the player for this GameModeInventoriesXPCalculator object
      * @throws IllegalArgumentException if the player is null
      */
-    GameModeInventoriesXPCalculator(Player player) {
+    GameModeInventoriesXPCalculator(Player player, GameModeInventories plugin) {
         Preconditions.checkNotNull(player, "Player cannot be null");
         this.player = new WeakReference<>(player);
         playerName = player.getName();
+        this.plugin = plugin;
     }
 
     /**
@@ -151,24 +155,37 @@ public class GameModeInventoriesXPCalculator {
         setExp(0, amt);
     }
 
+    /**
+     * This will generate an overflow when a player has more than 24791 levels
+     * To properly fix this 2 variables should be saved in the db: levels, points
+     *
+     * @param base Player's XP when the method is called
+     * @param amt Amount of XP
+     */
     private void setExp(double base, double amt) {
-        int xp = (int) Math.max(base + amt, 0);
+        double xp = Math.max(base + amt, 0);
 
         Player p = getPlayer();
         int curLvl = p.getLevel();
-        int newLvl = getLevelForExp(xp);
+        int newLvl = getLevelForExp((int)xp);
 
         // Increment level
         if (curLvl != newLvl) {
             p.setLevel(newLvl);
         }
+
         // Increment total experience - this should force the server to send an update packet
         if (xp > base) {
-            p.setTotalExperience(p.getTotalExperience() + xp - (int) base);
+            p.setTotalExperience((int)((double)p.getTotalExperience() + xp - base));
         }
 
-        double pct = (base - getXpForLevel(newLvl) + amt) / (double) (getXpNeededToLevelUp(newLvl));
-        p.setExp((float) pct);
+        double pct = (base - (double)getXpForLevel(newLvl) + amt) / (double) (getXpNeededToLevelUp(newLvl));
+
+        if(pct>=0 && pct<=1) {
+            p.setExp((float) pct);
+        }else{
+            plugin.getLogger().log(Level.SEVERE, "User " + p.getName() + " had more than 24791 levels");
+        }
     }
 
     /**
