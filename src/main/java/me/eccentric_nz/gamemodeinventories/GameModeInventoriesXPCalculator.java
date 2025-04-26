@@ -94,7 +94,7 @@ public class GameModeInventoriesXPCalculator {
      * increase by one when switching gamemodes
      *
      * @param exp the amount to check for
-     * @return the level
+     * @return the level that a player with this amount total XP would be
      * @throws IllegalArgumentException if the given XP is less than 0
      */
     public static int getLevelForExp(double exp) {
