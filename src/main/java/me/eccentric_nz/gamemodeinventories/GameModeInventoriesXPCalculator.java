@@ -75,7 +75,7 @@ public class GameModeInventoriesXPCalculator {
         Player p = getPlayer();
 
         int lvl = p.getLevel();
-        return getXpForLevel(lvl) + Math.floor(getXpNeededToLevelUp(lvl) * p.getExp());
+        return getXpForLevel(lvl) + Math.round(getXpNeededToLevelUp(lvl) * p.getExp());
     }
 
     /**
