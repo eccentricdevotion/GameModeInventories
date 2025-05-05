@@ -69,6 +69,16 @@ public class GameModeInventories extends JavaPlugin {
                 saveConfig();
                 plugin.getLogger().log(Level.INFO, "[GameModeInventories] Blocks conversion successful :)");
             }
+            // convert xp if necessary
+            if (!getConfig().getBoolean("xp_conversion_done")) {
+                if (new GameModeInventoriesXPConverter(this).convertXPColumn()) {
+                    getConfig().set("xp_conversion_done", true);
+                    saveConfig();
+                    plugin.getLogger().log(Level.INFO, "[GameModeInventories] XP conversion successful :)");
+                } else {
+                    plugin.getLogger().severe("[GameModeInventories] XP conversion failed");
+                }
+            }
             // check if creative world exists
             if (getConfig().getBoolean("creative_world.switch_to")) {
                 World creative = getServer().getWorld(getConfig().getString("creative_world.world"));

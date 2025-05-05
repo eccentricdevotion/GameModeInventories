@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.eccentric_nz.gamemodeinventories</groupId>
     <artifactId>GameModeInventories</artifactId>
-    <version>3.5.0</version>
+    <version>3.6.0</version>
     <name>GameModeInventories</name>
     <!-- use a profile here so that the Jenkins build can fetch the
     CoreProtect dependency locally - there is no repo available! -->

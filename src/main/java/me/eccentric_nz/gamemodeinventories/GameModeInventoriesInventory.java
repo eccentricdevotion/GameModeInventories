@@ -83,10 +83,10 @@ public class GameModeInventoriesInventory {
 
                 if (saveXP) {
                     // get players XP
-                    int a = xpc.getCurrentExp();
+                    double a = xpc.getCurrentExp();
                     String xpQuery = "UPDATE " + plugin.getPrefix() + "inventories SET xp = ? WHERE id = ?";
                     try (PreparedStatement psx = connection.prepareStatement(xpQuery);) {
-                        psx.setInt(1, a);
+                        psx.setDouble(1, a);
                         psx.setInt(2, id);
                         psx.executeUpdate();
                     }
@@ -125,7 +125,7 @@ public class GameModeInventoriesInventory {
                     statement.setString(1, uuid);
                     statement.setString(2, newGM.name());
                     try (ResultSet rsNewInv = statement.executeQuery();) {
-                        int amount;
+                        double amount;
                         if (rsNewInv.next()) {
                             // set their inventory to the saved one
                             String savedinventory = rsNewInv.getString("inventory");
@@ -136,7 +136,7 @@ public class GameModeInventoriesInventory {
                                 stacks = GameModeInventoriesBukkitSerialization.fromDatabase(savedinventory);
                             }
                             player.getInventory().setContents(stacks);
-                            amount = rsNewInv.getInt("xp");
+                            amount = rsNewInv.getDouble("xp");
                             if (saveArmour) {
                                 String savedarmour = rsNewInv.getString("armour");
                                 if (savedarmour != null) {

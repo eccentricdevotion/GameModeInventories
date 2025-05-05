@@ -82,6 +82,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("xp", true);
         boolOptions.put("uuid_conversion_done", false);
         boolOptions.put("blocks_conversion_done", false);
+        boolOptions.put("xp_conversion_done", false);
         boolOptions.put("storage.mysql.test_connection", false);
         boolOptions.put("storage.mysql.useSSL", true);
         containers.add("ANVIL");
