@@ -113,7 +113,7 @@ public class GameModeInventoriesXPCalculator {
      * @return the amount of experience at this level in the level bar
      * @throws IllegalArgumentException if the level is less than 0
      */
-    private static int getXpNeededToLevelUp(int level) {
+    public static int getXpNeededToLevelUp(int level) {
         Preconditions.checkArgument(level >= 0, "Level may not be negative.");
         return level > 30
             ? 9 * level - 158
