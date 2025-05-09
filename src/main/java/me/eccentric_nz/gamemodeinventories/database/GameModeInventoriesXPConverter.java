@@ -22,8 +22,8 @@ public class GameModeInventoriesXPConverter {
     // Old methods optimized a bit
     private static int oldGetLevelForExp(double oldExp) {
         return (oldExp < 255)
-                ? (int)(oldExp / 17)
-                : (oldExp < 887)
+            ? (int)(oldExp / 17)
+            : (oldExp < 887)
                 ? (int)((29.5 + Math.sqrt(29.5 * 29.5 - 4 * 1.5 * (360 - oldExp))) / (2 * 1.5))
                 : (int)((151.5 + Math.sqrt(151.5 * 151.5 - 4 * 3.5 * (2220 - oldExp))) / (2 * 3.5));
     }
