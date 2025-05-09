@@ -42,7 +42,6 @@ public class GameModeInventoriesXPConverter {
             : oldLevel >= 16
                 ? 1.5 * oldLevel * oldLevel - 29.5 * oldLevel + 360
                 : 17.0 * oldLevel;
-
     }
 
     // Conversion
