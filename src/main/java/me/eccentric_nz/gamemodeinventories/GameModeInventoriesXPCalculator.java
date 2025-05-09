@@ -84,7 +84,7 @@ public class GameModeInventoriesXPCalculator {
      * @return Gets the players current experience points towards the next level.
      */
     public static float getFractionalExp(int level, double exp) {
-        return (float) (exp - getXpForLevel(level)/getXpNeededToLevelUp(level));
+        return (float) ((exp - getXpForLevel(level))/getXpNeededToLevelUp(level));
     }
 
     /**
