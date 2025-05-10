@@ -84,7 +84,7 @@ public class GameModeInventoriesXPCalculator {
      * @return Gets the players current experience points towards the next level.
      */
     public static float getFractionalExp(int level, double exp) {
-        return (float)(exp - getXpForLevel(level))/getXpNeededToLevelUp(level);
+        return (float) ((exp - getXpForLevel(level))/getXpNeededToLevelUp(level));
     }
 
     /**
@@ -113,7 +113,7 @@ public class GameModeInventoriesXPCalculator {
      * @return the amount of experience at this level in the level bar
      * @throws IllegalArgumentException if the level is less than 0
      */
-    public static int getXpNeededToLevelUp(int level) {
+    public static double getXpNeededToLevelUp(int level) {
         Preconditions.checkArgument(level >= 0, "Level may not be negative.");
         return level > 30
             ? 9 * level - 158

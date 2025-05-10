@@ -4,7 +4,6 @@ import me.eccentric_nz.gamemodeinventories.GameModeInventories;
 import me.eccentric_nz.gamemodeinventories.GameModeInventoriesXPCalculator;
 import org.bukkit.util.FileUtil;
 import java.io.File;
-import java.util.Arrays;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,67 +17,38 @@ public class GameModeInventoriesXPConverter {
 
     public GameModeInventoriesXPConverter(GameModeInventories plugin) {
         this.plugin = plugin;
-        initLookupTables(1000000);
     }
 
-    // Old methods
-    private static int xpTotalToReachLevel[];
-
-    private static void initLookupTables(int maxLevel) {
-        xpTotalToReachLevel = new int[maxLevel];
-
-        for (int i = 0; i < xpTotalToReachLevel.length; i++) {
-            xpTotalToReachLevel[i] = i >= 30
-                    ? (int)(3.5 * i * i - 151.5 * i + 2220)
-                    : i >= 16
-                    ? (int)(1.5 * i * i - 29.5 * i + 360)
-                    : 17 * i;
-        }
-
+    // Old methods optimized a bit
+    private static int oldGetLevelForExp(double oldExp) {
+        return (oldExp < 255)
+            ? (int)(oldExp / 17)
+            : (oldExp < 887)
+                ? (int)((29.5 + Math.sqrt(29.5 * 29.5 - 4 * 1.5 * (360 - oldExp))) / (2 * 1.5))
+                : (int)((151.5 + Math.sqrt(151.5 * 151.5 - 4 * 3.5 * (2220 - oldExp))) / (2 * 3.5));
     }
 
-    private static int oldGetLevelForExp(int exp) {
-        if (exp <= 0) {
-            return 0;
-        }
-        if (exp > xpTotalToReachLevel[xpTotalToReachLevel.length - 1]) {
-            // need to extend the lookup tables
-            int newMax = oldCalculateLevelForExp(exp) * 2;
-            initLookupTables(newMax);
-        }
-        int pos = Arrays.binarySearch(xpTotalToReachLevel, exp);
-        return pos < 0 ? -pos - 2 : pos;
+    private static double oldGetXpNeededToLevelUp(int oldLevel) {
+        return oldLevel > 30
+            ? 62.0 + (oldLevel - 30.0) * 7.0
+            : oldLevel >= 16
+                ? 17.0 + (oldLevel - 15.0) * 3.0
+                : 17.0;
     }
 
-    private static int oldCalculateLevelForExp(int exp) {
-        int level = 0;
-        int curExp = 7; // level 1
-        int incr = 10;
-
-        while (curExp <= exp) {
-            curExp += incr;
-            level++;
-            incr += (level % 2 == 0) ? 3 : 4;
-        }
-        return level;
-    }
-
-    private static int oldGetXpNeededToLevelUp(int level) {
-        return level > 30 ? 62 + (level - 30) * 7 : level >= 16 ? 17 + (level - 15) * 3 : 17;
-    }
-
-    private static int oldGetXpForLevel(int level) {
-        if (level >= xpTotalToReachLevel.length) {
-            initLookupTables(level * 2);
-        }
-        return xpTotalToReachLevel[level];
+    private static double oldGetXpForLevel(int oldLevel) {
+        return oldLevel >= 30
+            ? 3.5 * oldLevel * oldLevel - 151.5 * oldLevel + 2220
+            : oldLevel >= 16
+                ? 1.5 * oldLevel * oldLevel - 29.5 * oldLevel + 360
+                : 17.0 * oldLevel;
     }
 
     // Conversion
     private double convertXp(double oldXp) {
         if(oldXp < 0) return 0;
-        int oldLevel = oldGetLevelForExp((int)oldXp);
-        double oldPct = (oldXp - oldGetXpForLevel(oldLevel)) / (double) (oldGetXpNeededToLevelUp(oldLevel));
+        int oldLevel = oldGetLevelForExp(oldXp);
+        double oldPct = (oldXp - oldGetXpForLevel(oldLevel)) / oldGetXpNeededToLevelUp(oldLevel);
         return GameModeInventoriesXPCalculator.getXpForLevel(oldLevel) + Math.round(GameModeInventoriesXPCalculator.getXpNeededToLevelUp(oldLevel) * oldPct);
     }
 
