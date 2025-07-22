@@ -5,7 +5,7 @@ name: GameModeInventories
 load: POSTWORLD
 softdepend: [ Multiverse-Core,MultiWorld,CoreProtect,LogBlock ]
 version: 3.6.1
-api-version: '1.20.5'
+api-version: '1.21.5'
 libraries:
   - com.zaxxer:HikariCP:5.0.1
 permissions:

@@ -73,7 +73,7 @@
         <dependency>
             <groupId>de.diddiz</groupId>
             <artifactId>LogBlock</artifactId>
-            <version>1.20.0.0-SNAPSHOT</version>
+            <version>1.21.8.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>system</scope>
             <systemPath>${basedir}/lib/LogBlock.jar</systemPath>

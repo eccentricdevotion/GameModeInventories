@@ -53,16 +53,13 @@ public class GameModeInventoriesXPCalculator {
 
     private void setExp(double base, double amt) {
         double xp = Math.max(base + amt, 0);
-
         Player p = getPlayer();
         int curLvl = p.getLevel();
         int newLvl = getLevelForExp(xp);
-
-        // Increment level
+        // increment level
         if (curLvl != newLvl) {
             p.setLevel(newLvl);
         }
-
         p.setExp(getFractionalExp(newLvl, xp));
     }
 
@@ -73,7 +70,6 @@ public class GameModeInventoriesXPCalculator {
      */
     double getCurrentExp() {
         Player p = getPlayer();
-
         int lvl = p.getLevel();
         return getXpForLevel(lvl) + Math.round(getXpNeededToLevelUp(lvl) * p.getExp());
     }
@@ -84,7 +80,7 @@ public class GameModeInventoriesXPCalculator {
      * @return Gets the players current experience points towards the next level.
      */
     public static float getFractionalExp(int level, double exp) {
-        return (float) ((exp - getXpForLevel(level))/getXpNeededToLevelUp(level));
+        return (float) ((exp - getXpForLevel(level)) / getXpNeededToLevelUp(level));
     }
 
     /**
@@ -100,10 +96,10 @@ public class GameModeInventoriesXPCalculator {
     public static int getLevelForExp(double exp) {
         Preconditions.checkArgument(exp >= 0, "Experience may not be negative.");
         return exp > 1507
-            ? (int)((325 + Math.sqrt(72 * exp - 54215)) / 18)
-            : exp > 352
-                ? (int)((81 + Math.sqrt(40 * exp - 7839)) / 10)
-                : (int)(Math.sqrt(exp + 9) - 3);
+                ? (int) ((325 + Math.sqrt(72 * exp - 54215)) / 18)
+                : exp > 352
+                ? (int) ((81 + Math.sqrt(40 * exp - 7839)) / 10)
+                : (int) (Math.sqrt(exp + 9) - 3);
     }
 
     /**
@@ -116,8 +112,8 @@ public class GameModeInventoriesXPCalculator {
     public static double getXpNeededToLevelUp(int level) {
         Preconditions.checkArgument(level >= 0, "Level may not be negative.");
         return level > 30
-            ? 9 * level - 158
-            : level > 15
+                ? 9 * level - 158
+                : level > 15
                 ? 5 * level - 38
                 : 2 * level + 7;
     }
@@ -132,9 +128,9 @@ public class GameModeInventoriesXPCalculator {
     public static double getXpForLevel(int level) {
         Preconditions.checkArgument(level >= 0, "Level may not be negative.");
         return level > 31
-            ? 4.5 * level * level - 162.5 * level + 2220
-            : level > 16
+                ? 4.5 * level * level - 162.5 * level + 2220
+                : level > 16
                 ? 2.5 * level * level - 40.5 * level + 360
-                : (double)level * level + 6 * level;
+                : (double) level * level + 6 * level;
     }
 }
