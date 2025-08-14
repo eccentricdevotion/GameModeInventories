@@ -30,12 +30,12 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Delete old release assets
-      uses: mknejp/delete-release-assets@v1
-      with:
-        assets: '*.jar' # name of asset to delete
-        tag: 'continuous'
-        token: ${{ secrets.GMI_WORKFLOW }}
+   # - name: Delete old release assets
+   #   uses: mknejp/delete-release-assets@v1
+   #   with:
+   #    assets: '*.jar' # name of asset to delete
+   #     tag: 'continuous'
+   #     token: ${{ secrets.GMI_WORKFLOW }}
 
     - name: Upload build artifacts to release
       uses: softprops/action-gh-release@v2
