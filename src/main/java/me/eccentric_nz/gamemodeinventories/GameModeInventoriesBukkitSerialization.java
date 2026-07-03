@@ -22,12 +22,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
-import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
+import java.util.Base64;
 
 /**
  * @author eccentric_nz
@@ -59,7 +59,7 @@ public class GameModeInventoriesBukkitSerialization {
                 }
                 // Serialize that array
             }
-            return Base64Coder.encodeLines(outputStream.toByteArray());
+            return Base64.getEncoder().encodeToString(outputStream.toByteArray());
         } catch (IOException e) {
             throw new IllegalStateException("Unable to save item stacks.", e);
         }
@@ -67,7 +67,7 @@ public class GameModeInventoriesBukkitSerialization {
 
     public static ItemStack[] fromDatabase(String data) throws IOException {
         try {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64.getMimeDecoder().decode(data));
             ItemStack[] inventory;
             try (BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream)) {
                 int size = dataInput.readInt();
