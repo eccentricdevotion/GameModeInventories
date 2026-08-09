@@ -1,0 +1,23 @@
+name: GameModeInventories
+version: 3.7.0
+description: Allow players to have separate inventories for each game mode (Creative and Survival).
+main: me.eccentric_nz.gamemodeinventories.GameModeInventories
+dependencies:
+  server:
+    Multiverse-Core:
+      load: AFTER
+      required: false
+    MultiWorld:
+      load: AFTER
+      required: false
+    CoreProtect:
+      load: AFTER
+      required: false
+    LogBlock:
+      load: AFTER
+      required: false
+    WorldGuard:
+      load: BEFORE
+      required: false
+api-version: '26.2'
+loader: me.eccentric_nz.gamemodeinventories.GMILibraryLoader

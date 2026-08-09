@@ -5,8 +5,8 @@ name: GameModeInventories
 load: POSTWORLD
 softdepend: [ Multiverse-Core,MultiWorld,CoreProtect,LogBlock ]
 loadbefore: [WorldGuard]
-version: 3.6.1
-api-version: '1.21.5'
+version: 3.7.0
+api-version: '26.2'
 libraries:
   - com.zaxxer:HikariCP:5.0.1
 permissions:
@@ -24,9 +24,4 @@ permissions:
     description: Allow players to switch to Gamemode SPECTATOR.
   gamemodeinventories.admin:
     default: op
-    description: Allow players to change config options.
-commands:
-  gmi:
-    permissions: gamemodeinventories.admin
-    description: Allow players to change config options.
-    usage: /<command> [config option]
+    description: Allow players to change config options, save and load kits.
