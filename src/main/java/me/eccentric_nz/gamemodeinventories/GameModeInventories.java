@@ -1,6 +1,17 @@
 package me.eccentric_nz.gamemodeinventories;
 
 import com.zaxxer.hikari.HikariDataSource;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import me.eccentric_nz.gamemodeinventories.brigadier.CommandNode;
+import me.eccentric_nz.gamemodeinventories.database.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,14 +21,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import me.eccentric_nz.gamemodeinventories.database.*;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 public class GameModeInventories extends JavaPlugin {
 
@@ -113,9 +116,8 @@ public class GameModeInventories extends JavaPlugin {
             pm.registerEvents(new GameModeInventoriesEntityListener(this), this);
             pm.registerEvents(new GameModeInventoriesPhysicsListener(this), this);
             pm.registerEvents(new GameModeInventoriesVillagerListener(this), this);
-            GameModeInventoriesCommands command = new GameModeInventoriesCommands(this);
-            getCommand("gmi").setExecutor(command);
-            getCommand("gmi").setTabCompleter(command);
+            this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands ->
+                    commands.registrar().register(new CommandNode(this).build(), List.of("gmi")));
             new GameModeInventoriesStand(this).loadStands();
             loadBlackList();
             loadNoTrackList();
