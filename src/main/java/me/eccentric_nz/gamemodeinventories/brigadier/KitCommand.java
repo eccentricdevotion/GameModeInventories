@@ -1,7 +1,7 @@
 package me.eccentric_nz.gamemodeinventories.brigadier;
 
 import me.eccentric_nz.gamemodeinventories.GameModeInventories;
-import me.eccentric_nz.gamemodeinventories.GameModeInventoriesBukkitSerialization;
+import me.eccentric_nz.gamemodeinventories.GameModeInventoriesSerialization;
 import me.eccentric_nz.gamemodeinventories.GameModeInventoriesJSONSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +21,7 @@ public class KitCommand {
                 PreparedStatement statement = connection.prepareStatement("SELECT id FROM " + plugin.getPrefix() + "inventories WHERE uuid = ? AND gamemode = 'SURVIVAL'");
         ) {
             if (action.equals("save")) {
-                String inv = GameModeInventoriesBukkitSerialization.toDatabase(player.getInventory().getContents());
+                String inv = GameModeInventoriesSerialization.toDatabase(player.getInventory().getContents());
                 // get their current gamemode inventory from database
                 statement.setString(1, uuid);
                 try (ResultSet rsInv = statement.executeQuery();) {
@@ -59,7 +59,7 @@ public class KitCommand {
                                 if (savedinventory.startsWith("[")) {
                                     i = GameModeInventoriesJSONSerialization.toItemStacks(savedinventory);
                                 } else {
-                                    i = GameModeInventoriesBukkitSerialization.fromDatabase(savedinventory);
+                                    i = GameModeInventoriesSerialization.fromDatabase(savedinventory);
                                 }
                                 player.getInventory().setContents(i);
                             } catch (IOException e) {

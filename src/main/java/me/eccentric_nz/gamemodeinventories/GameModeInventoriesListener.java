@@ -46,6 +46,9 @@ public class GameModeInventoriesListener implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onGameModeChange(PlayerGameModeChangeEvent event) {
         Player p = event.getPlayer();
+        if (p.isDead()) {
+            return;
+        }
         GameMode newGM = event.getNewGameMode();
         if (newGM.equals(GameMode.SPECTATOR) && plugin.getConfig().getBoolean("restrict_spectator") && !p.hasPermission("gamemodeinventories.spectator")) {
             event.setCancelled(true);

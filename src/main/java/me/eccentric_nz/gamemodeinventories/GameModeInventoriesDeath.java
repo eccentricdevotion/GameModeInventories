@@ -29,14 +29,13 @@ public class GameModeInventoriesDeath implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        assert (event.getEntity() instanceof Player);
-        Player p = event.getEntity();
-        if (p.hasPermission("gamemodeinventories.death") && plugin.getConfig().getBoolean("save_on_death")) {
+        Player player = event.getEntity();
+        if (player.hasPermission("gamemodeinventories.death") && plugin.getConfig().getBoolean("save_on_death")) {
             // save their inventory
-            plugin.getInventoryHandler().saveOnDeath(p);
+            plugin.getInventoryHandler().saveOnDeath(player);
             event.getDrops().clear();
         }
-        if (p.getGameMode().equals(GameMode.CREATIVE) && plugin.getConfig().getBoolean("no_drops")) {
+        if (player.getGameMode().equals(GameMode.CREATIVE) && plugin.getConfig().getBoolean("no_drops")) {
             event.getDrops().clear();
         }
     }

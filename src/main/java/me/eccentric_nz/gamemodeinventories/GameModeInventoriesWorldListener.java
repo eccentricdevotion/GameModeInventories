@@ -83,8 +83,8 @@ public class GameModeInventoriesWorldListener implements Listener {
                 String uuid = event.getPlayer().getUniqueId().toString();
                 // player changed worlds, record last location
                 try (Connection connection = plugin.getDatabaseConnection();
-                     // check if the player has a record for this world
-                     PreparedStatement statement = connection.prepareStatement("SELECT world FROM " + plugin.getPrefix() + "worlds WHERE uuid = ? AND world = ?");) {
+                    // check if the player has a record for this world
+                    PreparedStatement statement = connection.prepareStatement("SELECT world FROM " + plugin.getPrefix() + "worlds WHERE uuid = ? AND world = ?")) {
                     statement.setString(1, uuid);
                     statement.setString(2, from.getWorld().getName());
                     try (ResultSet rs = statement.executeQuery();) {
