@@ -12,12 +12,26 @@ no_wither_spawn: false
 no_golem_spawn: false
 remove_potions: true
 restrict_creative: false
+# Allow creative players to break non-empty containers while restrict_creative is enabled.
+# Uses normal Minecraft drops; set no_pickups: true to block item pickup in creative.
+# Container copying and pre-filled placement restrictions remain enabled.
+allow_creative_container_break: false
+# Automatically add future default containers after the first migration.
+# Existing configs first receive commented suggestions: run /gmi auto-update-container-config to include all defaults and enable updates.
+# To skip the current migration and disable automatic updates: /gmi auto-update-container-config false
+# Set to false to keep your list unchanged and review future updates manually.
+auto_update_containers: true
+# Managed by the plugin; leave this value unchanged.
+containers_version: 1
 containers:
+  - ACACIA_SHELF
   - ANVIL
+  - BAMBOO_SHELF
   - BARREL
   - BEACON
   - BEE_NEST
   - BEEHIVE
+  - BIRCH_SHELF
   - BLACK_SHULKER_BOX
   - BLAST_FURNACE
   - BLUE_SHULKER_BOX
@@ -25,16 +39,23 @@ containers:
   - BROWN_SHULKER_BOX
   - CAMPFIRE
   - CARTOGRAPHY_TABLE
+  - CHERRY_SHELF
   - CHEST
   - CHIPPED_ANVIL
+  - CHISELED_BOOKSHELF
   - COMPOSTER
+  - COPPER_CHEST
+  - CRAFTER
+  - CRIMSON_SHELF
   - CYAN_SHULKER_BOX
   - DAMAGED_ANVIL
+  - DARK_OAK_SHELF
   - DECORATED_POT
   - DISPENSER
   - DROPPER
   - ENCHANTING_TABLE
   - ENDER_CHEST
+  - EXPOSED_COPPER_CHEST
   - FLETCHING_TABLE
   - FURNACE
   - GRAY_SHULKER_BOX
@@ -42,22 +63,35 @@ containers:
   - GRINDSTONE
   - HOPPER
   - JUKEBOX
+  - JUNGLE_SHELF
   - LECTERN
   - LIGHT_BLUE_SHULKER_BOX
   - LIGHT_GRAY_SHULKER_BOX
   - LIME_SHULKER_BOX
   - LOOM
   - MAGENTA_SHULKER_BOX
+  - MANGROVE_SHELF
+  - OAK_SHELF
   - ORANGE_SHULKER_BOX
+  - OXIDIZED_COPPER_CHEST
+  - PALE_OAK_SHELF
   - PINK_SHULKER_BOX
+  - POPLAR_SHELF
   - PURPLE_SHULKER_BOX
   - RED_SHULKER_BOX
   - SHULKER_BOX
   - SMITHING_TABLE
   - SMOKER
   - SOUL_CAMPFIRE
+  - SPRUCE_SHELF
   - STONECUTTER
   - TRAPPED_CHEST
+  - WARPED_SHELF
+  - WAXED_COPPER_CHEST
+  - WAXED_EXPOSED_COPPER_CHEST
+  - WAXED_OXIDIZED_COPPER_CHEST
+  - WAXED_WEATHERED_COPPER_CHEST
+  - WEATHERED_COPPER_CHEST
   - WHITE_SHULKER_BOX
   - YELLOW_SHULKER_BOX
 save_on_death: true
@@ -91,6 +125,11 @@ commands:
 restrict_spectator: false
 bypass:
   inventories: true
+  # These switches allow OPs / gamemodeinventories.bypass holders to bypass each protection.
+  # Individual gamemodeinventories.bypass.container-* permissions bypass it independently.
+  container-copy: false
+  container-place: false
+  container-break: false
   items: true
   blacklist: false
   survival: false

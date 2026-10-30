@@ -2,11 +2,13 @@ package me.eccentric_nz.gamemodeinventories.brigadier;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import me.eccentric_nz.gamemodeinventories.GameModeInventories;
+import me.eccentric_nz.gamemodeinventories.GameModeInventoriesConfig;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -20,12 +22,16 @@ public class CommandNode {
     public CommandNode(GameModeInventories plugin) {
         this.plugin = plugin;
         firstArgs.put("armor", "armor");
+        firstArgs.put("allow_creative_container_break", "allow_creative_container_break");
         firstArgs.put("attached_block", "track_creative_place.attached_block");
         firstArgs.put("break_bedrock", "break_bedrock");
         firstArgs.put("break_no_drop", "track_creative_place.break_no_drop");
         firstArgs.put("bypass.blacklist", "bypass.blacklist");
         firstArgs.put("bypass.commands", "bypass.commands");
         firstArgs.put("bypass.inventories", "bypass.inventories");
+        firstArgs.put("bypass.container-copy", "bypass.container-copy");
+        firstArgs.put("bypass.container-place", "bypass.container-place");
+        firstArgs.put("bypass.container-break", "bypass.container-break");
         firstArgs.put("bypass.items", "bypass.items");
         firstArgs.put("bypass.survival", "bypass.survival");
         firstArgs.put("bypass.trades", "bypass.trades");
@@ -68,6 +74,11 @@ public class CommandNode {
                             }
                             return Command.SINGLE_SUCCESS;
                         }))
+                .then(Commands.literal("auto-update-container-config")
+                        .executes(ctx -> setContainerAutoUpdate(ctx.getSource(), true))
+                        .then(Commands.argument("enabled", BoolArgumentType.bool())
+                                .executes(ctx -> setContainerAutoUpdate(ctx.getSource(),
+                                        BoolArgumentType.getBool(ctx, "enabled")))))
                 .then(Commands.literal("kit")
                         .requires(ctx -> ctx.getSender() instanceof Player)
                         .then(Commands.argument("action", StringArgumentType.word())
@@ -81,4 +92,17 @@ public class CommandNode {
                 );
         return command.build();
     }
+
+    private int setContainerAutoUpdate(CommandSourceStack source, boolean enabled) {
+        int added = new GameModeInventoriesConfig(plugin).setAutoUpdateContainers(enabled);
+        if (enabled) {
+            plugin.reloadContainers();
+        }
+        String message = enabled
+                ? String.format(plugin.getM().getMessage().get("CONTAINERS_AUTO_UPDATE_ENABLED"), added)
+                : plugin.getM().getMessage().get("CONTAINERS_AUTO_UPDATE_DISABLED");
+        source.getSender().sendMessage(plugin.MY_PLUGIN_NAME + message);
+        return Command.SINGLE_SUCCESS;
+    }
+
 }

@@ -12,8 +12,9 @@ import java.util.concurrent.CompletableFuture;
 public class ConfigSuggestions {
 
     private static final Set<String> CMD_ARGS = Set.of(
-            "armor", "attached_block", "break_bedrock", "break_no_drop", "bypass.blacklist",
+            "armor", "allow_creative_container_break", "attached_block", "break_bedrock", "break_no_drop", "bypass.blacklist",
             "bypass.commands", "bypass.inventories", "bypass.items", "bypass.survival", "bypass.trades",
+            "bypass.container-copy", "bypass.container-place", "bypass.container-break",
             "command_blacklist", "creative_blacklist", "debug", "dont_spam_chat", "enderchest",
             "no_creative_pvp", "no_drops", "no_falling_drops", "no_pickups", "no_villager_trade",
             "no_golem_spawn", "no_wither_spawn", "no_seeds_from_pumpkin", "no_piston_move",

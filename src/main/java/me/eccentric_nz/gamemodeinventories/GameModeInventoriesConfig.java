@@ -18,6 +18,13 @@ import java.util.logging.Level;
  */
 public class GameModeInventoriesConfig {
 
+    // Append a new batch for each container version; never change an already released batch.
+    private static final List<List<String>> CONTAINER_UPDATES = List.of(
+            // Container config version 1: defaults updated for Minecraft 26.3.
+            List.of("CHISELED_BOOKSHELF", "CRAFTER", "COPPER_CHEST", "EXPOSED_COPPER_CHEST", "WEATHERED_COPPER_CHEST", "OXIDIZED_COPPER_CHEST", "WAXED_COPPER_CHEST", "WAXED_EXPOSED_COPPER_CHEST", "WAXED_WEATHERED_COPPER_CHEST", "WAXED_OXIDIZED_COPPER_CHEST", "ACACIA_SHELF", "BAMBOO_SHELF", "BIRCH_SHELF", "CHERRY_SHELF", "CRIMSON_SHELF", "DARK_OAK_SHELF", "JUNGLE_SHELF", "MANGROVE_SHELF", "OAK_SHELF", "PALE_OAK_SHELF", "POPLAR_SHELF", "SPRUCE_SHELF", "WARPED_SHELF")
+    );
+    private static final int CONTAINERS_VERSION = CONTAINER_UPDATES.size();
+
     private final GameModeInventories plugin;
     private final FileConfiguration config;
     private final File configFile;
@@ -49,8 +56,13 @@ public class GameModeInventoriesConfig {
         intOptions.put("storage.mysql.pool_size", 10);
         // boolean
         boolOptions.put("armor", true);
+        boolOptions.put("allow_creative_container_break", false);
+        boolOptions.put("auto_update_containers", true);
         boolOptions.put("break_bedrock", false);
         boolOptions.put("bypass.inventories", true);
+        boolOptions.put("bypass.container-copy", false);
+        boolOptions.put("bypass.container-place", false);
+        boolOptions.put("bypass.container-break", false);
         boolOptions.put("bypass.items", true);
         boolOptions.put("bypass.blacklist", false);
         boolOptions.put("bypass.commands", false);
@@ -85,11 +97,14 @@ public class GameModeInventoriesConfig {
         boolOptions.put("xp_conversion_done", false);
         boolOptions.put("storage.mysql.test_connection", false);
         boolOptions.put("storage.mysql.useSSL", true);
+        containers.add("ACACIA_SHELF");
         containers.add("ANVIL");
+        containers.add("BAMBOO_SHELF");
         containers.add("BARREL");
         containers.add("BEACON");
         containers.add("BEE_NEST");
         containers.add("BEEHIVE");
+        containers.add("BIRCH_SHELF");
         containers.add("BLACK_SHULKER_BOX");
         containers.add("BLAST_FURNACE");
         containers.add("BLUE_SHULKER_BOX");
@@ -97,16 +112,23 @@ public class GameModeInventoriesConfig {
         containers.add("BROWN_SHULKER_BOX");
         containers.add("CAMPFIRE");
         containers.add("CARTOGRAPHY_TABLE");
+        containers.add("CHERRY_SHELF");
         containers.add("CHEST");
         containers.add("CHIPPED_ANVIL");
+        containers.add("CHISELED_BOOKSHELF");
         containers.add("COMPOSTER");
+        containers.add("COPPER_CHEST");
+        containers.add("CRAFTER");
+        containers.add("CRIMSON_SHELF");
         containers.add("CYAN_SHULKER_BOX");
         containers.add("DAMAGED_ANVIL");
+        containers.add("DARK_OAK_SHELF");
         containers.add("DECORATED_POT");
         containers.add("DISPENSER");
         containers.add("DROPPER");
         containers.add("ENCHANTING_TABLE");
         containers.add("ENDER_CHEST");
+        containers.add("EXPOSED_COPPER_CHEST");
         containers.add("FLETCHING_TABLE");
         containers.add("FURNACE");
         containers.add("GRAY_SHULKER_BOX");
@@ -114,22 +136,35 @@ public class GameModeInventoriesConfig {
         containers.add("GRINDSTONE");
         containers.add("HOPPER");
         containers.add("JUKEBOX");
+        containers.add("JUNGLE_SHELF");
         containers.add("LECTERN");
         containers.add("LIGHT_BLUE_SHULKER_BOX");
         containers.add("LIGHT_GRAY_SHULKER_BOX");
         containers.add("LIME_SHULKER_BOX");
         containers.add("LOOM");
         containers.add("MAGENTA_SHULKER_BOX");
+        containers.add("MANGROVE_SHELF");
+        containers.add("OAK_SHELF");
         containers.add("ORANGE_SHULKER_BOX");
+        containers.add("OXIDIZED_COPPER_CHEST");
+        containers.add("PALE_OAK_SHELF");
         containers.add("PINK_SHULKER_BOX");
+        containers.add("POPLAR_SHELF");
         containers.add("PURPLE_SHULKER_BOX");
         containers.add("RED_SHULKER_BOX");
         containers.add("SHULKER_BOX");
         containers.add("SMITHING_TABLE");
         containers.add("SMOKER");
         containers.add("SOUL_CAMPFIRE");
+        containers.add("SPRUCE_SHELF");
         containers.add("STONECUTTER");
         containers.add("TRAPPED_CHEST");
+        containers.add("WARPED_SHELF");
+        containers.add("WAXED_COPPER_CHEST");
+        containers.add("WAXED_EXPOSED_COPPER_CHEST");
+        containers.add("WAXED_OXIDIZED_COPPER_CHEST");
+        containers.add("WAXED_WEATHERED_COPPER_CHEST");
+        containers.add("WEATHERED_COPPER_CHEST");
         containers.add("WHITE_SHULKER_BOX");
         containers.add("YELLOW_SHULKER_BOX");
         bl.add("TNT");
@@ -177,7 +212,24 @@ public class GameModeInventoriesConfig {
         }
         if (!config.contains("containers")) {
             plugin.getConfig().set("containers", containers);
+            plugin.getConfig().set("containers_version", CONTAINERS_VERSION);
             i++;
+        } else {
+            int version = config.getInt("containers_version", 0);
+            if (!config.contains("containers_version")) {
+                plugin.getConfig().set("containers_version", version);
+            }
+            if (version < CONTAINERS_VERSION) {
+                if (version > 0 && plugin.getConfig().getBoolean("auto_update_containers", true)) {
+                    i += migrateContainers();
+                } else {
+                    updateContainerSuggestions(version);
+                    plugin.getLogger().info("GameModeInventories has an updated container list. "
+                            + "Review the commented suggestions in config.yml, or run "
+                            + "'gmi auto-update-container-config' to include all default containers and enable updates, or "
+                            + "'gmi auto-update-container-config false' to keep your list and disable automatic updates.");
+                }
+            }
         }
         if (!config.contains("blacklist")) {
             plugin.getConfig().set("blacklist", bl);
@@ -216,4 +268,97 @@ public class GameModeInventoriesConfig {
         }
         plugin.saveConfig();
     }
+
+    /** Applies pending container defaults without replacing custom entries. */
+    public int migrateContainers() {
+        return migrateContainers(false);
+    }
+
+    private int migrateContainers(boolean includeAll) {
+        // Read the saved version explicitly: packaged defaults may already contain the latest one.
+        int version = config.getInt("containers_version", 0);
+        if (!includeAll && version >= CONTAINERS_VERSION) {
+            return 0;
+        }
+        List<String> list = plugin.getConfig().getStringList("containers");
+        List<String> added = new ArrayList<>();
+        for (String container : includeAll ? containers : pendingContainers(version)) {
+            if (!list.contains(container)) {
+                list.add(container);
+                added.add(container);
+            }
+        }
+        plugin.getConfig().set("containers", list);
+        plugin.getConfig().set("containers_version", Math.max(version, CONTAINERS_VERSION));
+        clearContainerSuggestions();
+        plugin.saveConfig();
+        if (!added.isEmpty()) {
+            plugin.getLogger().info("Added containers to config: " + String.join(", ", added));
+        }
+        return added.size();
+    }
+
+    /** Explicit opt-in includes all defaults, even if an earlier update was declined. */
+    public int setAutoUpdateContainers(boolean enabled) {
+        if (enabled) {
+            plugin.getConfig().set("auto_update_containers", true);
+            return migrateContainers(true);
+        }
+        declineContainerMigration();
+        return 0;
+    }
+
+    /** Marks the current defaults as reviewed without changing the active list. */
+    private void declineContainerMigration() {
+        int version = config.getInt("containers_version", 0);
+        plugin.getConfig().set("containers_version", Math.max(version, CONTAINERS_VERSION));
+        plugin.getConfig().set("auto_update_containers", false);
+        clearContainerSuggestions();
+        plugin.saveConfig();
+    }
+
+    private List<String> pendingContainers(int version) {
+        if (version <= 0) {
+            return containers;
+        }
+        List<String> pending = new ArrayList<>();
+        for (int next = version; next < CONTAINERS_VERSION; next++) {
+            pending.addAll(CONTAINER_UPDATES.get(next));
+        }
+        return pending;
+    }
+
+    private void updateContainerSuggestions(int version) {
+        clearContainerSuggestions();
+        List<String> comments = new ArrayList<>(plugin.getConfig().getComments("containers"));
+        comments.add("GMI pending container suggestions (start)");
+        comments.add("Existing entries below remain active. To include all defaults and enable updates, run:");
+        comments.add("/gmi auto-update-container-config");
+        comments.add("To keep your list and disable automatic updates: /gmi auto-update-container-config false");
+        comments.add("Or copy selected entries into the containers list and restart the server.");
+        List<String> current = plugin.getConfig().getStringList("containers");
+        for (String container : pendingContainers(version)) {
+            if (!current.contains(container)) {
+                comments.add("- " + container);
+            }
+        }
+        comments.add("GMI pending container suggestions (end)");
+        plugin.getConfig().setComments("containers", comments);
+    }
+
+    private void clearContainerSuggestions() {
+        List<String> comments = new ArrayList<>();
+        boolean suggestion = false;
+        for (String comment : plugin.getConfig().getComments("containers")) {
+            if ("GMI pending container suggestions (start)".equals(comment)) {
+                suggestion = true;
+            } else if ("GMI pending container suggestions (end)".equals(comment)) {
+                suggestion = false;
+            } else if (!suggestion) {
+                comments.add(comment);
+            }
+        }
+        plugin.getConfig().setComments("containers", comments);
+    }
+
 }

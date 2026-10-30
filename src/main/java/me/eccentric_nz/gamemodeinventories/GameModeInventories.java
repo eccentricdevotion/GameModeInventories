@@ -33,6 +33,7 @@ public class GameModeInventories extends JavaPlugin {
     private final List<UUID> stands = new ArrayList<>();
     public BukkitTask recordingTask;
     private GameModeInventoriesInventory inventoryHandler;
+    private GameModeInventoriesListener inventoryListener;
     private GameModeInventoriesBlock block;
     private GameModeInventoriesMessage m;
     private GameModeInventoriesBlockLogger blockLogger;
@@ -101,7 +102,8 @@ public class GameModeInventories extends JavaPlugin {
                 db_level = GMIDebug.ERROR;
             }
             inventoryHandler = new GameModeInventoriesInventory(this);
-            pm.registerEvents(new GameModeInventoriesListener(this), this);
+            inventoryListener = new GameModeInventoriesListener(this);
+            pm.registerEvents(inventoryListener, this);
             pm.registerEvents(new GameModeInventoriesChunkLoadListener(this), this);
             pm.registerEvents(new GameModeInventoriesDeath(this), this);
             pm.registerEvents(new GameModeInventoriesBlockListener(this), this);
@@ -127,6 +129,10 @@ public class GameModeInventories extends JavaPlugin {
             getServer().getConsoleSender().sendMessage(MY_PLUGIN_NAME + ChatColor.RED + "This plugin requires CraftBukkit/Spigot 1.13 or higher, disabling...");
             pm.disablePlugin(this);
         }
+    }
+
+    public void reloadContainers() {
+        inventoryListener.reloadContainers();
     }
 
     private Version getServerVersion(String s) {
