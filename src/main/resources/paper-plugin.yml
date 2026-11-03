@@ -19,5 +19,5 @@ dependencies:
     WorldGuard:
       load: BEFORE
       required: false
-api-version: '26.2'
+api-version: '26.3'
 loader: me.eccentric_nz.gamemodeinventories.GMILibraryLoader

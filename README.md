@@ -1,7 +1,7 @@
 ## GameModeInventories
 
-A CraftBukkit plugin for Minecraft Server.
+A Paper plugin for Minecraft Servers.
 
-Allow players to have separate inventories for each game mode (Creative, Survival and Adventure).
+Allow players to have separate inventories for each game mode (Creative, Survival, Adventure and Spectator).
 
-Downloads are available here: [http://tardisjenkins.duckdns.org:8080/job/GameModeInventories/](http://tardisjenkins.duckdns.org:8080/job/GameModeInventories/)
+Downloads are available onn the [Releases](https://github.com/eccentricdevotion/GameModeInventories/releases) page.

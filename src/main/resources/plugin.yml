@@ -6,7 +6,7 @@ load: POSTWORLD
 softdepend: [ Multiverse-Core,MultiWorld,CoreProtect,LogBlock ]
 loadbefore: [WorldGuard]
 version: 3.7.0
-api-version: '26.2'
+api-version: '26.3'
 libraries:
   - com.zaxxer:HikariCP:5.0.1
 permissions:
