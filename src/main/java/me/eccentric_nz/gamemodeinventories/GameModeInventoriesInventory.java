@@ -20,8 +20,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
 
 public class GameModeInventoriesInventory {
 
@@ -61,7 +59,7 @@ public class GameModeInventoriesInventory {
                     // update it with their current inventory
                     id = rsInv.getInt("id");
                     String updateQuery = "UPDATE " + plugin.getPrefix() + "inventories SET inventory = ? WHERE id = ?";
-                    try (PreparedStatement ps = connection.prepareStatement(updateQuery);) {
+                    try (PreparedStatement ps = connection.prepareStatement(updateQuery)) {
                         ps.setString(1, inv);
                         ps.setInt(2, id);
                         ps.executeUpdate();
@@ -117,9 +115,7 @@ public class GameModeInventoriesInventory {
                 }
                 if (potions && currentGM.equals("CREATIVE") && !newGM.equals(GameMode.CREATIVE)) {
                     // remove all potion effects
-                    player.getActivePotionEffects().forEach((effect) -> {
-                        player.removePotionEffect(effect.getType());
-                    });
+                    player.getActivePotionEffects().forEach((effect) -> player.removePotionEffect(effect.getType()));
                 }
                 // check if they have an inventory for the new gamemode
                 try {
@@ -152,7 +148,7 @@ public class GameModeInventoriesInventory {
                             }
                             if (saveEnderChest) {
                                 String savedender = rsNewInv.getString("enderchest");
-                                if (savedender == null || savedender.equals("[Null]") || savedender.equals("") || savedender.isEmpty()) {
+                                if (savedender == null || savedender.equals("[Null]") || savedender.isEmpty()) {
                                     // empty inventory
                                     savedender = "[\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\",\"null\"]";
                                 }

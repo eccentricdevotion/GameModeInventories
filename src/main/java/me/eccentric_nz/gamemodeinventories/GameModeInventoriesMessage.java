@@ -45,9 +45,7 @@ public class GameModeInventoriesMessage {
     }
 
     public void getMessages() {
-        messagesConfig.getKeys(false).forEach((m) -> {
-            message.put(m, messagesConfig.getString(m));
-        });
+        messagesConfig.getKeys(false).forEach((m) -> message.put(m, messagesConfig.getString(m)));
     }
 
     public HashMap<String, String> getMessage() {
@@ -68,11 +66,11 @@ public class GameModeInventoriesMessage {
                         out.write(buf, 0, len);
                     }
                 } catch (IOException io) {
-                    plugin.getLogger().log(Level.WARNING, "[GameModeInventories] Could not save the file (" + file.toString() + ").");
+                    plugin.getLogger().log(Level.WARNING, "[GameModeInventories] Could not save the file (" + file + ").");
                 } finally {
                     try {
                         out.close();
-                    } catch (IOException e) {
+                    } catch (IOException ignored) {
                     }
                 }
             } catch (FileNotFoundException e) {
@@ -81,7 +79,7 @@ public class GameModeInventoriesMessage {
                 if (in != null) {
                     try {
                         in.close();
-                    } catch (IOException e) {
+                    } catch (IOException ignored) {
                     }
                 }
             }

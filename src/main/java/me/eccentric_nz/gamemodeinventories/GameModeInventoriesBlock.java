@@ -43,7 +43,7 @@ public class GameModeInventoriesBlock {
         String deleteQuery = "DELETE FROM " + plugin.getPrefix() + "blocks WHERE worldchunk = ? AND location = ?";
         try (
                 Connection connection = plugin.getDatabaseConnection();
-                PreparedStatement ps = connection.prepareStatement(deleteQuery);
+                PreparedStatement ps = connection.prepareStatement(deleteQuery)
         ) {
             ps.setString(1, gmiwc);
             ps.setString(2, l);
@@ -60,7 +60,7 @@ public class GameModeInventoriesBlock {
         String insertQuery = "INSERT INTO " + plugin.getPrefix() + "blocks (worldchunk, location) VALUES (?,?)";
         try (
                 Connection connection = plugin.getDatabaseConnection();
-                PreparedStatement ps = connection.prepareStatement(insertQuery);
+                PreparedStatement ps = connection.prepareStatement(insertQuery)
         ) {
             ps.setString(1, data.getWorldChunk());
             ps.setString(2, data.getLocation());

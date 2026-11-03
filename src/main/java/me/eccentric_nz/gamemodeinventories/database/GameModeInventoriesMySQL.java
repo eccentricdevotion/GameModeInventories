@@ -25,14 +25,14 @@ public class GameModeInventoriesMySQL {
     public void createTables() {
         try (
                 Connection connection = plugin.getDatabaseConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ) {
             // add inventories table
             String queryInventories = "CREATE TABLE IF NOT EXISTS " + plugin.getPrefix() + "inventories (id int(11) NOT NULL AUTO_INCREMENT, uuid varchar(48) DEFAULT '', player varchar(24) DEFAULT '', gamemode varchar(24) DEFAULT '', inventory text, xp double, armour text, enderchest text, attributes text, armour_attributes text, PRIMARY KEY (id)) DEFAULT CHARSET=utf8 COLLATE utf8_general_ci";
             statement.executeUpdate(queryInventories);
             // update inventories if there is no attributes column
             String queryAttr = "SHOW COLUMNS FROM " + plugin.getPrefix() + "inventories LIKE 'attributes'";
-            try (ResultSet rsAttr = statement.executeQuery(queryAttr);) {
+            try (ResultSet rsAttr = statement.executeQuery(queryAttr)) {
                 if (!rsAttr.next()) {
                     String queryAlter4 = "ALTER TABLE " + plugin.getPrefix() + "inventories ADD attributes text";
                     statement.executeUpdate(queryAlter4);
@@ -46,7 +46,7 @@ public class GameModeInventoriesMySQL {
             statement.executeUpdate(queryBlocks);
             // update blocks if there is no world column
             String queryWorld = "SHOW COLUMNS FROM " + plugin.getPrefix() + "blocks LIKE 'worldchunk'";
-            try (ResultSet rsWorld = statement.executeQuery(queryWorld);) {
+            try (ResultSet rsWorld = statement.executeQuery(queryWorld)) {
                 if (!rsWorld.next()) {
                     String queryAlter6 = "ALTER TABLE " + plugin.getPrefix() + "blocks ADD worldchunk varchar(128)";
                     statement.executeUpdate(queryAlter6);

@@ -20,12 +20,12 @@ public class GameModeInventoriesBlocksConverter {
     }
 
     public static void processUpdateCounts(int[] updateCounts) {
-        for (int i = 0; i < updateCounts.length; i++) {
-            if (updateCounts[i] >= 0) {
+        for (int updateCount : updateCounts) {
+            if (updateCount >= 0) {
                 // Successfully executed; the number represents number of affected rows
-            } else if (updateCounts[i] == Statement.SUCCESS_NO_INFO) {
+            } else if (updateCount == Statement.SUCCESS_NO_INFO) {
                 // Successfully executed; number of affected rows not available
-            } else if (updateCounts[i] == Statement.EXECUTE_FAILED) {
+            } else if (updateCount == Statement.EXECUTE_FAILED) {
                 // Failed to execute
             }
         }
@@ -36,10 +36,10 @@ public class GameModeInventoriesBlocksConverter {
             try (
                     Connection connection = plugin.getDatabaseConnection();
                     PreparedStatement statement = connection.prepareStatement("SELECT id, location FROM " + plugin.getPrefix() + "blocks");
-                    ResultSet rs = statement.executeQuery();
+                    ResultSet rs = statement.executeQuery()
             ) {
                 if (rs.isBeforeFirst()) {
-                    try (PreparedStatement ps = connection.prepareStatement("UPDATE " + plugin.getPrefix() + "blocks SET worldchunk = ? WHERE id = ?");) {
+                    try (PreparedStatement ps = connection.prepareStatement("UPDATE " + plugin.getPrefix() + "blocks SET worldchunk = ? WHERE id = ?")) {
                         connection.setAutoCommit(false);
                         long count = 0;
                         while (rs.next()) {
@@ -71,7 +71,7 @@ public class GameModeInventoriesBlocksConverter {
                     }
                 }
             } catch (BatchUpdateException ex) {
-                // Not all of the statements were successfully executed
+                // Not all the statements were successfully executed
                 int[] updateCounts = ex.getUpdateCounts();
                 // Some databases will continue to execute after one fails.
                 // If so, updateCounts.length will equal the number of batched statements.

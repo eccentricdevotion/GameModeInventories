@@ -47,12 +47,12 @@ public class GameModeInventoriesBlockLogger {
         if (pm.isPluginEnabled("CoreProtect")) {
             CoreProtect cp = (CoreProtect) pm.getPlugin("CoreProtect");
             // Check that CoreProtect is loaded
-            if (cp == null || !(cp instanceof CoreProtect)) {
+            if (cp == null) {
                 return;
             }
             // Check that the API is enabled
             CoreProtectAPI CoreProtect = cp.getAPI();
-            if (CoreProtect.isEnabled() == false) {
+            if (!CoreProtect.isEnabled()) {
                 return;
             }
             // Check that a compatible version of the API is loaded

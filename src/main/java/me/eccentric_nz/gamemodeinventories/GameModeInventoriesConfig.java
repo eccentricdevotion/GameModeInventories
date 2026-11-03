@@ -164,7 +164,7 @@ public class GameModeInventoriesConfig {
         for (Map.Entry<String, Boolean> entry : boolOptions.entrySet()) {
             if (!config.contains(entry.getKey())) {
                 if (entry.getKey().equals("track_creative_place.enabled")) {
-                    // check for previous enrty
+                    // check for previous entry
                     if (plugin.getConfig().contains("track_creative_place")) {
                         plugin.getConfig().set(entry.getKey(), plugin.getConfig().getBoolean("track_creative_place"));
                     } else {

@@ -26,7 +26,7 @@ public class GameModeInventoriesStand {
             try (
                     Connection connection = plugin.getDatabaseConnection();
                     PreparedStatement statement = connection.prepareStatement("SELECT uuid FROM " + plugin.getPrefix() + "stands");
-                    ResultSet rs = statement.executeQuery();
+                    ResultSet rs = statement.executeQuery()
             ) {
                 if (rs.isBeforeFirst()) {
                     while (rs.next()) {
@@ -34,7 +34,7 @@ public class GameModeInventoriesStand {
                     }
                 }
                 // clear stands
-                try (PreparedStatement ps = connection.prepareStatement("DELETE FROM " + plugin.getPrefix() + "stands");) {
+                try (PreparedStatement ps = connection.prepareStatement("DELETE FROM " + plugin.getPrefix() + "stands")) {
                     ps.executeUpdate();
                 }
             } catch (SQLException e) {
@@ -46,7 +46,7 @@ public class GameModeInventoriesStand {
     public void saveStands() {
         try (
                 Connection connection = plugin.getDatabaseConnection();
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO " + plugin.getPrefix() + "stands (uuid) VALUES (?)");
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO " + plugin.getPrefix() + "stands (uuid) VALUES (?)")
         ) {
             for (UUID uuid : plugin.getStands()) {
                 ps.setString(1, uuid.toString());

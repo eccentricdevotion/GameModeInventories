@@ -66,8 +66,7 @@ public class GameModeInventoriesJSONSerialization {
 
     public static String toString(ItemStack[] inv) {
         List<String> result = new ArrayList<>();
-        List<ConfigurationSerializable> items = new ArrayList<>();
-        items.addAll(Arrays.asList(inv));
+        List<ConfigurationSerializable> items = new ArrayList<>(Arrays.asList(inv));
         items.forEach((cs) -> {
             if (cs == null) {
                 result.add("null");
@@ -115,9 +114,7 @@ public class GameModeInventoriesJSONSerialization {
 
     public static Map<String, Object> recreateMap(Map<String, Object> original) {
         Map<String, Object> map = new HashMap<>();
-        original.entrySet().forEach((entry) -> {
-            map.put(entry.getKey(), entry.getValue());
-        });
+        original.entrySet().forEach((entry) -> map.put(entry.getKey(), entry.getValue()));
         return map;
     }
 

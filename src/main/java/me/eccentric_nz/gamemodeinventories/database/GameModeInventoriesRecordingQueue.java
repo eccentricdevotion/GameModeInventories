@@ -14,7 +14,7 @@ public class GameModeInventoriesRecordingQueue {
     }
 
     /**
-     * @param data
+     * @param data Some data to add to the queue
      */
     public static void addToQueue(final GameModeInventoriesQueueData data) {
         if (data == null) {

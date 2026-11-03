@@ -10,17 +10,11 @@ import java.util.List;
 public class GameModeInventoriesConstructedMob {
 
     public static boolean checkBlocks(Material trigger, Block block) {
-        switch (trigger) {
-            case PUMPKIN:
-            case CARVED_PUMPKIN:
-            case JACK_O_LANTERN:
-                return isGolem(block);
-            case WITHER_SKELETON_SKULL:
-            case WITHER_SKELETON_WALL_SKULL:
-                return isWither(block, trigger);
-            default:
-                return false;
-        }
+        return switch (trigger) {
+            case PUMPKIN, CARVED_PUMPKIN, JACK_O_LANTERN -> isGolem(block);
+            case WITHER_SKELETON_SKULL, WITHER_SKELETON_WALL_SKULL -> isWither(block, trigger);
+            default -> false;
+        };
     }
 
     private static final List<BlockFace> faces = Arrays.asList(BlockFace.DOWN, BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH, BlockFace.UP);
@@ -28,7 +22,7 @@ public class GameModeInventoriesConstructedMob {
     private static boolean isGolem(Block block) {
         BlockFace direction = BlockFace.DOWN;
         for (BlockFace face : faces) {
-            if (block.getRelative(face).getType().equals(Material.IRON_BLOCK) && block.getRelative(face, 2).equals(Material.IRON_BLOCK)) {
+            if (block.getRelative(face).getType().equals(Material.IRON_BLOCK) && block.getRelative(face, 2).getType().equals(Material.IRON_BLOCK)) {
                 direction = face;
                 break;
             }

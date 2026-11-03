@@ -62,17 +62,17 @@ public class GameModeInventoriesListener implements Listener {
                     // get spawn location
                     Location loc = plugin.getServer().getWorld(plugin.getConfig().getString("creative_world.world")).getSpawnLocation();
                     if (plugin.getConfig().getString("creative_world.location").equals("last_known")) {
-                        //get last known position in world
+                        // get last known position in world
                         String uuid = p.getUniqueId().toString();
                         // player changed worlds, record last location
                         // check if the player has a record for this world
                         try (
                                 Connection connection = plugin.getDatabaseConnection();
-                                PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + plugin.getPrefix() + "worlds WHERE uuid = ? AND world = ?");
+                                PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + plugin.getPrefix() + "worlds WHERE uuid = ? AND world = ?")
                         ) {
                             statement.setString(1, uuid);
                             statement.setString(2, plugin.getConfig().getString("creative_world.world"));
-                            try (ResultSet rs = statement.executeQuery();) {
+                            try (ResultSet rs = statement.executeQuery()) {
                                 if (rs.next()) {
                                     World w = plugin.getServer().getWorld(rs.getString("world"));
                                     if (w != null) {
@@ -160,7 +160,7 @@ public class GameModeInventoriesListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
         //treat it the same as interacting with an entity in general
-        onEntityClick((PlayerInteractEntityEvent) event);
+        onEntityClick(event);
     }
 
     @EventHandler(ignoreCancelled = true)

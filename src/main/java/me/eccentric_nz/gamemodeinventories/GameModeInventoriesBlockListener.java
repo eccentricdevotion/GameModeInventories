@@ -93,11 +93,7 @@ public class GameModeInventoriesBlockListener implements Listener {
                             if (l != null) {
                                 String gmip = l.getBlockX() + "," + l.getBlockZ();
                                 plugin.getPoints().add(gmip);
-                                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                                    if (plugin.getPoints().contains(gmip)) {
-                                        plugin.getPoints().remove(gmip);
-                                    }
-                                }, 600L);
+                                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plugin.getPoints().remove(gmip), 600L);
                             }
                         }
                     }
