@@ -18,6 +18,14 @@ import java.util.logging.Level;
  */
 public class GameModeInventoriesConfig {
 
+    private static final List<String> containerUpdates = List.of(
+            "CHISELED_BOOKSHELF", "CRAFTER", "COPPER_CHEST", "EXPOSED_COPPER_CHEST", "WEATHERED_COPPER_CHEST",
+            "OXIDIZED_COPPER_CHEST", "WAXED_COPPER_CHEST", "WAXED_EXPOSED_COPPER_CHEST", "WAXED_WEATHERED_COPPER_CHEST",
+            "WAXED_OXIDIZED_COPPER_CHEST", "ACACIA_SHELF", "BAMBOO_SHELF", "BIRCH_SHELF", "CHERRY_SHELF",
+            "CRIMSON_SHELF", "DARK_OAK_SHELF", "JUNGLE_SHELF", "MANGROVE_SHELF", "OAK_SHELF", "PALE_OAK_SHELF",
+            "POPLAR_SHELF", "SPRUCE_SHELF", "WARPED_SHELF"
+    );
+
     private final GameModeInventories plugin;
     private final FileConfiguration config;
     private final File configFile;
@@ -49,8 +57,12 @@ public class GameModeInventoriesConfig {
         intOptions.put("storage.mysql.pool_size", 10);
         // boolean
         boolOptions.put("armor", true);
+        boolOptions.put("allow_creative_container_break", false);
         boolOptions.put("break_bedrock", false);
         boolOptions.put("bypass.inventories", true);
+        boolOptions.put("bypass.container-copy", false);
+        boolOptions.put("bypass.container-place", false);
+        boolOptions.put("bypass.container-break", false);
         boolOptions.put("bypass.items", true);
         boolOptions.put("bypass.blacklist", false);
         boolOptions.put("bypass.commands", false);
@@ -85,11 +97,14 @@ public class GameModeInventoriesConfig {
         boolOptions.put("xp_conversion_done", false);
         boolOptions.put("storage.mysql.test_connection", false);
         boolOptions.put("storage.mysql.useSSL", true);
+        containers.add("ACACIA_SHELF");
         containers.add("ANVIL");
+        containers.add("BAMBOO_SHELF");
         containers.add("BARREL");
         containers.add("BEACON");
         containers.add("BEE_NEST");
         containers.add("BEEHIVE");
+        containers.add("BIRCH_SHELF");
         containers.add("BLACK_SHULKER_BOX");
         containers.add("BLAST_FURNACE");
         containers.add("BLUE_SHULKER_BOX");
@@ -97,16 +112,23 @@ public class GameModeInventoriesConfig {
         containers.add("BROWN_SHULKER_BOX");
         containers.add("CAMPFIRE");
         containers.add("CARTOGRAPHY_TABLE");
+        containers.add("CHERRY_SHELF");
         containers.add("CHEST");
         containers.add("CHIPPED_ANVIL");
+        containers.add("CHISELED_BOOKSHELF");
         containers.add("COMPOSTER");
+        containers.add("COPPER_CHEST");
+        containers.add("CRAFTER");
+        containers.add("CRIMSON_SHELF");
         containers.add("CYAN_SHULKER_BOX");
         containers.add("DAMAGED_ANVIL");
+        containers.add("DARK_OAK_SHELF");
         containers.add("DECORATED_POT");
         containers.add("DISPENSER");
         containers.add("DROPPER");
         containers.add("ENCHANTING_TABLE");
         containers.add("ENDER_CHEST");
+        containers.add("EXPOSED_COPPER_CHEST");
         containers.add("FLETCHING_TABLE");
         containers.add("FURNACE");
         containers.add("GRAY_SHULKER_BOX");
@@ -114,22 +136,35 @@ public class GameModeInventoriesConfig {
         containers.add("GRINDSTONE");
         containers.add("HOPPER");
         containers.add("JUKEBOX");
+        containers.add("JUNGLE_SHELF");
         containers.add("LECTERN");
         containers.add("LIGHT_BLUE_SHULKER_BOX");
         containers.add("LIGHT_GRAY_SHULKER_BOX");
         containers.add("LIME_SHULKER_BOX");
         containers.add("LOOM");
         containers.add("MAGENTA_SHULKER_BOX");
+        containers.add("MANGROVE_SHELF");
+        containers.add("OAK_SHELF");
         containers.add("ORANGE_SHULKER_BOX");
+        containers.add("OXIDIZED_COPPER_CHEST");
+        containers.add("PALE_OAK_SHELF");
         containers.add("PINK_SHULKER_BOX");
+        containers.add("POPLAR_SHELF");
         containers.add("PURPLE_SHULKER_BOX");
         containers.add("RED_SHULKER_BOX");
         containers.add("SHULKER_BOX");
         containers.add("SMITHING_TABLE");
         containers.add("SMOKER");
         containers.add("SOUL_CAMPFIRE");
+        containers.add("SPRUCE_SHELF");
         containers.add("STONECUTTER");
         containers.add("TRAPPED_CHEST");
+        containers.add("WARPED_SHELF");
+        containers.add("WAXED_COPPER_CHEST");
+        containers.add("WAXED_EXPOSED_COPPER_CHEST");
+        containers.add("WAXED_OXIDIZED_COPPER_CHEST");
+        containers.add("WAXED_WEATHERED_COPPER_CHEST");
+        containers.add("WEATHERED_COPPER_CHEST");
         containers.add("WHITE_SHULKER_BOX");
         containers.add("YELLOW_SHULKER_BOX");
         bl.add("TNT");
@@ -177,6 +212,17 @@ public class GameModeInventoriesConfig {
         }
         if (!config.contains("containers")) {
             plugin.getConfig().set("containers", containers);
+            i++;
+        } else {
+            // add new containers
+            List<String> list = plugin.getConfig().getStringList("containers");
+            List<String> added = new ArrayList<>(list);
+            for (String c : containerUpdates) {
+                if (!list.contains(c)) {
+                    added.add(c);
+                }
+            }
+            plugin.getConfig().set("containers", added);
             i++;
         }
         if (!config.contains("blacklist")) {

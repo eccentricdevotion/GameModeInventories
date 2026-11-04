@@ -20,12 +20,16 @@ public class CommandNode {
     public CommandNode(GameModeInventories plugin) {
         this.plugin = plugin;
         firstArgs.put("armor", "armor");
+        firstArgs.put("allow_creative_container_break", "allow_creative_container_break");
         firstArgs.put("attached_block", "track_creative_place.attached_block");
         firstArgs.put("break_bedrock", "break_bedrock");
         firstArgs.put("break_no_drop", "track_creative_place.break_no_drop");
         firstArgs.put("bypass.blacklist", "bypass.blacklist");
         firstArgs.put("bypass.commands", "bypass.commands");
         firstArgs.put("bypass.inventories", "bypass.inventories");
+        firstArgs.put("bypass.container-copy", "bypass.container-copy");
+        firstArgs.put("bypass.container-place", "bypass.container-place");
+        firstArgs.put("bypass.container-break", "bypass.container-break");
         firstArgs.put("bypass.items", "bypass.items");
         firstArgs.put("bypass.survival", "bypass.survival");
         firstArgs.put("bypass.trades", "bypass.trades");
@@ -71,13 +75,13 @@ public class CommandNode {
                 .then(Commands.literal("kit")
                         .requires(ctx -> ctx.getSender() instanceof Player)
                         .then(Commands.argument("action", StringArgumentType.word())
-                        .suggests(KitSuggestions::get)
-                        .executes(ctx -> {
-                            String action = ctx.getArgument("action", String.class).toLowerCase(Locale.ROOT);
-                            Player player = (Player) ctx.getSource().getSender();
-                            new KitCommand().process(plugin, action, player);
-                            return Command.SINGLE_SUCCESS;
-                        }))
+                                .suggests(KitSuggestions::get)
+                                .executes(ctx -> {
+                                    String action = ctx.getArgument("action", String.class).toLowerCase(Locale.ROOT);
+                                    Player player = (Player) ctx.getSource().getSender();
+                                    new KitCommand().process(plugin, action, player);
+                                    return Command.SINGLE_SUCCESS;
+                                }))
                 );
         return command.build();
     }

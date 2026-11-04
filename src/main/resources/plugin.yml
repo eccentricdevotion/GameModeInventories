@@ -19,6 +19,15 @@ permissions:
   gamemodeinventories.bypass:
     default: op
     description: Allow players to access inventories in CREATIVE mode even if 'restrict_creative' is true. Also allow CREATIVE players to drop and pickup items.
+  gamemodeinventories.bypass.container-copy:
+    default: false
+    description: Allow copying container contents with pick-block in CREATIVE, independently of bypass config switches.
+  gamemodeinventories.bypass.container-place:
+    default: false
+    description: Allow placing pre-filled containers in CREATIVE without clearing their contents, independently of bypass config switches.
+  gamemodeinventories.bypass.container-break:
+    default: false
+    description: Allow breaking non-empty containers in CREATIVE, independently of bypass config switches.
   gamemodeinventories.spectator:
     default: op
     description: Allow players to switch to Gamemode SPECTATOR.

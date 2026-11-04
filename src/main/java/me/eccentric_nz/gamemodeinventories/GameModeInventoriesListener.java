@@ -1,22 +1,29 @@
 package me.eccentric_nz.gamemodeinventories;
 
+import io.papermc.paper.event.player.PlayerPickBlockEvent;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Campfire;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import java.sql.Connection;
@@ -202,6 +209,82 @@ public class GameModeInventoriesListener implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPickBlock(PlayerPickBlockEvent event) {
+        // ctrl + middle-click copies the block's contents
+        if (event.isIncludeData() && plugin.getConfig().getBoolean("restrict_creative")) {
+            Player p = event.getPlayer();
+            Block b = event.getBlock();
+            if (p.getGameMode().equals(GameMode.CREATIVE) && (containers.contains(b.getType()) || hasContents(b.getState(false))) && !GameModeInventoriesBypass.canBypassContainer(p, "copy", plugin)) {
+                event.setCancelled(true);
+                if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
+                    p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_PICK_DATA"));
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onContainerPlace(BlockPlaceEvent event) {
+        // empty pre-filled containers e.g. from saved hotbars
+        if (plugin.getConfig().getBoolean("restrict_creative")) {
+            Player p = event.getPlayer();
+            if (p.getGameMode().equals(GameMode.CREATIVE) && !GameModeInventoriesBypass.canBypassContainer(p, "place", plugin)) {
+                BlockState state = event.getBlockPlaced().getState(false);
+                if (state instanceof Campfire campfire) {
+                    for (int i = 0; i < campfire.getSize(); i++) {
+                        campfire.setItem(i, null);
+                    }
+                } else {
+                    Inventory inv = getBlockInventory(state);
+                    if (inv != null) {
+                        inv.clear();
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onContainerBreak(BlockBreakEvent event) {
+        // the contents would drop, and may have been put there by survival players
+        if (plugin.getConfig().getBoolean("restrict_creative") && !plugin.getConfig().getBoolean("allow_creative_container_break")) {
+            Player p = event.getPlayer();
+            if (p.getGameMode().equals(GameMode.CREATIVE) && hasContents(event.getBlock().getState(false)) && !GameModeInventoriesBypass.canBypassContainer(p, "break", plugin)) {
+                event.setCancelled(true);
+                if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
+                    p.sendMessage(plugin.MY_PLUGIN_NAME + plugin.getM().getMessage().get("NO_CREATIVE_CONTAINER_BREAK"));
+                }
+            }
+        }
+    }
+
+    /**
+     * Gets the inventory of this block only - for a double chest, getInventory() would include the other half.
+     */
+    private Inventory getBlockInventory(BlockState state) {
+        if (state instanceof Chest chest) {
+            return chest.getBlockInventory();
+        }
+        if (state instanceof InventoryHolder holder) {
+            return holder.getInventory();
+        }
+        return null;
+    }
+
+    private boolean hasContents(BlockState state) {
+        if (state instanceof Campfire campfire) {
+            for (int i = 0; i < campfire.getSize(); i++) {
+                if (campfire.getItem(i) != null && !campfire.getItem(i).getType().isAir()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        Inventory inv = getBlockInventory(state);
+        return inv != null && !inv.isEmpty();
     }
 
     private boolean isBlock(Material m) {

@@ -32,10 +32,12 @@ public class GameModeInventoriesMessage {
         messageOptions.put("INVALID_MATERIAL_TRACK", "Invalid material in dont_track list");
         messageOptions.put("NO_CREATIVE_BREAK", "You cannot break blocks that were placed in CREATIVE gamemode!");
         messageOptions.put("NO_CREATIVE_COMMAND", "You are not allowed to use %s in CREATIVE!");
+        messageOptions.put("NO_CREATIVE_CONTAINER_BREAK", "You are not allowed to break containers that have items in them in CREATIVE!");
         messageOptions.put("NO_CREATIVE_DROPS", "Blocks that were placed in CREATIVE gamemode, do not give drops!");
         messageOptions.put("NO_CREATIVE_HORSE", "You are not allowed to access horse inventories in CREATIVE!");
         messageOptions.put("NO_CREATIVE_INVENTORY", "You are not allowed to access inventories in CREATIVE!");
         messageOptions.put("NO_CREATIVE_PICKUP", "You are not allowed to pick up items in CREATIVE!");
+        messageOptions.put("NO_CREATIVE_PICK_DATA", "You are not allowed to copy block contents in CREATIVE!");
         messageOptions.put("NO_CREATIVE_PLACE", "%s placement is disabled in CREATIVE gamemode!");
         messageOptions.put("NO_PERMISSION", "You do not have permission to run that command!");
         messageOptions.put("NO_PLAYER_DROPS", "You are not allowed to drop items in CREATIVE!");
@@ -92,7 +94,8 @@ public class GameModeInventoriesMessage {
         int m = 0;
         for (Map.Entry<String, String> entry : messageOptions.entrySet()) {
             if (!messagesConfig.contains(entry.getKey())) {
-                plugin.getConfig().set(entry.getKey(), entry.getValue());
+                messagesConfig.set(entry.getKey(), entry.getValue());
+                message.put(entry.getKey(), entry.getValue());
                 m++;
             }
         }
